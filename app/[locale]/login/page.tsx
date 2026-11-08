@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { TopBar } from "@/components/chrome/top-bar";
 import { PageHeader, SectionTitle } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { JudgeTour } from "@/components/tour/judge-tour";
 import { PERSONAS } from "@/content/personas";
 import { PersonaCard } from "./persona-card";

@@ -11,7 +11,8 @@ import { ChoiceGroup, Steps, Switch } from "@/components/ui/controls";
 import { CardSkeleton, EmptyState, ErrorState } from "@/components/ui/states";
 import { Monogram } from "@/components/ui/avatar";
 import { Sheet } from "@/components/ui/sheet";
-import { CountUp, Rise, RiseItem } from "@/components/ui/motion";
+import { CountUp } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { FourSquareGrid, HundredGrid, Legend } from "@/components/risk/grids";
 import { HelixStage } from "@/components/three/helix-stage";
 

@@ -4,7 +4,7 @@ import { TopBar } from "@/components/chrome/top-bar";
 import { HelixStage } from "@/components/three/helix-stage";
 import { GlassCard } from "@/components/ui/glass-card";
 import { LinkButton } from "@/components/ui/link-button";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { JudgeTour } from "@/components/tour/judge-tour";
 
 export default async function Landing({ params }: { params: Promise<{ locale: string }> }) {

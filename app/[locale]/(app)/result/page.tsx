@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/ui/states";
 import { LinkButton } from "@/components/ui/link-button";
 import { ActionDock, PageHeader, SectionTitle } from "@/components/ui/page";
 import { Pill, SafetyPill } from "@/components/ui/pill";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { Disclosure } from "@/components/ui/disclosure";
 import { conditionById } from "@/content/conditions";
 import { CARRIER_MEANING, LIMITS, NOT_A_DIAGNOSIS, NO_VARIANTS } from "@/content/explainer";

@@ -8,7 +8,7 @@ import { isQuestionDone } from "@/lib/teachback/logic";
 import { GlassCard } from "@/components/ui/glass-card";
 import { LinkButton } from "@/components/ui/link-button";
 import { SectionTitle } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { HelixStage } from "@/components/three/helix-stage";
 import { PathwayTimeline } from "@/components/pathway/timeline";
 import { Link, redirect } from "@/i18n/navigation";

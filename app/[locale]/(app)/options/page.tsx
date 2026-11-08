@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/auth/session";
 import { GlassCard } from "@/components/ui/glass-card";
 import { LinkButton } from "@/components/ui/link-button";
 import { ActionDock, PageHeader } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { Disclosure } from "@/components/ui/disclosure";
 import { OPTIONS, seededShuffle, type OptionCard } from "@/content/options";
 import { pick } from "@/content/types";

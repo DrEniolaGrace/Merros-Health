@@ -3,7 +3,7 @@ import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { requireUser } from "@/lib/auth/session";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PageHeader } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { Link } from "@/i18n/navigation";
 import { CONDITIONS } from "@/content/conditions";
 import { pick } from "@/content/types";

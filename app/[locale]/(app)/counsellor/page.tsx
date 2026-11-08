@@ -10,7 +10,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Monogram } from "@/components/ui/avatar";
 import { PageHeader } from "@/components/ui/page";
 import { Pill } from "@/components/ui/pill";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { EmptyState } from "@/components/ui/states";
 import { ESCALATION_TEXT, SEVERITY_TEXT } from "@/content/escalation";
 import { pick } from "@/content/types";

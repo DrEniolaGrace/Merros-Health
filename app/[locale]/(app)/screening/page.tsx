@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/auth/session";
 import { GlassCard } from "@/components/ui/glass-card";
 import { LinkButton } from "@/components/ui/link-button";
 import { ActionDock, PageHeader } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 
 /** Preconception Screening Finder (SPEC 4.2). */
 export default async function ScreeningPage({ params }: { params: Promise<{ locale: string }> }) {

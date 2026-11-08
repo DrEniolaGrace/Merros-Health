@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth/session";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PageHeader, SectionTitle } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { conditionById } from "@/content/conditions";
 import { pick, type ReadingLevel } from "@/content/types";
 import { LevelSwitch } from "./level-switch";

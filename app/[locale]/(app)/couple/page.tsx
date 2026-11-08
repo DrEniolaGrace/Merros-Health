@@ -8,7 +8,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { EmptyState } from "@/components/ui/states";
 import { LinkButton } from "@/components/ui/link-button";
 import { ActionDock, PageHeader } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { conditionById } from "@/content/conditions";
 import { LIMITS, NOT_A_DIAGNOSIS } from "@/content/explainer";
 import { pick } from "@/content/types";

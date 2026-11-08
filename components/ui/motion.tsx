@@ -1,59 +1,9 @@
 "use client";
 
-import { animate, motion, useInView, useReducedMotion } from "motion/react";
+import { animate, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-/** Screen entrance: children rise gently and fade in, staggered 50ms (DESIGN.md section 6). */
-export function Rise({
-  children,
-  className,
-  stagger = 0.05,
-  delay = 0,
-  as = "div",
-}: {
-  children: React.ReactNode;
-  className?: string;
-  stagger?: number;
-  delay?: number;
-  as?: "div" | "ul" | "ol" | "section";
-}) {
-  const Comp = motion[as] as typeof motion.div;
-  return (
-    <Comp
-      className={className}
-      initial="hidden"
-      animate="show"
-      variants={{ hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } }}
-    >
-      {children}
-    </Comp>
-  );
-}
-
-export function RiseItem({
-  children,
-  className,
-  as = "div",
-}: {
-  children: React.ReactNode;
-  className?: string;
-  as?: "div" | "li" | "section" | "p" | "h1" | "h2";
-}) {
-  const Comp = motion[as] as typeof motion.div;
-  return (
-    <Comp
-      className={className}
-      variants={{
-        hidden: { opacity: 0, y: 14 },
-        show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
-      }}
-    >
-      {children}
-    </Comp>
-  );
-}
 
 /** Numbers count up smoothly when they appear. Final text is always the exact formatted value. */
 export function CountUp({

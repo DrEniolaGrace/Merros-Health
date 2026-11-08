@@ -6,7 +6,7 @@ import { isConsentActive } from "@/lib/consent/check";
 import { PURPOSES } from "@/lib/consent/purposes";
 import { GlassCard } from "@/components/ui/glass-card";
 import { PageHeader, SectionTitle } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/motion";
+import { Rise, RiseItem } from "@/components/ui/rise";
 import { EmptyState } from "@/components/ui/states";
 import { CONSENT_TEXT } from "@/content/consent";
 import { pick } from "@/content/types";
