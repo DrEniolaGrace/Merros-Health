@@ -214,6 +214,15 @@ model Appointment {
   createdAt   DateTime  @default(now())
 }
 
+/// Simulated delivery queue from the licensed screening lab. In production this is an mTLS API
+/// call from the lab; here the signed bundle waits, encrypted with the master key, until the
+/// person consents and imports it.
+model LabInbox {
+  accession  String   @id
+  encPayload String // AES-256-GCM of {"bundle":..., "signature":"..."}
+  createdAt  DateTime @default(now())
+}
+
 /// Values Compass (SPEC 4.6) arrives in a later phase; table reserved.
 model ValuesAssessment {
   id        String   @id @default(cuid())
