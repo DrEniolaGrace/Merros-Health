@@ -41,3 +41,13 @@ export async function refreshEscalations(user: User, extra: { medicalAdviceReque
   }
   return fired;
 }
+
+/** Re evaluates both partners, e.g. after either changes a couple comparison consent. */
+export async function refreshCoupleEscalations(user: User) {
+  await refreshEscalations(user);
+  const link = await prisma.coupleLink.findFirst({
+    where: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] },
+    include: { partnerA: true, partnerB: true },
+  });
+  if (link) await refreshEscalations(link.partnerAId === user.id ? link.partnerB : link.partnerA);
+}

@@ -19,7 +19,7 @@ export interface ButtonProps extends Omit<HTMLMotionProps<"button">, "children">
 }
 
 const base =
-  "relative inline-flex select-none items-center justify-center gap-2 rounded-control font-medium " +
+  "relative inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-control font-medium " +
   "transition-[background,box-shadow,color,filter,opacity] duration-500 ease-calm " +
   "disabled:cursor-not-allowed disabled:opacity-45 disabled:shadow-none disabled:saturate-50";
 

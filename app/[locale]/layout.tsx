@@ -27,9 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return { title: { default: t("appName"), template: `%s · ${t("appName")}` }, description: t("tagline") };
 }
 
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+// Every page depends on the session and theme cookies, so nothing is prerendered at build time.
+export const dynamic = "force-dynamic";
 
 export default async function LocaleLayout({
   children,
