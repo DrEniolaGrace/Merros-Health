@@ -1,0 +1,224 @@
+// Meros data model, Phase 1 subset of SPEC section 11.
+// Further models (PsiSession, PedigreeNode, ReclassificationEvent, ...) are added in their own phases.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [vector]
+}
+
+enum Role {
+  patient
+  counsellor
+  admin
+}
+
+enum Locale {
+  ar
+  en
+}
+
+enum ReadingLevel {
+  simple
+  standard
+  detailed
+}
+
+enum MediaPref {
+  text
+  audio
+  both
+}
+
+enum PregnancyStatus {
+  none
+  trying
+  pregnant
+  prefer_not_to_say
+}
+
+model User {
+  id             String   @id @default(cuid())
+  personaKey     String   @unique // demo persona identifier, e.g. "mariam"
+  role           Role
+  displayNameEn  String
+  displayNameAr  String
+  // Per user AES-256 data key, wrapped (encrypted) by ENCRYPTION_MASTER_KEY.
+  wrappedDataKey String
+  // Accession number the simulated lab uses to deliver this person's result.
+  labAccession   String?  @unique
+  createdAt      DateTime @default(now())
+
+  profile        Profile?
+  labResults     LabResult[]
+  consents       Consent[]
+  teachBacks     TeachBackAttempt[]
+  escalations    Escalation[]
+  pathwayEvents  PathwayEvent[]
+  appointments   Appointment[]      @relation("PatientAppointments")
+  coupleLinksA   CoupleLink[]       @relation("PartnerA")
+  coupleLinksB   CoupleLink[]       @relation("PartnerB")
+  clinician      Clinician?
+  values         ValuesAssessment[]
+}
+
+model Profile {
+  id               String          @id @default(cuid())
+  userId           String          @unique
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  locale           Locale          @default(ar)
+  readingLevel     ReadingLevel    @default(standard)
+  mediaPref        MediaPref       @default(text)
+  pregnancyStatus  PregnancyStatus @default(prefer_not_to_say)
+  onboardedAt      DateTime?
+  // Opaque per user seed for presentation order (Options Explorer shuffle).
+  presentationSeed Int             @default(0)
+  updatedAt        DateTime        @updatedAt
+}
+
+/// A screening result signed by the issuing lab (Ed25519). The signed FHIR bundle is stored
+/// encrypted with the user's data key. Variants are derived from the bundle (single source of truth).
+model LabResult {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accession     String
+  labKeyId      String // fingerprint of the lab public key that verified the signature
+  signature     String // hex Ed25519 signature over the canonical bundle
+  encBundle     String // AES-256-GCM ciphertext of the canonical FHIR bundle JSON
+  verifiedAt    DateTime
+  importedAt    DateTime @default(now())
+
+  @@unique([userId, accession])
+}
+
+model CoupleLink {
+  id         String   @id @default(cuid())
+  partnerAId String
+  partnerBId String
+  partnerA   User     @relation("PartnerA", fields: [partnerAId], references: [id], onDelete: Cascade)
+  partnerB   User     @relation("PartnerB", fields: [partnerBId], references: [id], onDelete: Cascade)
+  status     String   @default("engaged") // engaged | married
+  createdAt  DateTime @default(now())
+
+  @@unique([partnerAId, partnerBId])
+}
+
+/// Granular consent. A consent with a recipient is also a share. Nothing is shared by default.
+model Consent {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose   String // see lib/consent/purposes.ts
+  scope     String // what data is covered, e.g. "carrier_genes"
+  recipient String // "self" | "partner" | "counsellor" | "health_system_aggregate"
+  grantedAt DateTime  @default(now())
+  expiresAt DateTime?
+  revokedAt DateTime?
+
+  @@index([userId, purpose])
+}
+
+/// Append only, hash chained access log. No foreign key to User so the chain survives account deletion.
+model AccessLog {
+  seq       Int      @id @default(autoincrement())
+  at        DateTime
+  actorId   String // user id of who acted, or "system"
+  subjectId String // user id whose data was touched, or "-"
+  action    String
+  resource  String
+  prevHash  String
+  hash      String   @unique
+
+  @@index([subjectId])
+}
+
+model ContentItem {
+  id        String   @id // e.g. "condition.beta-thal"
+  version   Int
+  kind      String
+  label     String // education | decision_support | clinical_advice
+  source    String // curated | ai
+  updatedAt DateTime @updatedAt
+}
+
+model TeachBackAttempt {
+  id           String       @id @default(cuid())
+  userId       String
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId   String
+  attemptNo    Int
+  correct      Boolean
+  explanation  String // which explanation variant was shown before this attempt
+  locale       Locale
+  readingLevel ReadingLevel
+  createdAt    DateTime     @default(now())
+
+  @@index([userId, questionId])
+}
+
+model Escalation {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code      String // see lib/escalation/rules.ts
+  severity  String // urgent | high | routine
+  detail    String? // non identifying detail, e.g. gene symbol
+  status    String    @default("open") // open | booked | resolved
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([userId, code])
+}
+
+model PathwayEvent {
+  id     String   @id @default(cuid())
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  step   String // see lib/pathway/steps.ts
+  at     DateTime @default(now())
+
+  @@unique([userId, step])
+}
+
+model Clinician {
+  id              String        @id @default(cuid())
+  userId          String?       @unique
+  user            User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  nameEn          String
+  nameAr          String
+  credentialsEn   String
+  credentialsAr   String
+  licenceNo       String
+  languages       String[]
+  gender          String
+  appointments    Appointment[]
+}
+
+model Appointment {
+  id          String    @id @default(cuid())
+  patientId   String
+  patient     User      @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+  clinicianId String
+  clinician   Clinician @relation(fields: [clinicianId], references: [id], onDelete: Cascade)
+  mode        String // in_person | video | phone
+  startsAt    DateTime
+  status      String    @default("booked") // booked | completed | cancelled
+  createdAt   DateTime  @default(now())
+}
+
+/// Values Compass (SPEC 4.6) arrives in a later phase; table reserved.
+model ValuesAssessment {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ratings   Json
+  createdAt DateTime @default(now())
+}

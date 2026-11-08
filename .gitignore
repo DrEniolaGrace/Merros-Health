@@ -1,0 +1,33 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# testing
+/coverage
+/test-results
+/playwright-report
+
+# next.js
+/.next/
+/out/
+/build
+
+# misc
+.DS_Store
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+.pnpm-debug.log*
+
+# env files: secrets never committed; .env.example documents every variable
+.env*
+!.env.example
+
+# private demo material (lab private key output, generated lab inbox)
+/data/private/
+/data/lab-inbox/
+
+# local Claude Code settings
+/.claude/settings.local.json

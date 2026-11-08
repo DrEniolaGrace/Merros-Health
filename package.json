@@ -1,0 +1,62 @@
+{
+  "name": "meros",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "setup:env": "tsx scripts/setup-env.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@noble/curves": "1.9.7",
+    "@noble/hashes": "1.8.0",
+    "@prisma/client": "6.19.3",
+    "clsx": "2.1.1",
+    "iron-session": "8.0.4",
+    "next": "15.5.29",
+    "next-intl": "4.14.9",
+    "react": "19.1.5",
+    "react-dom": "19.1.5",
+    "tailwind-merge": "3.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@playwright/test": "1.65.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "17.2.2",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.29",
+    "prettier": "3.6.2",
+    "prisma": "6.19.3",
+    "tailwindcss": "^4",
+    "tsx": "4.20.5",
+    "typescript": "^5",
+    "vitest": "3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": "^8.5.23",
+      "effect": "^3.20.0",
+      "deepmerge-ts": "^8.0.0",
+      "sharp": "^0.35.5"
+    }
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

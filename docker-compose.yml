@@ -1,0 +1,51 @@
+# Local stack for when Docker is available: `docker compose up`
+# Today local dev runs with `pnpm dev` against Neon (see README). Variable names are identical,
+# so switching only means pointing DATABASE_URL / DIRECT_URL at the postgres service below.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: meros
+      POSTGRES_PASSWORD: meros
+      POSTGRES_DB: meros
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meros"]
+      interval: 5s
+      retries: 10
+
+  migrate:
+    build: .
+    command: ["sh", "-c", "npx prisma migrate deploy"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://meros:meros@postgres:5432/meros
+      DIRECT_URL: postgresql://meros:meros@postgres:5432/meros
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://meros:meros@postgres:5432/meros
+      DIRECT_URL: postgresql://meros:meros@postgres:5432/meros
+    ports:
+      - "3000:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  # Phase 5: Risk Beyond the Panel genomics service (Python FastAPI, bcftools, PLINK, KING).
+  # genomics:
+  #   build: ./services/genomics
+  #   ports:
+  #     - "8000:8000"
+
+volumes:
+  pgdata:
