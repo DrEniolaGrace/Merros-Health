@@ -287,7 +287,22 @@
     "noneBody": "If you are planning a pregnancy, carrier screening can tell you more. Here is what it involves and where to get it.",
     "noneAction": "Explore carrier screening",
     "waitingTitle": "Your result is ready to open",
-    "waitingAction": "Verify and open"
+    "waitingAction": "Verify and open",
+    "heroOne": "You carry one gene change",
+    "heroMany": "You carry {count} gene changes",
+    "heroVus": "One variant needs more science",
+    "heroAccent": "and you are healthy.",
+    "verifiedShort": "Verified",
+    "workingCopy": "Working copy",
+    "changedCopy": "Changed copy",
+    "copyPairLabel": "Two copies of a gene: one working copy and one changed copy. The working copy keeps you healthy.",
+    "statTested": "genes tested by the lab",
+    "statCarrier": "genes where you are a carrier",
+    "statVus": "variants of uncertain significance",
+    "statAi": "numbers calculated by AI",
+    "meaningTitle": "What being a carrier means",
+    "carrierLabel": "You are a carrier for",
+    "vusBadge": "Not counted"
   },
   "couple": {
     "title": "Your result as a couple",
@@ -313,7 +328,19 @@
     "noPartnerTitle": "No partner linked",
     "noPartnerBody": "Couple comparison is available when both partners use Merros.",
     "talk": "Talk to a counsellor together",
-    "notAffected": "Not affected"
+    "notAffected": "Not affected",
+    "heroAccentShared": "{count, plural, one {You share one carrier gene.} other {You share # carrier genes.}}",
+    "heroAccentNone": "No shared carrier gene found.",
+    "bothAgreed": "Both agreed",
+    "youAgreed": "You agreed",
+    "sealedBadge": "Sealed",
+    "agreedStatus": "Agreed",
+    "notYetStatus": "Not yet",
+    "partner": "Partner",
+    "dualKeyLabel": "Dual key: each partner agrees independently before anything is compared.",
+    "statShared": "genes you both carry",
+    "statCombined": "combined chance in each pregnancy",
+    "statSeen": "other genes either of you can see"
   },
   "learn": {
     "title": "Learn",
@@ -370,7 +397,14 @@
     "bookedTitle": "Your session is booked",
     "bookedBody": "{mode} with {name} on {date}.",
     "simulated": "Booking is simulated in this demo.",
-    "prepare": "Before your session, write down any questions, and decide whether you would like your partner or a family member with you."
+    "prepare": "Before your session, write down any questions, and decide whether you would like your partner or a family member with you.",
+    "heroAccentReasons": "A counsellor can help, at your pace.",
+    "heroAccentAlways": "Someone to talk to, whenever you need.",
+    "availableBadge": "Available this week",
+    "bookedBadge": "Session booked",
+    "bookEyebrow": "Simulated booking",
+    "stepOne": "Step 1",
+    "stepTwo": "Step 2"
   },
   "pathway": {
     "title": "Your journey",

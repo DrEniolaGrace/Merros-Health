@@ -22,7 +22,7 @@ test("My result shows the imported result without needing another page first", a
   await page.getByRole("button", { name: "Verify and open" }).click();
   await expect(page.getByText("Signature verified")).toBeVisible();
   await page.getByRole("navigation").getByRole("link", { name: "My result" }).click();
-  await expect(page.getByText("You are a carrier for Sickle cell disease")).toBeVisible({ timeout: 8000 });
+  await expect(page.getByRole("heading", { name: "Sickle cell disease" })).toBeVisible({ timeout: 8000 });
 });
 
 test("A condition card has a way back to all conditions", async ({ page }) => {

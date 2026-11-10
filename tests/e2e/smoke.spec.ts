@@ -25,8 +25,9 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   await page.getByRole("link", { name: "Open my result" }).click();
 
   // Risk Explainer.
-  await expect(page.getByText("You are a carrier for Beta thalassaemia")).toBeVisible();
-  await expect(page.getByText("You are a carrier for GJB2 related hearing loss")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "You carry 2 gene changes" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Beta thalassaemia" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "GJB2 related hearing loss" })).toBeVisible();
   await expect(page.getByText("Risk is not a diagnosis").first()).toBeVisible();
   await expect(page.locator("[data-safety-label=education]").first()).toBeVisible();
 
@@ -34,7 +35,7 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   await page.goto("/en/couple");
   await expect(page.getByText("You both carry a change in HBB")).toBeVisible();
   await expect(page.getByText("You both carry a change in GJB2")).toBeVisible();
-  await expect(page.getByLabel("43.75%")).toBeVisible();
+  await expect(page.getByLabel("43.75%").first()).toBeVisible();
 
   // Teach Back: one wrong answer shows a different explanation.
   await page.goto("/en/teach-back");

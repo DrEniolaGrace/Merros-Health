@@ -8,10 +8,14 @@ import { requestMedicalAdvice } from "@/lib/actions/patient";
 import { GlassCard } from "@/components/ui/glass-card";
 import { EmptyState } from "@/components/ui/states";
 import { LinkButton } from "@/components/ui/link-button";
-import { ActionDock, PageHeader, SectionTitle } from "@/components/ui/page";
+import { ActionDock, SectionTitle } from "@/components/ui/page";
 import { Pill, SafetyPill } from "@/components/ui/pill";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { Disclosure } from "@/components/ui/disclosure";
+import { CountUp } from "@/components/ui/motion";
+import { LiveBadge, StatRow } from "@/components/ui/accents";
+import { GeneOrb, PageHero } from "@/components/ui/page-hero";
+import { CopyPair } from "@/components/risk/copy-pair";
 import { conditionById } from "@/content/conditions";
 import { CARRIER_MEANING, LIMITS, NOT_A_DIAGNOSIS, NO_VARIANTS } from "@/content/explainer";
 import { pick } from "@/content/types";
@@ -52,73 +56,117 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
 
   const { result } = own;
   const summary = summarisePerson(result.variants);
+  const carriers = summary.genes.filter((g) => g.status.kind === "carrier");
   const hasPartner = (await prisma.coupleLink.count({ where: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } })) > 0;
   const name = (id: string) => {
     const c = conditionById(id);
     return c ? pick(c.name, locale) : id;
   };
+  const heroTitle =
+    summary.genes.length === 0 && summary.vus.length === 0
+      ? t("noVariantsTitle")
+      : carriers.length === 1
+        ? t("heroOne")
+        : carriers.length > 1
+          ? t("heroMany", { count: carriers.length })
+          : t("heroVus");
 
   return (
-    <Rise className="flex flex-col gap-8">
+    <Rise className="flex flex-col gap-10">
       <RiseItem>
-        <PageHeader eyebrow={tp("eyebrowResult")} title={t("title")} label={{ kind: "education", text: ts("education") }}>
-          <Pill tone="cyan">
-            <SealCheck size={14} weight="light" />
-            {t("verified", { lab: LAB_NAME })}
-          </Pill>
-        </PageHeader>
+        <PageHero
+          eyebrow={tp("eyebrowResult")}
+          title={heroTitle}
+          accent={carriers.length ? t("heroAccent") : undefined}
+          label={{ kind: "education", text: ts("education") }}
+          badges={
+            <LiveBadge>
+              <SealCheck size={12} weight="bold" />
+              {t("verifiedShort")}
+            </LiveBadge>
+          }
+          aside={carriers.length ? <CopyPair working={t("workingCopy")} changed={t("changedCopy")} label={t("copyPairLabel")} /> : undefined}
+        >
+          <p className="text-sm text-muted">{t("verified", { lab: LAB_NAME })}</p>
+        </PageHero>
       </RiseItem>
 
-      {summary.genes.map(({ gene, status }, gi) => (
-        <RiseItem key={gene}>
-          <GlassCard tone={status.kind === "carrier" ? "default" : "gold"} className="flex flex-col gap-4">
-            {status.kind === "carrier" ? (
-              <>
-                <h2 className="text-2xl font-medium">{t("carrierOf", { condition: name(status.variants[0].conditionId) })}</h2>
-                {gi === summary.genes.findIndex((g) => g.status.kind === "carrier") && (
-                  <p className="measure text-ink">{pick(CARRIER_MEANING.body[level], locale)}</p>
-                )}
-              </>
-            ) : (
-              <h2 className="text-2xl font-medium">{t("counsellorFinding")}</h2>
-            )}
-            <dl className="grid gap-3 text-sm sm:grid-cols-3">
-              <div>
-                <dt className="text-muted">{t("gene")}</dt>
-                <dd className="font-medium tabular" dir="ltr">{gene}</dd>
-              </div>
-              <div className="sm:col-span-2">
-                <dt className="text-muted">{t("variant")}</dt>
-                <dd className="break-words tabular" dir="ltr">{status.kind !== "not_carrier" && status.variants[0].hgvs}</dd>
-              </div>
-              {status.kind !== "not_carrier" && status.variants[0].clinvarId && (
-                <div>
-                  <dt className="text-muted">{t("clinvar")}</dt>
-                  <dd className="tabular" dir="ltr">VCV{status.variants[0].clinvarId.padStart(9, "0")}</dd>
-                </div>
-              )}
-            </dl>
-            {status.kind !== "not_carrier" && (
-              <div>
-                <LinkButton href={`/learn/${status.variants[0].conditionId}`} variant="ghost" iconEnd={<ArrowRight size={18} />} className="-ms-4">
-                  {t("learnCondition", { condition: name(status.variants[0].conditionId) })}
-                </LinkButton>
-              </div>
-            )}
+      <RiseItem>
+        <StatRow
+          items={[
+            { value: <CountUp value={result.panelGenes.length} locale={locale} />, label: t("statTested") },
+            { value: <CountUp value={carriers.length} locale={locale} />, label: t("statCarrier") },
+            { value: <CountUp value={summary.vus.length} locale={locale} />, label: t("statVus") },
+            { value: <CountUp value={0} locale={locale} />, label: t("statAi") },
+          ]}
+        />
+      </RiseItem>
+
+      {carriers.length > 0 && (
+        <RiseItem>
+          <GlassCard className="corner-dots flex flex-col gap-2">
+            <h2 className="text-xs uppercase tracking-[0.14em] text-rose-ink">{t("meaningTitle")}</h2>
+            <p className="measure text-lg text-ink">{pick(CARRIER_MEANING.body[level], locale)}</p>
           </GlassCard>
         </RiseItem>
-      ))}
+      )}
+
+      {summary.genes.length > 0 && (
+        <RiseItem as="section" className="grid gap-4 lg:grid-cols-2">
+          {summary.genes.map(({ gene, status }) => {
+            const v = status.kind !== "not_carrier" ? status.variants[0] : null;
+            return (
+              <GlassCard key={gene} tilt tone={status.kind === "carrier" ? "default" : "gold"} className="flex flex-col gap-5">
+                <div className="flex items-center gap-4">
+                  <GeneOrb gene={gene} tone={status.kind === "carrier" ? "rose" : "gold"} size={64} />
+                  <div className="min-w-0">
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted">{status.kind === "carrier" ? t("carrierLabel") : t("counsellorFinding")}</p>
+                    <h2 className="text-xl font-medium text-ink">{v ? name(v.conditionId) : gene}</h2>
+                  </div>
+                </div>
+                {v && (
+                  <dl className="grid gap-3 text-sm">
+                    <div className="glass rounded-control px-4 py-3">
+                      <dt className="text-xs text-muted">{t("variant")}</dt>
+                      <dd className="break-words text-ink tabular" dir="ltr">{v.hgvs}</dd>
+                    </div>
+                    {v.clinvarId && (
+                      <div className="flex items-center justify-between gap-3 px-1">
+                        <dt className="text-muted">{t("clinvar")}</dt>
+                        <dd className="text-ink tabular" dir="ltr">VCV{v.clinvarId.padStart(9, "0")}</dd>
+                      </div>
+                    )}
+                  </dl>
+                )}
+                {v && (
+                  <div className="mt-auto">
+                    <LinkButton href={`/learn/${v.conditionId}`} variant="ghost" iconEnd={<ArrowRight size={18} />} className="-ms-4">
+                      {t("learnCondition", { condition: name(v.conditionId) })}
+                    </LinkButton>
+                  </div>
+                )}
+              </GlassCard>
+            );
+          })}
+        </RiseItem>
+      )}
 
       {summary.vus.map((v) => (
         <RiseItem key={v.hgvs}>
-          <GlassCard className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 text-gold-ink">
-              <Info size={20} />
-              <h2 className="text-xl font-medium text-ink">{t("vusTitle")}</h2>
+          <GlassCard tone="gold" className="flex flex-col gap-4 sm:flex-row sm:items-start">
+            <GeneOrb gene={v.gene} tone="gold" size={64} />
+            <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-xl font-medium text-ink">{t("vusTitle")}</h2>
+                <LiveBadge tone="gold">
+                  <Info size={12} weight="bold" />
+                  {t("vusBadge")}
+                </LiveBadge>
+              </div>
+              <p className="text-muted">{t("vusBody", { gene: v.gene })}</p>
+              <p className="break-words text-sm tabular text-muted" dir="ltr">{v.hgvs}{v.clinvarId ? ` · VCV${v.clinvarId.padStart(9, "0")}` : ""}</p>
+              <p className="measure text-sm text-ink">{pick(LIMITS.items[2].body, locale)}</p>
             </div>
-            <p className="text-muted">{t("vusBody", { gene: v.gene })}</p>
-            <p className="break-words text-sm tabular text-muted" dir="ltr">{v.hgvs}{v.clinvarId ? ` · VCV${v.clinvarId.padStart(9, "0")}` : ""}</p>
-            <p className="measure text-sm text-ink">{pick(LIMITS.items[2].body, locale)}</p>
           </GlassCard>
         </RiseItem>
       ))}
@@ -126,15 +174,14 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
       {summary.genes.length === 0 && summary.vus.length === 0 && (
         <RiseItem>
           <GlassCard className="flex flex-col gap-3">
-            <h2 className="text-2xl font-medium">{t("noVariantsTitle")}</h2>
-            <p className="measure">{pick(NO_VARIANTS.body[level], locale)}</p>
+            <p className="measure text-lg">{pick(NO_VARIANTS.body[level], locale)}</p>
           </GlassCard>
         </RiseItem>
       )}
 
       <RiseItem>
-        <GlassCard tone="gold" className="flex flex-col gap-2" aria-labelledby="nad">
-          <h2 id="nad" className="text-lg font-medium text-gold-ink">{pick(NOT_A_DIAGNOSIS.title, locale)}</h2>
+        <GlassCard tone="gold" hero className="flex flex-col gap-2" aria-labelledby="nad">
+          <h2 id="nad" className="text-gradient-gold text-xl font-semibold">{pick(NOT_A_DIAGNOSIS.title, locale)}</h2>
           <p className="measure text-ink">{pick(NOT_A_DIAGNOSIS.body, locale)}</p>
         </GlassCard>
       </RiseItem>

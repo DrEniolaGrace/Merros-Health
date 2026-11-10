@@ -5,7 +5,9 @@ import { prisma } from "@/lib/db";
 import { refreshEscalations } from "@/lib/services/escalation";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Monogram } from "@/components/ui/avatar";
-import { PageHeader, SectionTitle } from "@/components/ui/page";
+import { SectionTitle } from "@/components/ui/page";
+import { LiveBadge } from "@/components/ui/accents";
+import { PageHero } from "@/components/ui/page-hero";
 import { Pill, SafetyPill } from "@/components/ui/pill";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { EmptyState } from "@/components/ui/states";
@@ -51,25 +53,61 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
     new Intl.DateTimeFormat(ar ? "ar-AE" : "en-GB", { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit", timeZone: "Asia/Dubai", numberingSystem: "latn" }).format(d);
   const modeLabel = (m: string) => (m === "video" ? t("video") : m === "phone" ? t("phone") : t("inPerson"));
 
+  const dayFmt = (d: Date) => new Intl.DateTimeFormat(ar ? "ar-AE" : "en-GB", { weekday: "long", timeZone: "Asia/Dubai" }).format(d);
+  const dateFmt = (d: Date) => new Intl.DateTimeFormat(ar ? "ar-AE" : "en-GB", { day: "numeric", month: "long", timeZone: "Asia/Dubai", numberingSystem: "latn" }).format(d);
+  const timeFmt = (d: Date) => new Intl.DateTimeFormat(ar ? "ar-AE" : "en-GB", { hour: "numeric", minute: "2-digit", timeZone: "Asia/Dubai", numberingSystem: "latn" }).format(d);
+  const clinicianName = clinician ? (ar ? clinician.nameAr : clinician.nameEn) : "";
+
   return (
-    <Rise className="flex flex-col gap-8">
+    <Rise className="flex flex-col gap-10">
       <RiseItem>
-        <PageHeader eyebrow={tp("eyebrowCare")} title={t("title")} label={{ kind: "decision_support", text: ts("decision_support") }} />
+        <PageHero
+          eyebrow={tp("eyebrowCare")}
+          title={t("title")}
+          accent={escalations.length ? t("heroAccentReasons") : t("heroAccentAlways")}
+          label={{ kind: "decision_support", text: ts("decision_support") }}
+          badges={appointment ? <LiveBadge tone="gold">{t("bookedBadge")}</LiveBadge> : <LiveBadge>{t("availableBadge")}</LiveBadge>}
+          aside={
+            clinician && (
+              <div className="flex w-64 flex-col items-center gap-3 text-center">
+                <span className="relative">
+                  <span aria-hidden className="absolute -inset-4 animate-[spin_30s_linear_infinite] rounded-full border border-dashed border-[color-mix(in_oklab,var(--pearl-gold)_45%,transparent)]" />
+                  <span aria-hidden className="absolute -inset-8 rounded-full bg-burgundy-glow/20 blur-2xl" />
+                  <Monogram name={clinicianName} size={96} />
+                </span>
+                <p className="mt-3 text-xs uppercase tracking-[0.14em] text-muted">{t("counsellor")}</p>
+                <p className="text-lg font-medium text-ink">{clinicianName}</p>
+                <p className="text-sm text-muted">{ar ? clinician.credentialsAr : clinician.credentialsEn}</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {clinician.languages.map((l) => (
+                    <Pill key={l} tone="cyan">{l === "ar" ? "العربية" : "English"}</Pill>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        />
       </RiseItem>
 
       {escalations.length > 0 ? (
-        <RiseItem className="flex flex-col gap-3">
+        <RiseItem className="flex flex-col gap-4">
           <SectionTitle>{t("why")}</SectionTitle>
-          <ul className="flex flex-col gap-3">
-            {escalations.map((e) => (
-              <li key={e.id}>
-                <GlassCard className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+          <ol className="relative flex flex-col gap-3">
+            <span aria-hidden className="absolute bottom-6 start-[19px] top-6 w-px bg-[linear-gradient(var(--burgundy-glow),var(--pearl-gold))] opacity-50" />
+            {escalations.map((e, i) => (
+              <li key={e.id} className="relative flex gap-4">
+                <span className="relative z-10 mt-5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-burgundy text-sm text-on-burgundy shadow-[0_0_20px_-6px_var(--burgundy-glow)] tabular">
+                  {i + 1}
+                </span>
+                <GlassCard className="corner-dots flex flex-1 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
                   <p className="measure text-ink">{pick(ESCALATION_TEXT[e.code as EscalationCode], locale)}</p>
-                  <Pill tone={e.severity === "routine" ? "neutral" : "gold"} className="shrink-0 self-start">{pick(SEVERITY_TEXT[e.severity as "urgent"], locale)}</Pill>
+                  <LiveBadge tone={e.severity === "routine" ? "rose" : "gold"} className="shrink-0 self-start">
+                    {pick(SEVERITY_TEXT[e.severity as "urgent"], locale)}
+                  </LiveBadge>
                 </GlassCard>
               </li>
             ))}
-          </ul>
+          </ol>
         </RiseItem>
       ) : (
         !appointment && (
@@ -79,27 +117,24 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
         )
       )}
 
-      {clinician && (
-        <RiseItem>
-          <GlassCard className="flex items-center gap-4">
-            <Monogram name={ar ? clinician.nameAr : clinician.nameEn} size={56} />
-            <div className="min-w-0">
-              <p className="text-sm text-muted">{t("counsellor")}</p>
-              <p className="text-lg font-medium">{ar ? clinician.nameAr : clinician.nameEn}</p>
-              <p className="text-sm text-muted">{ar ? clinician.credentialsAr : clinician.credentialsEn}</p>
-            </div>
-          </GlassCard>
-        </RiseItem>
-      )}
-
       <RiseItem>
         {appointment ? (
-          <GlassCard tone="gold" hero className="flex flex-col gap-3">
-            <CalendarCheck size={32} weight="light" className="text-gold-ink" />
-            <h2 className="text-2xl font-semibold">{t("bookedTitle")}</h2>
-            <p className="text-ink">{t("bookedBody", { mode: modeLabel(appointment.mode), name: ar ? appointment.clinician.nameAr : appointment.clinician.nameEn, date: fmt(appointment.startsAt) })}</p>
-            <p className="measure text-sm text-muted">{t("prepare")}</p>
-            <SafetyPill kind="decision_support" label={t("simulated")} className="self-start" />
+          <GlassCard tone="gold" hero className="relative grid gap-6 overflow-hidden sm:grid-cols-[auto_1fr] sm:items-center">
+            <span aria-hidden className="pointer-events-none absolute -end-20 -top-20 h-64 w-64 rounded-full bg-gold/15 blur-3xl" />
+            <div className="glass flex w-36 flex-col items-center gap-1 rounded-card px-4 py-5 text-center">
+              <span className="text-xs uppercase tracking-[0.14em] text-gold-ink">{dayFmt(appointment.startsAt)}</span>
+              <span className="font-display text-2xl font-semibold text-ink tabular">{dateFmt(appointment.startsAt)}</span>
+              <span className="text-lg text-ink tabular" dir="ltr">{timeFmt(appointment.startsAt)}</span>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2 text-gold-ink">
+                <CalendarCheck size={24} weight="light" />
+                <h2 className="text-2xl font-semibold text-ink">{t("bookedTitle")}</h2>
+              </div>
+              <p className="text-ink">{t("bookedBody", { mode: modeLabel(appointment.mode), name: ar ? appointment.clinician.nameAr : appointment.clinician.nameEn, date: fmt(appointment.startsAt) })}</p>
+              <p className="measure text-sm text-muted">{t("prepare")}</p>
+              <SafetyPill kind="decision_support" label={t("simulated")} className="self-start" />
+            </div>
           </GlassCard>
         ) : (
           <Booking slots={slots().map((iso) => ({ iso, label: fmt(new Date(iso)) }))} />
