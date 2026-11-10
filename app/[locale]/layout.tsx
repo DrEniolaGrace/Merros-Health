@@ -48,6 +48,7 @@ export default async function LocaleLayout({
         <div className="aurora" aria-hidden>
           <span />
         </div>
+        <div className="stars" aria-hidden />
         <div className="grain" aria-hidden />
         <NextIntlClientProvider>
           <Providers>{children}</Providers>

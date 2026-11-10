@@ -9,13 +9,14 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale);
   await requireUser(["admin"]);
   const t = await getTranslations("admin");
-  const tp = await getTranslations("privacy");
+  const tp = await getTranslations("page");
+  const tpr = await getTranslations("privacy");
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={t("title")} body={t("body")} />
+      <PageHeader eyebrow={tp("eyebrowProgramme")} title={t("title")} body={t("body")} />
       <GlassCard className="flex flex-col gap-4">
         <h2 className="text-lg font-medium">{t("auditTitle")}</h2>
-        <p className="measure text-sm text-muted">{tp("integrityBody")}</p>
+        <p className="measure text-sm text-muted">{tpr("integrityBody")}</p>
         <IntegrityCheck />
       </GlassCard>
       <GlassCard tone="gold"><p className="measure text-ink">{t("statement")}</p></GlassCard>

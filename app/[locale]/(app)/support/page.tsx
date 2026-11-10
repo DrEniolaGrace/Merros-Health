@@ -37,6 +37,7 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("support");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   await refreshEscalations(user);
   const [escalations, appointment, clinician] = await Promise.all([
@@ -53,7 +54,7 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
   return (
     <Rise className="flex flex-col gap-8">
       <RiseItem>
-        <PageHeader title={t("title")} label={{ kind: "decision_support", text: ts("decision_support") }} />
+        <PageHeader eyebrow={tp("eyebrowCare")} title={t("title")} label={{ kind: "decision_support", text: ts("decision_support") }} />
       </RiseItem>
 
       {escalations.length > 0 ? (

@@ -18,13 +18,14 @@ export default async function OptionsPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("options");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const tc = await getTranslations("common");
   const ordered = seededShuffle(OPTIONS, user.profile?.presentationSeed ?? 1);
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={t("title")} body={t("body")} label={{ kind: "decision_support", text: ts("decision_support") }} />
+      <PageHeader eyebrow={tp("eyebrowOptions")} title={t("title")} body={t("body")} label={{ kind: "decision_support", text: ts("decision_support") }} />
       <Rise as="ul" className="grid gap-4 md:grid-cols-2">
         {ordered.map((o) => {
           const Icon = ICONS[o.icon];

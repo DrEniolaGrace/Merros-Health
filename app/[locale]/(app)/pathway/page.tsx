@@ -9,10 +9,11 @@ export default async function PathwayPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("pathway");
+  const tp = await getTranslations("page");
   const events = await prisma.pathwayEvent.findMany({ where: { userId: user.id } });
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={t("title")} body={t("body")} />
+      <PageHeader eyebrow={tp("eyebrowJourney")} title={t("title")} body={t("body")} />
       <PathwayTimeline locale={locale} events={events.map((e) => ({ step: e.step, at: e.at.toISOString() }))} />
     </div>
   );

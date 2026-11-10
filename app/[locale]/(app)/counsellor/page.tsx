@@ -24,6 +24,7 @@ export default async function CounsellorPage({ params }: { params: Promise<{ loc
   setRequestLocale(locale);
   const me = await requireUser(["counsellor"]);
   const t = await getTranslations("counsellor");
+  const tp = await getTranslations("page");
   const ar = locale === "ar";
 
   const escalations = await prisma.escalation.findMany({
@@ -49,7 +50,7 @@ export default async function CounsellorPage({ params }: { params: Promise<{ loc
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={t("title")} body={t("body")} />
+      <PageHeader eyebrow={tp("eyebrowCases")} title={t("title")} body={t("body")} />
       {cases.length === 0 ? (
         <GlassCard><EmptyState title={t("emptyTitle")} body={t("emptyBody")} /></GlassCard>
       ) : (

@@ -15,6 +15,8 @@ import { CountUp } from "@/components/ui/motion";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { FourSquareGrid, HundredGrid, Legend } from "@/components/risk/grids";
 import { HelixStage } from "@/components/three/helix-stage";
+import { DotMeter, Eyebrow, FloatingChip, Horizon, LiveBadge, StatRow } from "@/components/ui/accents";
+import { SealCheck as SealCheckIcon, CalendarCheck } from "@phosphor-icons/react";
 
 export function DsInteractive({ locale }: { locale: string }) {
   const t = useTranslations("ds");
@@ -37,6 +39,30 @@ export function DsInteractive({ locale }: { locale: string }) {
           </div>
           <HelixStage className="h-80 md:h-96" />
         </GlassCard>
+      </Block>
+
+      <Block title={t("accents")} note={t("accentsNote")}>
+        <div className="glass relative flex min-h-80 flex-col items-center gap-6 overflow-hidden rounded-hero p-8 text-center">
+          <Horizon className="-bottom-40" />
+          <Eyebrow>{t("eyebrowSample")}</Eyebrow>
+          <h3 className="text-4xl font-semibold leading-tight">
+            <span className="text-gradient block">{t("gradientSample")}</span>
+            <span className="text-gradient-gold block">{t("goldSample")}</span>
+          </h3>
+          <div className="relative z-10 flex flex-wrap justify-center gap-3">
+            <FloatingChip className="float-slow" icon={<SealCheckIcon size={16} />} title={t("chipSample")} meta="Ed25519" tone="cyan" />
+            <FloatingChip className="float-slower" icon={<CalendarCheck size={16} />} title={t("chipSample2")} tone="gold" />
+          </div>
+          <div className="relative z-10 flex flex-wrap justify-center gap-2">
+            <LiveBadge>{t("live")}</LiveBadge>
+            <LiveBadge tone="gold">{t("revealed")}</LiveBadge>
+            <LiveBadge tone="rose">{t("sealedBadge")}</LiveBadge>
+          </div>
+        </div>
+        <div className="glass flex flex-col gap-6 rounded-card p-6">
+          <StatRow items={[{ value: "25%", label: t("perPregnancy") }, { value: "43.75%", label: t("combinedNote") }, { value: "3", label: t("steps") }]} />
+          <DotMeter total={48} filled={12} label={t("hundredSummary")} />
+        </div>
       </Block>
 
       <Block title={t("buttons")} note={t("statesNote")}>

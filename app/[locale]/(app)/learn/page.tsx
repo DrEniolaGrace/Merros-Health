@@ -13,12 +13,13 @@ export default async function LearnPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("learn");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const level = user.profile?.readingLevel ?? "standard";
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={t("title")} body={t("body")} label={{ kind: "education", text: ts("education") }} />
+      <PageHeader eyebrow={tp("eyebrowLearn")} title={t("title")} body={t("body")} label={{ kind: "education", text: ts("education") }} />
       <Rise as="ul" className="grid gap-4 md:grid-cols-2">
         {CONDITIONS.map((c) => (
           <RiseItem as="li" key={c.conditionId}>

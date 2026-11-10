@@ -11,6 +11,7 @@ export default async function TeachBackPage({ params }: { params: Promise<{ loca
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("teachback");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const attempts = await prisma.teachBackAttempt.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" }, select: { questionId: true, correct: true } });
 
@@ -23,7 +24,7 @@ export default async function TeachBackPage({ params }: { params: Promise<{ loca
 
   return (
     <div className="flex flex-col gap-8">
-      <PageHeader title={t("title")} body={t("body")} label={{ kind: "education", text: ts("education") }} />
+      <PageHeader eyebrow={tp("eyebrowTeach")} title={t("title")} body={t("body")} label={{ kind: "education", text: ts("education") }} />
       <Quiz questions={questions} initialAttempts={attempts} />
     </div>
   );

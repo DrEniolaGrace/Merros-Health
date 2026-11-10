@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
 import { SafetyPill, type SafetyKind } from "./pill";
+import { Eyebrow } from "./accents";
 
 /** Page heading block: optional eyebrow, title, supporting text, optional safety label. */
 export function PageHeader({
@@ -16,9 +17,14 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <header className="flex flex-col gap-3">
-      {eyebrow && <p className="text-sm text-gold-ink">{eyebrow}</p>}
-      <h1 className="text-3xl font-semibold sm:text-4xl">{title}</h1>
+    <header className="relative flex flex-col gap-4">
+      <span aria-hidden className="pointer-events-none absolute -start-16 -top-16 -z-10 h-48 w-72 rounded-full bg-burgundy-glow/20 blur-3xl" />
+      {eyebrow && (
+        <div>
+          <Eyebrow>{eyebrow}</Eyebrow>
+        </div>
+      )}
+      <h1 className="text-gradient text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">{title}</h1>
       {body && <p className="measure text-base text-muted">{body}</p>}
       {(label || children) && (
         <div className="flex flex-wrap items-center gap-2 pt-1">

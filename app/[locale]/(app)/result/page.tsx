@@ -22,6 +22,7 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("result");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const tc = await getTranslations("common");
   const level = user.profile?.readingLevel ?? "standard";
@@ -60,7 +61,7 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
   return (
     <Rise className="flex flex-col gap-8">
       <RiseItem>
-        <PageHeader title={t("title")} label={{ kind: "education", text: ts("education") }}>
+        <PageHeader eyebrow={tp("eyebrowResult")} title={t("title")} label={{ kind: "education", text: ts("education") }}>
           <Pill tone="cyan">
             <SealCheck size={14} weight="light" />
             {t("verified", { lab: LAB_NAME })}

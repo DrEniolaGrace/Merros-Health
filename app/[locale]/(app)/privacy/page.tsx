@@ -17,6 +17,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("privacy");
+  const tp = await getTranslations("page");
   const tc = await getTranslations("common");
   const now = new Date();
   const [consents, logs, hasPartner] = await Promise.all([
@@ -49,7 +50,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
 
   return (
     <Rise className="flex flex-col gap-10">
-      <RiseItem><PageHeader title={t("title")} body={t("body")} /></RiseItem>
+      <RiseItem><PageHeader eyebrow={tp("eyebrowPrivacy")} title={t("title")} body={t("body")} /></RiseItem>
 
       <RiseItem className="flex flex-col gap-4">
         <SectionTitle>{t("choices")}</SectionTitle>

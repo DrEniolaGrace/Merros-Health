@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { TopBar } from "@/components/chrome/top-bar";
 import { PageHeader, SectionTitle } from "@/components/ui/page";
+import { Horizon } from "@/components/ui/accents";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { JudgeTour } from "@/components/tour/judge-tour";
 import { PERSONAS } from "@/content/personas";
@@ -27,7 +28,10 @@ export default async function LoginPage({ params }: { params: Promise<{ locale: 
     <>
       <TopBar />
       <main id="main" className="mx-auto flex max-w-6xl flex-col gap-12 px-4 pb-32 pt-8 sm:px-8">
-        <PageHeader title={t("title")} body={t("body")} />
+        <div className="relative isolate">
+          <Horizon className="-top-8 -z-10 scale-75 opacity-60" />
+          <PageHeader eyebrow={t("eyebrow")} title={t("title")} body={t("body")} />
+        </div>
         {groups.map((g) => (
           <section key={g.title} className="flex flex-col gap-4">
             <SectionTitle>{g.title}</SectionTitle>

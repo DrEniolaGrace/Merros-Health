@@ -20,6 +20,7 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("couple");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const tds = await getTranslations("ds");
   const view = await getCoupleView(user);
@@ -50,7 +51,7 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
   return (
     <Rise className="flex flex-col gap-8">
       <RiseItem>
-        <PageHeader title={t("title")} label={{ kind: "education", text: ts("education") }}>
+        <PageHeader eyebrow={tp("eyebrowCouple")} title={t("title")} label={{ kind: "education", text: ts("education") }}>
           <span className="inline-flex items-center gap-2 text-sm text-muted">
             <UsersThree size={16} weight="light" />
             {t("with", { name: partner })}

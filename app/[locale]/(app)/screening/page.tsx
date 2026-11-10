@@ -12,12 +12,13 @@ export default async function ScreeningPage({ params }: { params: Promise<{ loca
   setRequestLocale(locale);
   await requireUser(["patient"]);
   const t = await getTranslations("screening");
+  const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const tc = await getTranslations("common");
 
   return (
     <Rise className="flex flex-col gap-6">
-      <RiseItem><PageHeader title={t("title")} body={t("body")} label={{ kind: "education", text: ts("education") }} /></RiseItem>
+      <RiseItem><PageHeader eyebrow={tp("eyebrowScreening")} title={t("title")} body={t("body")} label={{ kind: "education", text: ts("education") }} /></RiseItem>
       <RiseItem>
         <GlassCard className="flex flex-col gap-4">
           <div className="flex items-center gap-3"><UsersThree size={24} weight="light" className="text-rose-ink" /><h2 className="text-xl font-medium">{t("whoTitle")}</h2></div>
