@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Meros",
+    "appName": "Merros",
     "tagline": "Your private genomic companion",
     "language": "Language",
     "toNight": "Switch to Night mode",
@@ -8,7 +8,7 @@
     "close": "Close",
     "loading": "Loading",
     "skipToContent": "Skip to content",
-    "principle": "Meros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice.",
+    "principle": "Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice.",
     "signOut": "Switch persona",
     "back": "Back",
     "continue": "Continue",
@@ -31,7 +31,7 @@
   },
   "ds": {
     "title": "Design system",
-    "intro": "Every token, typeface, component and state used in Meros. Screens may only use what is shown here.",
+    "intro": "Every token, typeface, component and state used in Merros. Screens may only use what is shown here.",
     "feeling": "Alive. Calm. Precise.",
     "colours": "Colour",
     "coloursNote": "Burgundy is the brand colour, never a warning colour. Data cyan is for numbers and charts only. Ink variants keep gold and cyan text at WCAG AA in Pearl mode.",
@@ -118,7 +118,7 @@
   "landing": {
     "eyebrow": "Premarital and preconception genetics",
     "title": "Understand your genes. Decide by your own values.",
-    "body": "Meros is a private genomic companion. It explains carrier results in Arabic and English, protects couples so nobody sees more than they agreed to, and connects you to qualified genetic counsellors.",
+    "body": "Merros is a private genomic companion. It explains carrier results in Arabic and English, protects couples so nobody sees more than they agreed to, and connects you to qualified genetic counsellors.",
     "start": "Start the demo",
     "design": "See the design system",
     "f1Title": "Private by design",
@@ -126,19 +126,19 @@
     "f2Title": "Numbers you can trust",
     "f2Body": "Every risk figure comes from tested, deterministic code, never from an AI model.",
     "f3Title": "People, not just screens",
-    "f3Body": "When it matters, Meros routes you to a named, licensed genetic counsellor."
+    "f3Body": "When it matters, Merros routes you to a named, licensed genetic counsellor."
   },
   "login": {
     "title": "Choose a demo persona",
-    "body": "Every person here is fictional. Pick one to see Meros through their eyes.",
-    "patients": "People using Meros",
+    "body": "Every person here is fictional. Pick one to see Merros through their eyes.",
+    "patients": "People using Merros",
     "staff": "Health system",
     "enter": "Continue as {name}",
     "onboarded": "Already onboarded",
     "fresh": "New result waiting"
   },
   "onboarding": {
-    "title": "Welcome to Meros",
+    "title": "Welcome to Merros",
     "progress": "Onboarding progress",
     "step": "Step {n} of {total}",
     "langTitle": "Which language do you prefer?",
@@ -165,19 +165,20 @@
   },
   "import": {
     "title": "Your screening result has arrived",
-    "body": "Your result was sent by {lab}. It is digitally signed, so Meros checks the signature before opening it. If anything was changed on the way, Meros will refuse it.",
+    "body": "Your result was sent by {lab}. It is digitally signed, so Merros checks the signature before opening it. If anything was changed on the way, Merros will refuse it.",
     "verify": "Verify and open",
     "tamper": "Demo: simulate a tampered delivery",
     "verifiedTitle": "Signature verified",
     "verifiedBody": "The result is exactly what the lab sent. It is now stored encrypted, and only you can open it.",
     "open": "Open my result",
-    "rejectedTitle": "Meros refused this result",
+    "rejectedTitle": "Merros refused this result",
     "rejectedBody": "The signature did not match, which means the result may have been changed after the lab signed it. Nothing was stored. In real life, the lab would be asked to resend it.",
     "noConsentTitle": "Your result is sealed",
     "noConsentBody": "You have not asked to see your result. That is your right. You can change your mind any time.",
     "noConsentAction": "Review my choices",
     "noneTitle": "No result is waiting",
-    "noneBody": "There is no result from a screening lab for you right now."
+    "noneBody": "There is no result from a screening lab for you right now.",
+    "back": "Home"
   },
   "result": {
     "title": "Your result",
@@ -218,7 +219,7 @@
     "noneSharedTitle": "You do not share a carrier gene on the tested panel",
     "noneSharedBody": "This lowers the chance of the conditions tested, but it does not make it zero. No test can find everything.",
     "privacyNote": "You only see genes you both carry. Neither of you can see the rest of the other's result.",
-    "phaseNote": "Today this comparison runs on the Meros server after you both agreed. Blind Couple Match will soon do it without the server seeing either result.",
+    "phaseNote": "Today this comparison runs on the Merros server after you both agreed. Blind Couple Match will soon do it without the server seeing either result.",
     "awaitingSelfTitle": "Compare privately with your partner",
     "awaitingSelfBody": "When you both agree, you will each see only the genes you share. Either of you can say no without the other being told why.",
     "agree": "I agree to compare",
@@ -227,17 +228,18 @@
     "awaitingResultsTitle": "Waiting for results",
     "awaitingResultsBody": "Both of you need a result before you can compare.",
     "noPartnerTitle": "No partner linked",
-    "noPartnerBody": "Couple comparison is available when both partners use Meros.",
+    "noPartnerBody": "Couple comparison is available when both partners use Merros.",
     "talk": "Talk to a counsellor together",
     "notAffected": "Not affected"
   },
   "learn": {
     "title": "Learn",
-    "body": "Plain language guides to conditions common in the region. Written for Meros and pending accredited clinical review.",
+    "body": "Plain language guides to conditions common in the region. Written for Merros and pending accredited clinical review.",
     "carriers": "For carriers",
     "treatment": "Treatment and care",
     "life": "Living with it",
-    "level": "Reading level"
+    "level": "Reading level",
+    "backToLearn": "All conditions"
   },
   "teachback": {
     "title": "Check your understanding",
@@ -252,11 +254,12 @@
     "doneEscalated": "Some parts may be easier with a person. We have offered you a counsellor.",
     "question": "Question {n} of {total}",
     "toOptions": "Explore your options",
-    "toCare": "See counsellor options"
+    "toCare": "See counsellor options",
+    "seeResults": "See my results"
   },
   "options": {
     "title": "Your options",
-    "body": "Every option is shown with equal weight. Meros never ranks them or tells you what to choose.",
+    "body": "Every option is shown with equal weight. Merros never ranks them or tells you what to choose.",
     "involves": "What it involves",
     "timing": "Timing",
     "cost": "Cost",
@@ -308,14 +311,14 @@
     "history": "Who has seen my data",
     "historyEmpty": "No one has accessed your data yet.",
     "you": "You",
-    "system": "Meros (automatic)",
+    "system": "Merros (automatic)",
     "integrity": "Check the record has not been altered",
     "integrityBody": "Every entry is chained to the one before it with a cryptographic hash. Any edit, deletion or insertion breaks the chain.",
     "verify": "Verify integrity",
     "intact": "Intact. {count} entries checked.",
     "broken": "The record was altered at entry {seq}.",
     "export": "Download all my data",
-    "exportBody": "A file with everything Meros holds about you, readable by you.",
+    "exportBody": "A file with everything Merros holds about you, readable by you.",
     "delete": "Delete all my data",
     "deleteBody": "Permanently removes your account, result, consents and journey. The access record keeps only anonymous entries so it can still be verified.",
     "deleteConfirmLabel": "Type DELETE or حذف to confirm",
@@ -386,18 +389,18 @@
   "admin": {
     "title": "Programme view",
     "body": "The Population Signals Dashboard with differential privacy arrives in Phase 4. Today you can verify the integrity of the access record.",
-    "statement": "Meros does not track marriage outcomes or any single personal decision as a success measure.",
+    "statement": "Merros does not track marriage outcomes or any single personal decision as a success measure.",
     "auditTitle": "Access record integrity"
   },
   "tour": {
     "open": "Judge Tour",
     "title": "Judge Tour",
-    "body": "A guided walk through Meros. Each step switches persona and opens the screen that proves it.",
+    "body": "A guided walk through Merros. Each step switches persona and opens the screen that proves it.",
     "go": "Go",
     "reset": "Reset demo data",
     "resetting": "Resetting",
     "s1": "Mariam receives a lab signed result, sets her language and gives granular consent",
-    "s2": "Signature check: Meros refuses a tampered result",
+    "s2": "Signature check: Merros refuses a tampered result",
     "s3": "Khalid's view: couple risk with multi gene analysis (after Mariam consents)",
     "s4": "Teach Back checks understanding and re explains",
     "s5": "Options Explorer: every option, equal weight",

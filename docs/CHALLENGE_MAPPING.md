@@ -2,7 +2,7 @@
 
 Status: ✅ built and tested in Phase 1 · ◐ partly built · ⏳ later phase
 
-| Challenge element | Meros features | Status |
+| Challenge element | Merros features | Status |
 |---|---|---|
 | Identify inherited risk | Preconception Screening Finder (4.2) ✅, Risk Beyond the Panel (6.2) ⏳ P5, Family Risk Engine (6.4) ⏳ P3, Living Results (6.3) ⏳ P3 | ◐ |
 | Understand | Risk Explainer with multi gene analysis (4.3) ✅, Teach Back (4.4) ✅, Genetic Copilot with voice (6.5) ⏳ P2/P4, My Result Video (6.6) ⏳ P5 | ◐ |

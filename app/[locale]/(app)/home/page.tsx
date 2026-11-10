@@ -35,7 +35,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const understood = TEACHBACK.every((q) => isQuestionDone(attempts.filter((a) => a.questionId === q.questionId)));
 
   let next: { href: string; label: string; variant?: "primary" | "gold" } | null = null;
-  if (own.status === "waiting") next = { href: "/result/import", label: t("importResult"), variant: "gold" };
+  if (own.status === "waiting") next = { href: "/import", label: t("importResult"), variant: "gold" };
   else if (own.status === "none") next = { href: "/screening", label: t("screening") };
   else if (own.status === "ok" && !understood) next = { href: "/result", label: t("openResult") };
   else if (openEsc > 0 && appt === 0) next = { href: "/support", label: t("book") };

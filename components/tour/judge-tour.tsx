@@ -12,7 +12,7 @@ import { cn } from "@/lib/cn";
 
 const STEPS: { key: string; persona: string; path: string }[] = [
   { key: "s1", persona: "mariam", path: "/onboarding" },
-  { key: "s2", persona: "mariam", path: "/result/import" },
+  { key: "s2", persona: "mariam", path: "/import" },
   { key: "s3", persona: "khalid", path: "/couple" },
   { key: "s4", persona: "mariam", path: "/teach-back" },
   { key: "s5", persona: "mariam", path: "/options" },

@@ -1,6 +1,6 @@
 # Clinical safety
 
-All clinical content is **pending accredited clinical review**. Meros supports, and never replaces, licensed screening and genetic counselling services.
+All clinical content is **pending accredited clinical review**. Merros supports, and never replaces, licensed screening and genetic counselling services.
 
 ## Risk engine (`lib/risk/engine.ts`)
 

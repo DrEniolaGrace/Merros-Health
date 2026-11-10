@@ -1,4 +1,4 @@
-# Meros web app. Multi stage build.
+# Merros web app. Multi stage build.
 #   target "tools":  full source and dev dependencies, used by compose to migrate and seed
 #   target "runner": small production image (Next.js standalone server), used by compose and Azure
 

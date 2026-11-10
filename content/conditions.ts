@@ -1,5 +1,5 @@
 /**
- * Condition cards (SPEC 4.3). Original plain language summaries written for Meros, citing
+ * Condition cards (SPEC 4.3). Original plain language summaries written for Merros, citing
  * MedlinePlus Genetics and GeneReviews. Balanced: what it is, treatments, quality of life.
  * All pending accredited clinical review.
  */

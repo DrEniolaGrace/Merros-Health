@@ -3,7 +3,7 @@
 ## Lab signed results (input integrity)
 
 * Each screening result is a FHIR style bundle signed by the issuing lab with **Ed25519** (`@noble/curves`). The signature covers the canonical JSON (keys sorted recursively), so formatting changes do not matter but any content change does.
-* Meros holds only the lab **public** key (`LAB_SIGNING_PUBLIC_KEY`). In this prototype the private key also sits in `.env` so `pnpm seed` can play the lab; in production the lab keeps it.
+* Merros holds only the lab **public** key (`LAB_SIGNING_PUBLIC_KEY`). In this prototype the private key also sits in `.env` so `pnpm seed` can play the lab; in production the lab keeps it.
 * Import verifies the signature before anything is stored; a failed check is refused and logged (`result_import_rejected`). Stored results are re verified on every decryption.
 * **Why it matters for Blind Couple Match (Phase 2):** the panel has only about 570 genes, so a dishonest partner could feed every gene into PSI to learn the other's full list. PSI inputs will be accepted only if they match a lab signed result, verified on both client and server. The same `verifyBundle` function is reused. Tests: tampered classification, inflated gene list, wrong key, flipped signature byte, malformed input.
 

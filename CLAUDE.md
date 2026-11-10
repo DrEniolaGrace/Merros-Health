@@ -1,4 +1,4 @@
-# Meros project rules
+# Merros project rules
 - The full specification is in SPEC.md. Read the relevant section before any task.
 - The visual design system is in DESIGN.md. Follow it for every screen and component. It replaces SPEC.md section 12.
 - Build only the current phase. Never break working features.

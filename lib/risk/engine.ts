@@ -1,5 +1,5 @@
 /**
- * Meros deterministic risk engine (SPEC 4.3). Pure functions, no I/O, fully unit tested.
+ * Merros deterministic risk engine (SPEC 4.3). Pure functions, no I/O, fully unit tested.
  * Language models never compute these numbers; they may only call this code.
  *
  * Model: autosomal recessive (AR) Mendelian transmission. For each parent and gene, t is the

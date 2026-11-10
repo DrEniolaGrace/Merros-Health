@@ -21,7 +21,7 @@ export async function GET() {
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "data_exported", resource: "export" });
 
   const body = {
-    notice: "Synthetic demo data. Meros export.",
+    notice: "Synthetic demo data. Merros export.",
     exportedAt: new Date().toISOString(),
     person: { id: user.id, name: { en: user.displayNameEn, ar: user.displayNameAr }, profile: user.profile },
     result: own.status === "ok" ? own.result : { status: own.status },

@@ -1,7 +1,7 @@
 # Local development stack (default): `docker compose up --build`
 #   postgres  PostgreSQL 16 with pgvector, data kept in the "pgdata" volume
 #   migrate   applies Prisma migrations, seeds synthetic personas if the database is empty, then exits
-#   web       the Meros app on http://localhost:3000
+#   web       the Merros app on http://localhost:3000
 #
 # Secrets (encryption master key, session secret, lab keys) come from .env (see .env.example).
 # DATABASE_URL / DIRECT_URL in .env are overridden here so the containers use the local Postgres;

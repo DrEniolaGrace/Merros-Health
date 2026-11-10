@@ -7,6 +7,7 @@ import { Rise, RiseItem } from "@/components/ui/rise";
 import { conditionById } from "@/content/conditions";
 import { pick, type ReadingLevel } from "@/content/types";
 import { LevelSwitch } from "./level-switch";
+import { BackLink } from "@/components/ui/back-link";
 
 export default async function ConditionPage({
   params,
@@ -29,6 +30,9 @@ export default async function ConditionPage({
 
   return (
     <Rise className="flex flex-col gap-8">
+      <RiseItem className="-mt-4">
+        <BackLink href="/learn" label={t("backToLearn")} />
+      </RiseItem>
       <RiseItem>
         <PageHeader eyebrow={c.gene} title={pick(c.name, locale)} label={{ kind: "education", text: ts("education") }} />
       </RiseItem>

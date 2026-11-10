@@ -33,8 +33,11 @@ export interface NavItem {
   primary?: boolean;
 }
 
+/** Extra paths that belong to a nav item (the result import screen belongs to My result). */
+const ALSO: Record<string, string[]> = { "/result": ["/import"], "/learn": [] };
+
 function isActive(pathname: string, href: string) {
-  return pathname === href || pathname.startsWith(`${href}/`);
+  return [href, ...(ALSO[href] ?? [])].some((h) => pathname === h || pathname.startsWith(`${h}/`));
 }
 
 /** Calm left navigation rail on desktop (DESIGN.md section 9). */

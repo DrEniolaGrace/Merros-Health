@@ -34,7 +34,7 @@ export async function signOut() {
 }
 
 /** Judge Tour: switch persona and open a screen. Only fixed, known paths are allowed. */
-const TOUR_PATHS = new Set(["/onboarding", "/result/import", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home"]);
+const TOUR_PATHS = new Set(["/onboarding", "/import", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home"]);
 
 export async function tourGo(personaKey: string, path: string) {
   if (!TOUR_PATHS.has(path)) throw new Error("Unknown tour path");

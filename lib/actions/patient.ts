@@ -57,7 +57,7 @@ export async function saveOnboarding(input: z.infer<typeof onboardingSchema>) {
   for (const p of new Set(data.consents)) await grant(user.id, p);
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "onboarding_completed", resource: "profile" });
   await refreshCoupleEscalations(user);
-  const next = data.consents.includes("view_own_result") && (await hasResultWaiting(user)) ? "/result/import" : "/home";
+  const next = data.consents.includes("view_own_result") && (await hasResultWaiting(user)) ? "/import" : "/home";
   redirect({ href: next, locale: data.locale });
 }
 
@@ -77,7 +77,12 @@ export async function setConsent(purpose: ConsentPurpose, on: boolean) {
 export async function importAction(tamper: boolean): Promise<ImportOutcome> {
   const user = await requireUser(["patient"]);
   const outcome = await importResult(user, { tamper });
-  if (outcome.ok) await refreshCoupleEscalations(user);
+  if (outcome.ok) {
+    await refreshCoupleEscalations(user);
+    // The result, couple and home screens all change once a result exists: drop any cached copy
+    // the browser holds from before the import, so "My result" opens the new result at once.
+    revalidatePath("/[locale]", "layout");
+  }
   return outcome;
 }
 

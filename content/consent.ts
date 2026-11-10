@@ -6,8 +6,8 @@ export const CONSENT_TEXT: Record<ConsentPurpose, { title: Bi; body: Bi }> = {
   view_own_result: {
     title: { en: "Show me my result", ar: "اعرض لي نتيجتي" },
     body: {
-      en: "Meros will open the result your screening lab sent and explain it to you. Only you will see it. You can choose not to know.",
-      ar: "سيفتح ميروس النتيجة التي أرسلها مختبر الفحص ويشرحها لك. لن يراها أحد غيرك. ويمكنك أن تختار عدم المعرفة.",
+      en: "Merros will open the result your screening lab sent and explain it to you. Only you will see it. You can choose not to know.",
+      ar: "سيفتح ميرّوس النتيجة التي أرسلها مختبر الفحص ويشرحها لك. لن يراها أحد غيرك. ويمكنك أن تختار عدم المعرفة.",
     },
   },
   couple_comparison: {

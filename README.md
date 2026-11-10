@@ -1,8 +1,8 @@
-# Meros
+# Merros
 
 A privacy preserving genomic companion that helps individuals, couples, families and the health system identify, understand and act on inherited disease risk. Built for the Future Health Digital Innovation Challenge 2026 (Abu Dhabi), Fertility Challenge 03.
 
-> Meros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice.
+> Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice.
 
 **All data in this prototype is synthetic.** Every person, clinician and clinic is fictional.
 

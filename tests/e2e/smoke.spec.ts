@@ -17,9 +17,9 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   await page.getByRole("button", { name: "Save my choices" }).click();
 
   // Signed import: a tampered delivery is refused, the real one verifies.
-  await expect(page).toHaveURL(/\/en\/result\/import/);
+  await expect(page).toHaveURL(/\/en\/import/);
   await page.getByRole("button", { name: "Demo: simulate a tampered delivery" }).click();
-  await expect(page.getByText("Meros refused this result")).toBeVisible();
+  await expect(page.getByText("Merros refused this result")).toBeVisible();
   await page.getByRole("button", { name: "Verify and open" }).click();
   await expect(page.getByText("Signature verified")).toBeVisible();
   await page.getByRole("link", { name: "Open my result" }).click();
@@ -43,10 +43,17 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   await expect(page.getByText("Not quite. Here is another way to think about it.")).toBeVisible();
   await page.getByText("I have one changed copy of a gene and I am usually healthy").click();
   await page.getByRole("button", { name: "Check my answer" }).click();
+  // The confirmation appears inside the card, in view, with its own next step.
+  await expect(page.getByText("That's right")).toBeInViewport();
+  await page.getByRole("button", { name: "Next question" }).click();
   await page.getByText("1 in 4 for every pregnancy, each time").click();
   await page.getByRole("button", { name: "Check my answer" }).click();
+  await expect(page.getByText("That's right")).toBeInViewport();
+  await page.getByRole("button", { name: "Next question" }).click();
   await page.getByText("No, it shows a chance. Other tests can give more certainty").click();
   await page.getByRole("button", { name: "Check my answer" }).click();
+  await expect(page.getByText("That's right")).toBeInViewport();
+  await page.getByRole("button", { name: "See my results" }).click();
   await expect(page.getByText("You answered 2 of 3 on the first try and 3 of 3 in the end.")).toBeVisible();
 
   // Options: all seven, no ranking language.

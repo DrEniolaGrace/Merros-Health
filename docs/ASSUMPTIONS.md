@@ -1,6 +1,6 @@
 # Assumptions
 
-* Results arrive from licensed screening labs as HL7 FHIR Genomics style bundles, signed by the lab. Meros can obtain each lab's public key through a trusted channel (for example a national key registry).
+* Results arrive from licensed screening labs as HL7 FHIR Genomics style bundles, signed by the lab. Merros can obtain each lab's public key through a trusted channel (for example a national key registry).
 * The carrier panel is about 570 genes in production; the prototype panel lists seven genes (HBB, HBA1, HBA2, SMN1, GJB2, CFTR, G6PD).
 * Pathogenic and likely pathogenic variants are treated as equivalent for couple risk, following common clinical practice.
 * Each pregnancy is independent; risk is reported per pregnancy.

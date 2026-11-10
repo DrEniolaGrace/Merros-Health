@@ -1,7 +1,7 @@
 /**
  * Lab result signing and verification (SPEC 4.1, and input integrity for PSI in 6.1).
  * The issuing lab signs the canonical JSON of the FHIR bundle with Ed25519.
- * Meros only ever holds the lab PUBLIC key; the private key exists in this prototype
+ * Merros only ever holds the lab PUBLIC key; the private key exists in this prototype
  * so the seed script can play the role of the lab.
  */
 import { ed25519 } from "@noble/curves/ed25519";

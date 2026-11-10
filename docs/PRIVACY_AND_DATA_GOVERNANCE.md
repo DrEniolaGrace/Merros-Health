@@ -9,7 +9,7 @@
 * Partners see only genes they both carry, never each other's full result.
 * No identifiers are ever sent to an AI model (Phase 2 onward).
 * Population statistics use differential privacy with suppression of groups smaller than 10 (Phase 4). Never broken down by tribe, family name or any identity group that could stigmatise.
-* Meros does not track marriage outcomes or any single personal decision as a success measure.
+* Merros does not track marriage outcomes or any single personal decision as a success measure.
 
 ## Consent purposes (Phase 1)
 
@@ -26,7 +26,7 @@ All reads of a result pass the single consent gate (`lib/consent/check.ts`, 10 t
 ## Person controls (Privacy screen)
 
 * Turn any consent on or off (revocation is immediate and logged).
-* "Who has seen my data": the person's own audit entries, with the actor named (you, Meros automatic, a named counsellor, or a partner viewing the couple result).
+* "Who has seen my data": the person's own audit entries, with the actor named (you, Merros automatic, a named counsellor, or a partner viewing the couple result).
 * Verify the integrity of the access record.
 * Download all data as readable JSON (`/api/export`; never includes keys).
 * Delete all data with typed confirmation (cascade delete; anonymous audit rows remain for verifiability).

@@ -1,4 +1,4 @@
-/** Meros mark: two interlaced strands meeting at a single point of gold light. */
+/** Merros mark: two interlaced strands meeting at a single point of gold light. */
 export function LogoMark({ size = 28 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden>

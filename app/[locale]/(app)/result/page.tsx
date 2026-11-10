@@ -37,7 +37,7 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
   if (own.status === "waiting") {
     return (
       <GlassCard tone="gold">
-        <EmptyState title={t("waitingTitle")} body={pick(NOT_A_DIAGNOSIS.body, locale)} action={<LinkButton href="/result/import" variant="gold">{t("waitingAction")}</LinkButton>} />
+        <EmptyState title={t("waitingTitle")} body={pick(NOT_A_DIAGNOSIS.body, locale)} action={<LinkButton href="/import" variant="gold">{t("waitingAction")}</LinkButton>} />
       </GlassCard>
     );
   }
