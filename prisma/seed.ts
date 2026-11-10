@@ -12,6 +12,10 @@ async function main() {
   if (!masterKey || !labPrivateKey) {
     throw new Error("ENCRYPTION_MASTER_KEY and LAB_SIGNING_PRIVATE_KEY are required. Run `pnpm setup:env` first.");
   }
+  if (process.argv.includes("--if-empty") && (await prisma.user.count()) > 0) {
+    console.log("Database already has demo data; skipping seed (run `pnpm seed` to reset).");
+    return;
+  }
   const r = await resetDemo({ masterKey, labPrivateKey });
   console.log(`Seeded ${r.users} synthetic personas.`);
 }

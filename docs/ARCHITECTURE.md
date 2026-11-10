@@ -27,7 +27,7 @@ flowchart LR
 ```
 
 * **Web app:** Next.js 15 (App Router), TypeScript strict, Tailwind v4 with the DESIGN.md token system, Motion, React Three Fiber (Living Helix, lazy loaded with a static fallback), next-intl (Arabic default, RTL).
-* **Data:** Prisma 6 on PostgreSQL. Locally a hosted Neon database (Docker not yet available); production Azure Database for PostgreSQL Flexible Server in UAE North. `pgvector` is enabled for Phase 2 retrieval.
+* **Data:** Prisma 6 on PostgreSQL. Locally PostgreSQL 16 with pgvector in Docker Compose (Neon as a fallback); production Azure Database for PostgreSQL Flexible Server in UAE North. `pgvector` is enabled for Phase 2 retrieval.
 * **Auth:** demo persona picker behind `DEMO_MODE` with an encrypted, httpOnly iron-session cookie. Production integration point: UAE Pass (OpenID Connect).
 * **Result import:** the lab's signed FHIR style bundle waits in an encrypted inbox. On import the server verifies the Ed25519 signature against the lab public key **before** storing anything, then stores the canonical bundle encrypted with the person's data key. The signature is re verified each time the result is decrypted.
 * **Couple analysis (Phase 1):** after both partners consent, the server computes the couple result and returns **only genes both partners carry**. Phase 2 replaces this with Blind Couple Match (ECDH PSI over ristretto255) so the server never sees either result.

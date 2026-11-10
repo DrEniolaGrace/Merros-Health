@@ -14,3 +14,4 @@
 | 2026-11-08 | Phase 1 documentation: README, ARCHITECTURE, SECURITY, CLINICAL_SAFETY, PRIVACY_AND_DATA_GOVERNANCE, REGULATORY, ASSUMPTIONS, DEPENDENCIES, LIMITATIONS, CHALLENGE_MAPPING, METRICS; stubs for RESPONSIBLE_AI, AI_EVALUATION, PILOT_PLAN, COMMERCIAL; data/reference/SOURCES.md | Done | n/a |
 
 **Phase 1 status:** complete. Next: Phase 2 (Blind Couple Match with Dual Key; Genetic Copilot text with Safety Verifier and evaluation harness).
+| 2026-11-10 | Local development switched to Docker Compose: postgres (pgvector), migrate (migrations + seed if empty), web (standalone image). Neon kept as the Node.js fallback. Docker helper scripts, CLAUDE.md and README updated | Done | 101 unit + 3 e2e passing against the Docker stack |

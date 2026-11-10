@@ -1,6 +1,15 @@
-# Local stack for when Docker is available: `docker compose up`
-# Today local dev runs with `pnpm dev` against Neon (see README). Variable names are identical,
-# so switching only means pointing DATABASE_URL / DIRECT_URL at the postgres service below.
+# Local development stack (default): `docker compose up --build`
+#   postgres  PostgreSQL 16 with pgvector, data kept in the "pgdata" volume
+#   migrate   applies Prisma migrations, seeds synthetic personas if the database is empty, then exits
+#   web       the Meros app on http://localhost:3000
+#
+# Secrets (encryption master key, session secret, lab keys) come from .env (see .env.example).
+# DATABASE_URL / DIRECT_URL in .env are overridden here so the containers use the local Postgres;
+# .env can keep the Neon URLs for the Neon fallback (`pnpm dev`).
+
+x-db-env: &db-env
+  DATABASE_URL: postgresql://meros:meros@postgres:5432/meros
+  DIRECT_URL: postgresql://meros:meros@postgres:5432/meros
 
 services:
   postgres:
@@ -14,32 +23,34 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U meros"]
-      interval: 5s
-      retries: 10
+      test: ["CMD-SHELL", "pg_isready -U meros -d meros"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
 
   migrate:
-    build: .
-    command: ["sh", "-c", "npx prisma migrate deploy"]
+    build:
+      context: .
+      target: tools
     env_file: .env
-    environment:
-      DATABASE_URL: postgresql://meros:meros@postgres:5432/meros
-      DIRECT_URL: postgresql://meros:meros@postgres:5432/meros
+    environment: *db-env
     depends_on:
       postgres:
         condition: service_healthy
+    restart: "no"
 
   web:
-    build: .
+    build:
+      context: .
+      target: runner
     env_file: .env
-    environment:
-      DATABASE_URL: postgresql://meros:meros@postgres:5432/meros
-      DIRECT_URL: postgresql://meros:meros@postgres:5432/meros
+    environment: *db-env
     ports:
       - "3000:3000"
     depends_on:
       migrate:
         condition: service_completed_successfully
+    restart: unless-stopped
 
   # Phase 5: Risk Beyond the Panel genomics service (Python FastAPI, bcftools, PLINK, KING).
   # genomics:

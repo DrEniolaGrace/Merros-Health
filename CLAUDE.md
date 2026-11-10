@@ -4,5 +4,8 @@
 - Build only the current phase. Never break working features.
 - Synthetic data only. Risk numbers come from tested code, never from the AI model.
 - After every completed feature: run tests, update docs/PROGRESS.md, and make a git commit.
-- Windows machine. Docker is not available yet: run locally with Node.js and the hosted Neon Postgres database. Keep Dockerfiles and docker-compose.yml ready for later. Production target is Azure (UAE North).
+- Windows machine with Docker Desktop. Local development runs with `docker compose up --build` (postgres with pgvector, migrate+seed, web on http://localhost:3000). Rebuild the web image after code changes.
+- Neon is the fallback: `pnpm dev` / `pnpm start` use DATABASE_URL and DIRECT_URL from .env (Neon). Compose overrides those two variables, so .env keeps the Neon URLs. Keep both paths working.
+- To run Node commands (tests, seed) against the Docker database, set DATABASE_URL and DIRECT_URL to postgresql://meros:meros@localhost:5432/meros for that command. Never point tests at Neon by accident.
+- Production target is Azure (UAE North).
 - Write user facing text in both Arabic and English.

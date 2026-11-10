@@ -7,3 +7,5 @@ data/private
 data/lab-inbox
 test-results
 playwright-report
+.claude
+coverage

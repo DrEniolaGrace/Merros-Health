@@ -6,17 +6,31 @@ A privacy preserving genomic companion that helps individuals, couples, families
 
 **All data in this prototype is synthetic.** Every person, clinician and clinic is fictional.
 
-## Run it in under 5 minutes (Windows, no Docker)
+## Run it in under 5 minutes (Docker, recommended)
 
-Prerequisites: Node.js 22 or newer, and a Postgres database (we use a hosted [Neon](https://neon.tech) project).
+Prerequisites: Docker Desktop, and Node.js 22 or newer (only to generate local secrets once).
 
 ```bash
 npm install -g pnpm@9.15.0
 pnpm install
 pnpm setup:env
+docker compose up --build -d
 ```
 
-`pnpm setup:env` creates `.env` and generates the encryption master key, session secret and the simulated lab's Ed25519 key pair. Open `.env` and set `DATABASE_URL` (pooled Neon URL, host contains `-pooler`) and `DIRECT_URL` (same URL without `-pooler`). `.env` is never committed.
+`pnpm setup:env` creates `.env` (never committed) with the encryption master key, session secret and the simulated lab's Ed25519 key pair. Compose then starts PostgreSQL with pgvector, applies migrations, seeds the synthetic personas (only if the database is empty) and serves the app at http://localhost:3000.
+
+| Task | Command |
+|---|---|
+| Start, or rebuild after code changes | `pnpm docker:up` |
+| Reset demo data | `pnpm docker:seed` (or Judge Tour > Reset demo data) |
+| App logs | `pnpm docker:logs` |
+| Stop | `pnpm docker:down` (data stays in the `pgdata` volume; add `-v` to wipe it) |
+
+The genomics service is commented out in `docker-compose.yml` until Phase 5.
+
+### Fallback: Node.js with Neon (no Docker)
+
+Set `DATABASE_URL` (pooled Neon URL, host contains `-pooler`) and `DIRECT_URL` (same URL without `-pooler`) in `.env`. Compose overrides these two variables, so they can stay in `.env` permanently.
 
 ```bash
 pnpm db:deploy
@@ -25,11 +39,7 @@ pnpm build
 pnpm start
 ```
 
-Open http://localhost:3000. For development with hot reload use `pnpm dev` (first page loads compile slowly on Windows).
-
-### With Docker (later)
-
-`Dockerfile` and `docker-compose.yml` are ready: point `DATABASE_URL` / `DIRECT_URL` at the compose Postgres (already set in the compose file) and run `docker compose up`. The genomics service is commented out until Phase 5.
+Use `pnpm dev` for hot reload (first page loads compile slowly on Windows). Stop the Docker web container first, since both use port 3000.
 
 ## Demo logins
 
@@ -55,6 +65,12 @@ The gold **Judge Tour** button (bottom corner of every screen) walks through Pha
 ```bash
 pnpm test        # 101 unit tests: risk engine, escalation, consent, signatures, encryption, audit chain, Teach Back, content, i18n
 pnpm test:e2e    # Playwright smoke tests at 375px in English and Arabic (resets demo data first)
+```
+
+`pnpm test:e2e` resets whichever database `DATABASE_URL` points to (Neon by default, from `.env`). To test the Docker stack, point it at the container database for that command (PowerShell):
+
+```powershell
+$env:DATABASE_URL="postgresql://meros:meros@localhost:5432/meros"; $env:DIRECT_URL=$env:DATABASE_URL; pnpm test:e2e
 ```
 
 ## Documentation
