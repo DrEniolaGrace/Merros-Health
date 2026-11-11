@@ -3,17 +3,16 @@ import type { User } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { emptyContext, evaluateEscalation, type Escalation } from "@/lib/escalation/rules";
 import { appendAudit } from "@/lib/audit/log";
-import { getCoupleView, getOwnResult } from "./results";
+import { getOwnResult } from "./results";
 
 /**
  * Re evaluates the escalation rules for one person from current data and records any newly
  * fired reason. Result based rules only run once the person has chosen to see their result.
  */
 export async function refreshEscalations(user: User, extra: { medicalAdviceRequested?: boolean } = {}): Promise<Escalation[]> {
-  const [profile, own, couple, attempts, existing] = await Promise.all([
+  const [profile, own, attempts, existing] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id } }),
     getOwnResult(user, { log: false }),
-    getCoupleView(user, { log: false }),
     prisma.teachBackAttempt.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
     prisma.escalation.findMany({ where: { userId: user.id } }),
   ]);
@@ -21,7 +20,9 @@ export async function refreshEscalations(user: User, extra: { medicalAdviceReque
   const fired = evaluateEscalation(
     emptyContext({
       ownVariants: own.status === "ok" ? own.result.variants : [],
-      coupleSharedGenes: couple.status === "ok" ? couple.shared.map((s) => s.gene) : [],
+      // Shared genes are known to the server only if the person chose to tell their counsellor
+      // (Blind Couple Match runs on the devices; see lib/actions/psi.ts).
+      coupleSharedGenes: existing.find((x) => x.code === "shared_pathogenic_gene")?.detail?.split(",").filter(Boolean) ?? [],
       pregnancyStatus: profile?.pregnancyStatus ?? "prefer_not_to_say",
       teachBackAttempts: attempts,
       medicalAdviceRequested: extra.medicalAdviceRequested || existing.some((e) => e.code === "medical_advice_requested"),

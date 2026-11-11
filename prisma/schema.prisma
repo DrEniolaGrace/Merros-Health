@@ -107,6 +107,7 @@ model CoupleLink {
   partnerB   User     @relation("PartnerB", fields: [partnerBId], references: [id], onDelete: Cascade)
   status     String   @default("engaged") // engaged | married
   createdAt  DateTime @default(now())
+  psiSession PsiSession?
 
   @@unique([partnerAId, partnerBId])
 }
@@ -229,5 +230,29 @@ model ValuesAssessment {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   ratings   Json
+  createdAt DateTime @default(now())
+}
+
+/// Blind Couple Match relay state (SPEC 6.1). The server only stores opaque, blinded ristretto255
+/// points (hex). It never holds a secret scalar, a gene name or the intersection.
+model PsiSession {
+  id           String     @id @default(cuid())
+  coupleLinkId String     @unique
+  coupleLink   CoupleLink @relation(fields: [coupleLinkId], references: [id], onDelete: Cascade)
+  aRound1      Json? // partner A's blinded set
+  bRound1      Json?
+  aRound2      Json? // partner A's exponentiation of B's round 1 (B's order preserved)
+  bRound2      Json?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+/// Safety Verifier and guard log (SPEC 6.5). Stores which rule fired, never the message text.
+model GuardEvent {
+  id        String   @id @default(cuid())
+  stage     String // rules | classifier | input
+  rule      String // rule id or class
+  action    String // rewritten | replaced_with_escalation | escalated
+  locale    String
   createdAt DateTime @default(now())
 }

@@ -8,8 +8,6 @@ import { masterKey, userDataKey } from "@/lib/crypto/keys";
 import { keyFingerprint, verifyBundle } from "@/lib/fhir/sign";
 import { parseBundle, type ParsedResult } from "@/lib/fhir/bundle";
 import { hasActiveConsent, coupleConsentsActive } from "@/lib/consent/check";
-import { analyseCouple, type CoupleGeneResult } from "@/lib/risk/engine";
-import type { Fraction } from "@/lib/risk/fraction";
 import { appendAudit } from "@/lib/audit/log";
 import { recordStep } from "./pathway";
 
@@ -114,56 +112,56 @@ export async function getOwnResult(user: User, { log = true } = {}): Promise<Own
   return { status: "ok", result };
 }
 
-export interface SharedGene {
-  gene: string;
-  conditionIds: string[];
-  affected: Fraction;
-  carrier: Fraction;
-  nonCarrier: Fraction;
+/**
+ * The person's own lab signed result, for their own device only (Blind Couple Match runs on the
+ * device). Consent gated; the signature is re verified before release.
+ */
+export async function getOwnSignedResult(user: User): Promise<{ bundle: unknown; signature: string } | null> {
+  const consents = await prisma.consent.findMany({ where: { userId: user.id } });
+  if (!hasActiveConsent(consents, "view_own_result")) return null;
+  const row = await prisma.labResult.findFirst({ where: { userId: user.id }, orderBy: { importedAt: "desc" } });
+  if (!row) return null;
+  const bundle = JSON.parse(decryptString(row.encBundle, userDataKey(user), user.id));
+  if (!verifyBundle(bundle, row.signature, env().LAB_SIGNING_PUBLIC_KEY)) throw new Error("Stored result failed signature verification");
+  return { bundle, signature: row.signature };
 }
 
-export type CoupleView =
+export type CoupleStatus =
   | { status: "no_partner" }
-  | { status: "awaiting_consent"; selfConsented: boolean }
-  | { status: "awaiting_results" }
-  | { status: "ok"; partnerName: { en: string; ar: string }; shared: SharedGene[]; combinedAffected: Fraction; needsCounsellor: boolean };
+  | {
+      status: "linked";
+      linkId: string;
+      role: "a" | "b";
+      partner: User;
+      selfConsented: boolean;
+      bothConsented: boolean;
+      selfHasResult: boolean;
+    };
 
 /**
- * Couple analysis. Reveals ONLY genes both partners carry (never the partner's other results).
- * Phase 1 computes on the server after both partners consent; Phase 2 replaces this with
- * Blind Couple Match (PSI) so the server never sees either full result.
+ * Couple link and Dual Key state. The server never compares the two results: matching happens
+ * on the partners' devices (lib/psi/protocol.ts) and the server only relays blinded points.
  */
-export async function getCoupleView(user: User, { log = true } = {}): Promise<CoupleView> {
+export async function getCoupleStatus(user: User): Promise<CoupleStatus> {
   const link = await prisma.coupleLink.findFirst({
     where: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] },
     include: { partnerA: true, partnerB: true },
   });
   if (!link) return { status: "no_partner" };
-  const partner = link.partnerAId === user.id ? link.partnerB : link.partnerA;
-  const [mine, theirs] = await Promise.all([
+  const role = link.partnerAId === user.id ? "a" : "b";
+  const partner = role === "a" ? link.partnerB : link.partnerA;
+  const [mine, theirs, results] = await Promise.all([
     prisma.consent.findMany({ where: { userId: user.id } }),
     prisma.consent.findMany({ where: { userId: partner.id } }),
+    prisma.labResult.count({ where: { userId: user.id } }),
   ]);
-  if (!coupleConsentsActive(mine, theirs)) {
-    return { status: "awaiting_consent", selfConsented: hasActiveConsent(mine, "couple_comparison") };
-  }
-  const [a, b] = await Promise.all([decryptResult(user), decryptResult(partner)]);
-  if (!a || !b) return { status: "awaiting_results" };
-  const analysis = analyseCouple(a.variants, b.variants);
-  const shared = analysis.genes
-    .filter((g): g is Extract<CoupleGeneResult, { kind: "computed" }> => g.kind === "computed" && g.shared)
-    .map((g) => ({ gene: g.gene, conditionIds: g.conditionIds, ...g.outcome }));
-  if (log) await appendAudit({ actorId: user.id, subjectId: partner.id, action: "couple_result_viewed", resource: `couple:${link.id}` });
   return {
-    status: "ok",
-    partnerName: { en: partner.displayNameEn, ar: partner.displayNameAr },
-    shared,
-    combinedAffected: analysis.combinedAffected,
-    needsCounsellor: analysis.genes.some((g) => g.kind === "needs_counsellor" && bothCarry(a.variants, b.variants, g.gene)),
+    status: "linked",
+    linkId: link.id,
+    role,
+    partner,
+    selfConsented: hasActiveConsent(mine, "couple_comparison"),
+    bothConsented: coupleConsentsActive(mine, theirs),
+    selfHasResult: results > 0 && hasActiveConsent(mine, "view_own_result"),
   };
-}
-
-function bothCarry(a: ParsedResult["variants"], b: ParsedResult["variants"], gene: string) {
-  const has = (vs: ParsedResult["variants"]) => vs.some((v) => v.gene === gene && (v.acmg === "pathogenic" || v.acmg === "likely_pathogenic"));
-  return has(a) && has(b);
 }

@@ -7,6 +7,30 @@
 * Import verifies the signature before anything is stored; a failed check is refused and logged (`result_import_rejected`). Stored results are re verified on every decryption.
 * **Why it matters for Blind Couple Match (Phase 2):** the panel has only about 570 genes, so a dishonest partner could feed every gene into PSI to learn the other's full list. PSI inputs will be accepted only if they match a lab signed result, verified on both client and server. The same `verifyBundle` function is reused. Tests: tampered classification, inflated gene list, wrong key, flipped signature byte, malformed input.
 
+## Blind Couple Match: PSI threat model (`lib/psi/protocol.ts`)
+
+**Goal.** Partners learn which carrier genes they share and nothing else. Neither partner, nor the relay, learns the other's remaining genes.
+
+**Protocol.** ECDH private set intersection over ristretto255 (`@noble/curves`), run in each partner's browser:
+
+1. Each device verifies its own lab signed result, takes the genes where the person is a straightforward carrier, hashes each to a curve point (RFC 9380 hash to ristretto255, domain separated) and raises it to a fresh secret scalar that never leaves the device. The set is padded with random points to a fixed size of 8 and shuffled (round 1).
+2. Each device raises the partner's round 1 points to its own secret, preserving order (round 2).
+3. Each device compares the partner's round 2 of its own points with its own exponentiation of the partner's round 1. Equal points are shared genes. The risk engine then runs on the device.
+
+**Dual Key.** The relay releases a partner's points only while both partners hold an active `couple_comparison` consent. Withdrawing consent deletes the relay state. Either partner can decline; the other only ever sees "waiting".
+
+| Threat | Mitigation | Residual risk |
+|---|---|---|
+| Relay (server) reads the match | It only stores blinded points; computing the intersection needs a device secret. Verified by unit tests and by inspecting the `PsiSession` table (hex points only) | The prototype server also stores each person's encrypted result for the Risk Explainer, so a fully compromised server with the master key could decrypt results at rest. Production: results encrypted to user held keys |
+| Partner learns how many genes I carry | Fixed size padding (8 points) | Panels where a person carries more than 8 genes need a larger fixed size |
+| Dishonest partner submits every gene on the panel to learn my full list (the panel has about 570 genes) | Inputs must come from a lab signed result: verified on the device before blinding and on the server before round 1 is accepted; the fixed set size caps any submission at 8 items | A modified client could still submit up to 8 chosen genes instead of its own. Production upgrade: the lab signs per gene blinded commitments, or a zero knowledge proof ties round 1 to the signed result |
+| Replay or stale secrets | A new round 1 voids all earlier round 2 values; devices detect a mismatch with their stored secret and restart | None known |
+| Malformed points (identity, invalid encodings, duplicates) | Rejected on device and relay (`decodePointSet`, tested) | None known |
+| Outcome leaks to the server | The server learns shared genes only if the person presses "Tell our counsellor"; the claim must be a subset of their own signed carrier genes | The person chooses this |
+| Device theft | The secret lives in browser storage for the session | Production: platform keystore, short lived secrets |
+
+Not built (optional in the specification): cardinality only mode and a synchronised "reveal together" moment. The reveal is a deliberate tap on each phone.
+
 ## Encryption at rest
 
 * Envelope encryption: each user has a random 256 bit data key, stored only wrapped (AES-256-GCM) by the master key (`ENCRYPTION_MASTER_KEY` locally, Azure Key Vault in production).

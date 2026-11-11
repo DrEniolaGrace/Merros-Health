@@ -8,7 +8,6 @@ import { canonicalize } from "@/lib/canonical";
 import { encryptString, generateDataKey, wrapDataKey } from "@/lib/crypto/fieldEncryption";
 import { buildBundle } from "@/lib/fhir/bundle";
 import { keyFingerprint, publicKeyFromPrivate, signBundle } from "@/lib/fhir/sign";
-import { analyseCouple } from "@/lib/risk/engine";
 import { emptyContext, evaluateEscalation } from "@/lib/escalation/rules";
 import { PURPOSES } from "@/lib/consent/purposes";
 import { appendAudit } from "@/lib/audit/log";
@@ -131,11 +130,9 @@ export async function resetDemo(keys: SeedKeys) {
   // Pre existing escalations for already onboarded personas, from the same tested rules.
   for (const p of PERSONAS) {
     if (p.role !== "patient" || !p.onboarded) continue;
-    const partner = p.partnerKey ? PERSONAS.find((x) => x.key === p.partnerKey) : undefined;
-    const bothShare = partner?.onboarded && partner.variants && p.variants;
-    const shared = bothShare ? analyseCouple(p.variants!, partner!.variants!).sharedGenes : [];
+    // Couple outcomes are never precomputed: partners match on their own devices (PSI).
     const fired = evaluateEscalation(
-      emptyContext({ ownVariants: p.variants ?? [], coupleSharedGenes: shared, pregnancyStatus: p.pregnancyStatus }),
+      emptyContext({ ownVariants: p.variants ?? [], pregnancyStatus: p.pregnancyStatus }),
     );
     for (const e of fired) {
       await prisma.escalation.create({

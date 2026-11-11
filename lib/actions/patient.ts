@@ -69,6 +69,10 @@ export async function setConsent(purpose: ConsentPurpose, on: boolean) {
     await grant(user.id, p);
   } else {
     await revoke(user.id, p);
+    // Withdrawing the Dual Key wipes the relay state, so nothing further can be matched.
+    if (p === "couple_comparison") {
+      await prisma.psiSession.deleteMany({ where: { coupleLink: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } } });
+    }
   }
   await refreshCoupleEscalations(user);
   revalidatePath("/[locale]", "layout");

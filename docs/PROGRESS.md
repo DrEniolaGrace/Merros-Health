@@ -18,3 +18,9 @@
 | 2026-11-10 | Testing feedback: fixed "My result" not opening after import (import screen moved from /result/import to /import), renamed to Merros, back link on condition cards, Teach Back confirmation shown in place with a Next button | Done | 101 unit + 5 e2e (new: result navigation, back link, confirmation in viewport) |
 | 2026-11-11 | Visual upgrade from reference images (kept DESIGN.md burgundy and gold): starfield, glowing event horizon, gradient display type, eyebrow pills, floating status chips with corner dots, live badges, stat rows, dot meter. New landing (couple match window, journey graph, Inheritance Explorer using the tested engine) and home (real status chips and numbers). Page headers, login and /design-system updated | Done | 101 unit + 5 e2e passing (Docker) |
 | 2026-11-11 | Restyled My result (hero with gene copy illustration, stats, gene orbs), Couple (Dual Key orbs with shared genes in gold, stats, dot meters) and Care (counsellor ring, numbered reasons, two step booking, ticket style appointment) | Done | 101 unit + 5 e2e passing (Docker) |
+
+## Phase 2
+
+| Date | Feature | Status | Tests |
+|---|---|---|---|
+| 2026-11-12 | Blind Couple Match: ECDH PSI over ristretto255 on the partners' devices, fixed size padding, Dual Key release, lab signed input integrity (device and server), reveal on tap, outcome shared with the counsellor only by choice. The server no longer compares results. PSI threat model in SECURITY.md | Done | 121 unit (20 new PSI) + 5 e2e (two phone flow) on Docker |

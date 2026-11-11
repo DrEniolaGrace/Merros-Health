@@ -1,23 +1,15 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { LockKey, UsersThree } from "@phosphor-icons/react/dist/ssr";
 import { requireUser } from "@/lib/auth/session";
-import { getCoupleView } from "@/lib/services/results";
-import { refreshEscalations } from "@/lib/services/escalation";
-import { toNumber, toPercentString } from "@/lib/risk/fraction";
+import { env } from "@/lib/env";
+import { getCoupleStatus } from "@/lib/services/results";
+import { GENES } from "@/lib/risk/genes";
 import { GlassCard } from "@/components/ui/glass-card";
 import { EmptyState } from "@/components/ui/states";
 import { LinkButton } from "@/components/ui/link-button";
-import { ActionDock } from "@/components/ui/page";
-import { Rise, RiseItem } from "@/components/ui/rise";
-import { CountUp } from "@/components/ui/motion";
-import { LiveBadge, StatRow } from "@/components/ui/accents";
-import { PageHero } from "@/components/ui/page-hero";
-import { DualKey } from "@/components/risk/dual-key";
 import { conditionById } from "@/content/conditions";
 import { LIMITS, NOT_A_DIAGNOSIS } from "@/content/explainer";
 import { pick } from "@/content/types";
-import { ConsentButton } from "./consent-button";
-import { CoupleNumbers } from "./couple-numbers";
+import { BlindMatch } from "./blind-match";
 
 export default async function CouplePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -27,150 +19,98 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
   const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   const tds = await getTranslations("ds");
-  const view = await getCoupleView(user);
-  const me = locale === "ar" ? user.displayNameAr : user.displayNameEn;
+  const tc = await getTranslations("common");
+  const te = await getTranslations("errors");
+  const couple = await getCoupleStatus(user);
 
-  if (view.status === "no_partner") {
+  if (couple.status === "no_partner") {
     return <GlassCard><EmptyState title={t("noPartnerTitle")} body={t("noPartnerBody")} /></GlassCard>;
   }
-  if (view.status === "awaiting_consent") {
+  if (!couple.selfHasResult) {
     return (
-      <PageHero
-        eyebrow={tp("eyebrowCouple")}
-        title={view.selfConsented ? t("awaitingPartnerTitle") : t("awaitingSelfTitle")}
-        body={view.selfConsented ? t("awaitingPartnerBody") : t("awaitingSelfBody")}
-        badges={<LiveBadge tone={view.selfConsented ? "gold" : "rose"}>{view.selfConsented ? t("youAgreed") : t("sealedBadge")}</LiveBadge>}
-        aside={
-          <DualKey
-            label={t("dualKeyLabel")}
-            you={{ name: me, status: view.selfConsented ? t("agreedStatus") : t("notYetStatus") }}
-            partner={{ name: t("partner"), status: t("notYetStatus") }}
-            youAgreed={view.selfConsented}
-            partnerAgreed={false}
-          />
-        }
-      >
-        {!view.selfConsented && (
-          <div>
-            <ConsentButton label={t("agree")} />
-          </div>
-        )}
-      </PageHero>
+      <GlassCard>
+        <EmptyState title={t("needResultTitle")} body={t("needResultBody")} action={<LinkButton href="/result" variant="secondary">{t("needResultAction")}</LinkButton>} />
+      </GlassCard>
     );
   }
-  if (view.status === "awaiting_results") {
-    return <GlassCard><EmptyState title={t("awaitingResultsTitle")} body={t("awaitingResultsBody")} /></GlassCard>;
-  }
 
-  await refreshEscalations(user);
-  const partner = locale === "ar" ? view.partnerName.ar : view.partnerName.en;
-  const cname = (ids: string[]) => ids.map((id) => (conditionById(id) ? pick(conditionById(id)!.name, locale) : id)).join(" / ");
-  const combinedPct = toNumber(view.combinedAffected) * 100;
-  const decimals = Number.isInteger(combinedPct) ? 0 : 2;
+  const ar = locale === "ar";
+  const partnerName = ar ? couple.partner.displayNameAr : couple.partner.displayNameEn;
+  const geneConditions = Object.fromEntries(
+    Object.values(GENES).map((g) => [g.symbol, g.conditionIds.map((id) => conditionById(id)).filter(Boolean).map((c) => pick(c!.name, locale)).join(" / ") || g.symbol]),
+  );
 
   return (
-    <Rise className="flex flex-col gap-10">
-      <RiseItem>
-        <PageHero
-          eyebrow={tp("eyebrowCouple")}
-          title={t("title")}
-          accent={view.shared.length ? t("heroAccentShared", { count: view.shared.length }) : t("heroAccentNone")}
-          label={{ kind: "education", text: ts("education") }}
-          badges={
-            <>
-              <LiveBadge tone="gold">{t("bothAgreed")}</LiveBadge>
-              <span className="inline-flex items-center gap-2 text-sm text-muted">
-                <UsersThree size={16} weight="light" />
-                {t("with", { name: partner })}
-              </span>
-            </>
-          }
-          aside={
-            <DualKey
-              label={t("dualKeyLabel")}
-              you={{ name: me, status: t("agreedStatus") }}
-              partner={{ name: partner, status: t("agreedStatus") }}
-              youAgreed
-              partnerAgreed
-              shared={view.shared.map((s) => s.gene)}
-            />
-          }
-        />
-      </RiseItem>
-
-      <RiseItem>
-        <StatRow
-          items={[
-            { value: <CountUp value={view.shared.length} locale={locale} />, label: t("statShared") },
-            { value: <CountUp value={combinedPct} decimals={decimals} suffix="%" locale={locale} />, label: t("statCombined") },
-            { value: <CountUp value={0} locale={locale} />, label: t("statSeen") },
-          ]}
-        />
-      </RiseItem>
-
-      {view.shared.length === 0 ? (
-        <RiseItem>
-          <GlassCard className="flex flex-col gap-3">
-            <h2 className="text-2xl font-medium">{t("noneSharedTitle")}</h2>
-            <p className="measure text-muted">{t("noneSharedBody")}</p>
-            <p className="measure text-sm text-muted">{pick(LIMITS.items[1].body, locale)}</p>
-          </GlassCard>
-        </RiseItem>
-      ) : (
-        <RiseItem>
-          <CoupleNumbers
-            locale={locale}
-            genes={view.shared.map((g) => ({
-              gene: g.gene,
-              title: t("sharedTitle", { gene: g.gene }),
-              perPregnancy: t("perPregnancy", { condition: cname(g.conditionIds) }),
-              affectedPct: toNumber(g.affected) * 100,
-              carrierText: t("carrierChance", { pct: toPercentString(g.carrier) }),
-            }))}
-            combined={
-              view.shared.length > 1
-                ? {
-                    pct: combinedPct,
-                    exact: toPercentString(view.combinedAffected),
-                    title: t("combinedTitle"),
-                    body: t("combinedBody"),
-                    how: t("combinedHow"),
-                    hundred: Math.round(combinedPct),
-                    hundredSummary: t("hundredSummary", { n: Math.round(combinedPct) }),
-                    notAffected: t("notAffected"),
-                  }
-                : null
-            }
-            gridLabels={{
-              title: tds("fourSquare"),
-              parentA: tds("parentA"),
-              parentB: tds("parentB"),
-              nonCarrier: tds("nonCarrier"),
-              carrier: tds("carrier"),
-              affected: tds("affected"),
-              summary: tds("fourSummary"),
-            }}
-          />
-        </RiseItem>
-      )}
-
-      <RiseItem>
-        <GlassCard tone="gold" hero className="flex flex-col gap-2">
-          <h2 className="text-gradient-gold text-xl font-semibold">{pick(NOT_A_DIAGNOSIS.title, locale)}</h2>
-          <p className="measure">{pick(NOT_A_DIAGNOSIS.body, locale)}</p>
-        </GlassCard>
-      </RiseItem>
-
-      <RiseItem className="glass corner-dots flex flex-col gap-2 rounded-card p-6 text-sm text-muted">
-        <p className="flex items-start gap-2 text-ink"><LockKey size={16} weight="light" className="mt-1 shrink-0 text-gold-ink" />{t("privacyNote")}</p>
-        <p className="measure">{t("phaseNote")}</p>
-      </RiseItem>
-
-      <RiseItem>
-        <ActionDock>
-          <LinkButton href="/support" size="lg">{t("talk")}</LinkButton>
-        </ActionDock>
-      </RiseItem>
-    </Rise>
+    <BlindMatch
+      userId={user.id}
+      linkId={couple.linkId}
+      me={ar ? user.displayNameAr : user.displayNameEn}
+      partnerName={partnerName}
+      partnerPersona={env().DEMO_MODE === "true" ? couple.partner.personaKey : null}
+      geneConditions={geneConditions}
+      locale={locale}
+      gridLabels={{
+        title: tds("fourSquare"),
+        parentA: tds("parentA"),
+        parentB: tds("parentB"),
+        nonCarrier: tds("nonCarrier"),
+        carrier: tds("carrier"),
+        affected: tds("affected"),
+        summary: tds("fourSummary"),
+      }}
+      labels={{
+        eyebrow: tp("eyebrowCouple"),
+        education: ts("education"),
+        sealedTitle: t("awaitingSelfTitle"),
+        sealedBody: t("awaitingSelfBody"),
+        turnKey: t("turnKey"),
+        workingTitle: t("workingTitle"),
+        workingBody: t("workingBody"),
+        waitingTitle: t("awaitingPartnerTitle"),
+        waitingBody: t("awaitingPartnerBody"),
+        readyTitle: t("readyTitle"),
+        readyBody: t("readyBody"),
+        reveal: t("reveal"),
+        revealedTitle: t("title"),
+        accentNone: t("heroAccentNone"),
+        accentOne: t("heroAccentShared", { count: 1 }),
+        accentMany: t.raw("accentMany"),
+        withPartner: t("with", { name: partnerName }),
+        sealedBadge: t("sealedBadge"),
+        youAgreed: t("youAgreed"),
+        bothAgreed: t("bothAgreed"),
+        agreed: t("agreedStatus"),
+        notYet: t("notYetStatus"),
+        waiting: t("waitingStatus"),
+        partner: t("partner"),
+        dualKeyLabel: t("dualKeyLabel"),
+        demoSwitch: t("demoSwitch", { name: partnerName }),
+        statShared: t("statShared"),
+        statCombined: t("statCombined"),
+        statSeen: t("statSeen"),
+        sharedTitle: t.raw("sharedTitle"),
+        perPregnancy: t.raw("perPregnancy"),
+        carrierChance: t.raw("carrierChance"),
+        combinedTitle: t("combinedTitle"),
+        combinedBody: t("combinedBody"),
+        combinedHow: t("combinedHow"),
+        hundredSummary: t.raw("hundredSummary"),
+        notAffected: t("notAffected"),
+        noneSharedTitle: t("noneSharedTitle"),
+        noneSharedBody: t("noneSharedBody"),
+        residual: pick(LIMITS.items[1].body, locale),
+        nadTitle: pick(NOT_A_DIAGNOSIS.title, locale),
+        nadBody: pick(NOT_A_DIAGNOSIS.body, locale),
+        privacyNote: t("privacyNote"),
+        deviceNote: t("deviceNote"),
+        serverSees: t.raw("serverSees"),
+        talkShare: t("talkShare"),
+        talkShareNote: t("talkShareNote"),
+        talk: t("talk"),
+        errorTitle: te("title"),
+        errorBody: t("errorBody"),
+        tryAgain: tc("tryAgain"),
+      }}
+    />
   );
 }

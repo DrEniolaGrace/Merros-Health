@@ -31,11 +31,25 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   await expect(page.getByText("Risk is not a diagnosis").first()).toBeVisible();
   await expect(page.locator("[data-safety-label=education]").first()).toBeVisible();
 
-  // Couple: both consented (Khalid in seed) -> per gene 25%, combined 43.75%.
+  // Blind Couple Match: each partner turns their own key on their own phone (same browser here).
   await page.goto("/en/couple");
+  await page.getByRole("button", { name: "Turn my key" }).click();
+  await expect(page.getByRole("heading", { name: "Your key is turned" })).toBeVisible();
+  await page.getByRole("button", { name: "Demo: switch to Khalid's phone" }).click();
+  await page.getByRole("button", { name: "Turn my key" }).click();
+  await expect(page.getByRole("heading", { name: "Your key is turned" })).toBeVisible();
+  await page.getByRole("button", { name: "Demo: switch to Mariam's phone" }).click();
+  // The result stays sealed until she chooses to reveal it.
+  await expect(page.getByRole("heading", { name: "Your private match is ready" })).toBeVisible();
+  await expect(page.getByText("You both carry a change in HBB")).toHaveCount(0);
+  await page.getByRole("button", { name: "Reveal our result" }).click();
   await expect(page.getByText("You both carry a change in HBB")).toBeVisible();
   await expect(page.getByText("You both carry a change in GJB2")).toBeVisible();
   await expect(page.getByLabel("43.75%").first()).toBeVisible();
+  // The server learns the outcome only when she chooses to tell the counsellor.
+  await page.getByRole("button", { name: "Tell our counsellor and book" }).click();
+  await expect(page).toHaveURL(/\/en\/support/);
+  await expect(page.getByText("You and your partner carry a change in the same gene.")).toBeVisible();
 
   // Teach Back: one wrong answer shows a different explanation.
   await page.goto("/en/teach-back");
