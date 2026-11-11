@@ -1,0 +1,10 @@
+[
+  {
+    "clinvarId": "15584",
+    "gene": "HBB",
+    "hgvs": "NM_000518.4(HBB):c.371C>A (p.Thr124Asn)",
+    "classification": "likely_pathogenic",
+    "source": "national_feed_mock",
+    "evidence": "SIMULATED for the demo, not a real ClinVar change. Scenario: new functional studies and family segregation data were submitted and an expert panel reviewed the variant, moving it from uncertain significance to likely pathogenic."
+  }
+]

@@ -21,7 +21,8 @@
     "docker:down": "docker compose down",
     "docker:seed": "docker compose run --rm migrate pnpm seed",
     "docker:logs": "docker compose logs -f web",
-    "eval": "tsx scripts/eval.ts"
+    "eval": "tsx scripts/eval.ts",
+    "variant-watch": "tsx scripts/variant-watch.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

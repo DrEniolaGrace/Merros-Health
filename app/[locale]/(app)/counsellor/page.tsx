@@ -28,7 +28,7 @@ export default async function CounsellorPage({ params }: { params: Promise<{ loc
   const ar = locale === "ar";
 
   const escalations = await prisma.escalation.findMany({
-    where: { status: { in: ["open", "booked"] } },
+    where: { status: { in: ["open", "booked", "pending_counsellor"] } },
     include: { user: { include: { consents: true, appointments: { where: { status: "booked" }, orderBy: { startsAt: "asc" } } } } },
   });
   const byUser = new Map<string, typeof escalations>();

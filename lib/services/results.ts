@@ -87,7 +87,7 @@ export async function hasResultWaiting(user: User): Promise<boolean> {
  * Internal: callers must have checked consent.
  */
 async function decryptResult(user: User): Promise<(ParsedResult & { verifiedAt: Date; labKeyId: string }) | null> {
-  const row = await prisma.labResult.findFirst({ where: { userId: user.id }, orderBy: { importedAt: "desc" } });
+  const row = await prisma.labResult.findFirst({ where: { userId: user.id, releasedAt: { not: null } }, orderBy: { importedAt: "desc" } });
   if (!row) return null;
   const bundle = JSON.parse(decryptString(row.encBundle, userDataKey(user), user.id));
   if (!verifyBundle(bundle, row.signature, env().LAB_SIGNING_PUBLIC_KEY)) {
@@ -119,7 +119,7 @@ export async function getOwnResult(user: User, { log = true } = {}): Promise<Own
 export async function getOwnSignedResult(user: User): Promise<{ bundle: unknown; signature: string } | null> {
   const consents = await prisma.consent.findMany({ where: { userId: user.id } });
   if (!hasActiveConsent(consents, "view_own_result")) return null;
-  const row = await prisma.labResult.findFirst({ where: { userId: user.id }, orderBy: { importedAt: "desc" } });
+  const row = await prisma.labResult.findFirst({ where: { userId: user.id, releasedAt: { not: null } }, orderBy: { importedAt: "desc" } });
   if (!row) return null;
   const bundle = JSON.parse(decryptString(row.encBundle, userDataKey(user), user.id));
   if (!verifyBundle(bundle, row.signature, env().LAB_SIGNING_PUBLIC_KEY)) throw new Error("Stored result failed signature verification");
@@ -153,7 +153,7 @@ export async function getCoupleStatus(user: User): Promise<CoupleStatus> {
   const [mine, theirs, results] = await Promise.all([
     prisma.consent.findMany({ where: { userId: user.id } }),
     prisma.consent.findMany({ where: { userId: partner.id } }),
-    prisma.labResult.count({ where: { userId: user.id } }),
+    prisma.labResult.count({ where: { userId: user.id, releasedAt: { not: null } } }),
   ]);
   return {
     status: "linked",

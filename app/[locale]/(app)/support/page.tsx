@@ -43,7 +43,7 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
   const ts = await getTranslations("safety");
   await refreshEscalations(user);
   const [escalations, appointment, clinician] = await Promise.all([
-    prisma.escalation.findMany({ where: { userId: user.id, status: { not: "resolved" } } }),
+    prisma.escalation.findMany({ where: { userId: user.id, status: { in: ["open", "booked"] } } }),
     prisma.appointment.findFirst({ where: { patientId: user.id, status: "booked" }, include: { clinician: true }, orderBy: { startsAt: "asc" } }),
     prisma.clinician.findFirst(),
   ]);

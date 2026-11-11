@@ -67,6 +67,12 @@ model User {
   coupleLinksB   CoupleLink[]       @relation("PartnerB")
   clinician      Clinician?
   values         ValuesAssessment[]
+  counsellorTasks CounsellorTask[]
+  pedigree       PedigreeNode[]
+  invites        RelativeInvite[]
+  summaries      PatientSummary[]
+  familyDoctorId String?
+  familyDoctor   Clinician?         @relation("FamilyDoctor", fields: [familyDoctorId], references: [id], onDelete: SetNull)
 }
 
 model Profile {
@@ -95,6 +101,9 @@ model LabResult {
   encBundle     String // AES-256-GCM ciphertext of the canonical FHIR bundle JSON
   verifiedAt    DateTime
   importedAt    DateTime @default(now())
+  /// Null while an amended report (after a reclassification) waits for the counsellor to tell
+  /// the person. Only released results are shown or used for matching.
+  releasedAt    DateTime? @default(now())
 
   @@unique([userId, accession])
 }
@@ -201,6 +210,15 @@ model Clinician {
   languages       String[]
   gender          String
   appointments    Appointment[]
+  service         String        @default("genetic_counselling") // see content/directory.ts
+  experienceYears Int           @default(5)
+  video           Boolean       @default(true)
+  inPerson        Boolean       @default(true)
+  nextSlotDays    Int           @default(2) // synthetic: days until next free slot
+  clinicId        String?
+  clinic          Clinic?       @relation(fields: [clinicId], references: [id], onDelete: SetNull)
+  familyPatients  User[]        @relation("FamilyDoctor")
+  signedSummaries PatientSummary[]
 }
 
 model Appointment {
@@ -213,6 +231,10 @@ model Appointment {
   startsAt    DateTime
   status      String    @default("booked") // booked | completed | cancelled
   createdAt   DateTime  @default(now())
+  /// The person's questions for the session, encrypted with their data key.
+  encQuestions String?
+  note        CounsellorNote?
+  summary     PatientSummary?
 }
 
 /// Simulated delivery queue from the licensed screening lab. In production this is an mTLS API
@@ -255,4 +277,94 @@ model GuardEvent {
   action    String // rewritten | replaced_with_escalation | escalated
   locale    String
   createdAt DateTime @default(now())
+}
+
+/// Fictional clinic or service location (SPEC 4.10). Synthetic coordinates.
+model Clinic {
+  id         String      @id @default(cuid())
+  nameEn     String
+  nameAr     String
+  city       String // abu_dhabi | al_ain | al_dhafra
+  lat        Float
+  lng        Float
+  insurance  String[]
+  clinicians Clinician[]
+}
+
+/// A change in a variant's classification (SPEC 6.3). Contains no personal data.
+model ReclassificationEvent {
+  id        String           @id @default(cuid())
+  clinvarId String
+  gene      String
+  hgvs      String
+  oldClass  String
+  newClass  String
+  source    String // clinvar | national_feed_mock
+  evidence  String
+  /// How many people's results include this variant (no identities).
+  affected  Int              @default(0)
+  createdAt DateTime         @default(now())
+  tasks     CounsellorTask[]
+
+  @@unique([clinvarId, newClass])
+}
+
+/// Work for a counsellor: tell the person about a reclassification, then release the amended result.
+model CounsellorTask {
+  id         String                @id @default(cuid())
+  userId     String
+  user       User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId    String
+  event      ReclassificationEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  status     String                @default("open") // open | released
+  createdAt  DateTime              @default(now())
+  releasedAt DateTime?
+
+  @@unique([userId, eventId])
+}
+
+/// Family tree by relationship label only. Never a name (SPEC 6.4).
+model PedigreeNode {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  relation  String // see lib/family/engine.ts
+  side      String   @default("unknown") // maternal | paternal | unknown | na
+  planning  Boolean  @default(false) // adult planning marriage or pregnancy
+  tested    String   @default("unknown") // carrier | not_carrier | unknown
+  createdAt DateTime @default(now())
+}
+
+/// Private invitation for a relative. The link never names the sender or the gene.
+model RelativeInvite {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  openedAt  DateTime?
+}
+
+/// Counsellor's private session notes, encrypted with the patient's data key.
+model CounsellorNote {
+  id            String      @id @default(cuid())
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  encNotes      String
+  updatedAt     DateTime    @updatedAt
+}
+
+/// Post session summary for the patient (SPEC 4.11). Released only after the counsellor signs it.
+model PatientSummary {
+  id            String      @id @default(cuid())
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  patientId     String
+  patient       User        @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encText       String // encrypted with the patient's data key
+  locale        String
+  signedById    String?
+  signedBy      Clinician?  @relation(fields: [signedById], references: [id], onDelete: SetNull)
+  signedAt      DateTime?
+  createdAt     DateTime    @default(now())
 }
