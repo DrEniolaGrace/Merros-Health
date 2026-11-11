@@ -11,6 +11,7 @@ import {
   MagnifyingGlass,
   Path,
   ShieldCheck,
+  Sparkle,
   UsersThree,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
@@ -18,10 +19,10 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
 export type NavKey =
-  | "home" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme";
+  | "home" | "copilot" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme";
 
 const ICONS: Record<NavKey, typeof House> = {
-  home: House, result: Dna, couple: UsersThree, learn: BookOpenText, options: Compass, care: Lifebuoy,
+  home: House, copilot: Sparkle, result: Dna, couple: UsersThree, learn: BookOpenText, options: Compass, care: Lifebuoy,
   pathway: Path, privacy: ShieldCheck, screening: MagnifyingGlass, cases: ListChecks, programme: ChartLineUp,
 };
 

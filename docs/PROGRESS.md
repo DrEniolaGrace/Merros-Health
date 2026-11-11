@@ -24,3 +24,4 @@
 | Date | Feature | Status | Tests |
 |---|---|---|---|
 | 2026-11-12 | Blind Couple Match: ECDH PSI over ristretto255 on the partners' devices, fixed size padding, Dual Key release, lab signed input integrity (device and server), reveal on tap, outcome shared with the counsellor only by choice. The server no longer compares results. PSI threat model in SECURITY.md | Done | 121 unit (20 new PSI) + 5 e2e (two phone flow) on Docker |
+| 2026-11-12 | Genetic Copilot (text): six agent pipeline (Orchestrator, Variant Interpreter with tools, Explainer, Dialect Adapter, Safety Verifier, Escalation Agent), provider abstraction (offline default, Claude optional), versioned prompts, chat screen with labels, sources and an agent trace, guard log. Evaluation harness with a 54 question bilingual golden set, `pnpm eval`, CI workflow | Done | 168 unit (47 new Copilot and evaluation) + 6 e2e on Docker; evaluation 54/54 with the offline provider |

@@ -8,6 +8,7 @@
 * **Data residency.** Local development uses Postgres in Docker; the Neon fallback database is in AWS eu-central-1 (synthetic data only). Production targets Azure UAE North.
 * **Audit truncation.** Deleting the newest audit entries is not detectable until the head hash is anchored externally (planned with Azure immutable storage). Demo reset deliberately restarts the chain.
 * **Docker on Windows only so far.** The compose stack runs locally (Docker Desktop); the image has not yet been deployed to Azure Container Apps.
+* **Genetic Copilot.** Runs on an offline demo model unless a Claude API key is configured; Claude has not yet been evaluated on the golden set. The golden set and Safety Verifier phrase lists are drafts pending review by a genetic counsellor and Gulf Arabic reviewers. Retrieval is lexical, not embedding based. Conversations are not stored, so the Copilot has no memory between visits.
 * **Audio preference.** Choosing "listen" is stored; Gulf Arabic voice arrives in Phase 4.
 * **Accessibility.** Built to WCAG AA contrast and keyboard use; a full Lighthouse and screen reader audit is pending.
 * **Kinship estimates (Phase 5)** will be approximations and counsellor only.

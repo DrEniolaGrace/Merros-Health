@@ -60,10 +60,15 @@ Pick a persona on the sign in screen (no passwords; demo mode only).
 
 The gold **Judge Tour** button (bottom corner of every screen) walks through Phase 1 in eight steps, switching personas automatically, and lists later phase features as "Coming in Phase N". **Reset demo data** restores the starting state.
 
+## Genetic Copilot
+
+The Copilot works offline by default with a demo model that composes approved content. To use Claude, set `AI_PROVIDER=anthropic` and `AI_API_KEY` in `.env`, then run `pnpm docker:up`. See `docs/RESPONSIBLE_AI.md`.
+
 ## Tests
 
 ```bash
-pnpm test        # 101 unit tests: risk engine, escalation, consent, signatures, encryption, audit chain, Teach Back, content, i18n
+pnpm test        # 168 unit tests: risk engine, escalation, consent, signatures, encryption, audit chain, PSI, Safety Verifier, Copilot pipeline, content, i18n
+pnpm eval        # Copilot evaluation on the golden set, writes docs/AI_EVALUATION.md
 pnpm test:e2e    # Playwright smoke tests at 375px in English and Arabic (resets demo data first)
 ```
 

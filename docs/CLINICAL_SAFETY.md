@@ -20,14 +20,14 @@ Rule based, auditable, 19 tests including persona snapshots. Each fired rule rec
 
 | Code | Trigger | Severity |
 |---|---|---|
-| shared_pathogenic_gene | Both partners carry P/LP in the same gene (after both consent) | high |
+| shared_pathogenic_gene | Both partners carry P/LP in the same gene. Known to the server only when the person chooses to tell their counsellor after the Blind Couple Match | high |
 | vus_present | Any VUS | routine |
 | significant_personal_finding | P/LP in an X linked, dominant or unknown gene; homozygous or multiple P/LP in one gene | high |
 | pregnant_or_trying | Pregnant (urgent) or trying to conceive (high) | urgent / high |
-| high_distress | Distress Thermometer ≥ 4 (NCCN screening cut off; Distress Check is Phase 5) | urgent |
+| high_distress | Distress Thermometer ≥ 4 (Distress Check is Phase 5), or distress language in a Copilot question | urgent |
 | teachback_failed_twice | Same Teach Back question wrong twice | routine |
-| medical_advice_requested | Person asks for medical advice | routine |
-| safety_verifier_block | Phase 2 hook | routine |
+| medical_advice_requested | Person asks for medical advice, or asks the Copilot to decide for them | routine |
+| safety_verifier_block | The Copilot's Safety Verifier replaced a draft answer | routine |
 | variant_reclassified | Phase 3 hook | high |
 | risk_beyond_panel_result | Phase 5 hook | high |
 

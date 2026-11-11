@@ -123,7 +123,8 @@
     "privacy": "Privacy",
     "screening": "Screening",
     "cases": "Cases",
-    "programme": "Programme"
+    "programme": "Programme",
+    "copilot": "Copilot"
   },
   "landing": {
     "eyebrow": "Premarital and preconception genetics",
@@ -556,10 +557,10 @@
     "s7": "Dr. Layla's case queue",
     "s8": "Privacy: access history and tamper evident audit",
     "later": "Later phases",
-    "l2": "Genetic Copilot with Safety Verifier",
     "l3": "Living Results, Family Risk Engine, Find Care",
     "l4": "Population Signals and Gulf Arabic voice",
-    "l5": "Risk Beyond the Panel and My Result Video"
+    "l5": "Risk Beyond the Panel and My Result Video",
+    "s9": "Genetic Copilot: ask a question, then try \"Should I marry my cousin?\" to see the Safety Verifier"
   },
   "errors": {
     "title": "Something went wrong",
@@ -580,5 +581,35 @@
     "eyebrowScreening": "Before pregnancy",
     "eyebrowCases": "Counsellor workspace",
     "eyebrowProgramme": "Health system"
+  },
+  "copilot": {
+    "eyebrow": "Genetic Copilot",
+    "title": "Ask anything about your result",
+    "accent": "Plain answers, never a verdict.",
+    "body": "The Copilot explains results, conditions, chances and options from approved Merros content. Every number comes from the tested risk engine. It never tells you what to decide, and it offers a genetic counsellor when a person is the right answer.",
+    "badgeSafe": "Safety verified",
+    "badgeOffline": "Offline demo model",
+    "placeholder": "Ask about your result, a condition or your options",
+    "send": "Send question",
+    "thinking": "The Copilot is preparing an answer",
+    "suggestionsTitle": "Try asking",
+    "q1": "What does being a carrier mean?",
+    "q2": "We are both carriers. What is the chance for each pregnancy?",
+    "q3": "What is beta thalassaemia?",
+    "q4": "What are our options?",
+    "sources": "Sources",
+    "how": "How this answer was made",
+    "blocked": "Replaced by the Safety Verifier",
+    "counsellor": "A genetic counsellor can help with this.",
+    "counsellorCta": "Book a session",
+    "offlineNote": "Answered by the offline demo model, which composes approved content without a language model. Connect Claude for natural conversation.",
+    "you": "You",
+    "agentOrchestrator": "Orchestrator",
+    "agentInterpreter": "Variant Interpreter",
+    "agentExplainer": "Explainer",
+    "agentDialect": "Dialect Adapter",
+    "agentVerifier": "Safety Verifier",
+    "agentEscalation": "Escalation Agent",
+    "disclaimer": "The Copilot gives education and decision support, not clinical advice. Your conversation is not stored. Content is pending accredited clinical review."
   }
 }
