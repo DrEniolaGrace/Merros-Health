@@ -31,6 +31,13 @@ export const CONSENT_TEXT: Record<ConsentPurpose, { title: Bi; body: Bi }> = {
       ar: "تساعد إحصاءات مجهولة الهوية ومحمية الخصوصية النظام الصحي في تخطيط الخدمات. ولا يمكن لأحد التعرف عليك منها. صالحة لمدة سنة.",
     },
   },
+  family_doctor_referral: {
+    title: { en: "Share a carrier summary with my family doctor", ar: "شارك ملخص الحامل مع طبيب العائلة" },
+    body: {
+      en: "Your linked family doctor can see which genes you carry, to support your care. They do not see your partner's result. Lasts 90 days.",
+      ar: "يمكن لطبيب العائلة المرتبط بك رؤية الجينات التي تحملها لدعم رعايتك. ولا يرى نتيجة شريكك. صالحة لمدة 90 يوماً.",
+    },
+  },
   reclassification_recontact: {
     title: { en: "Tell me if science changes my result", ar: "أبلغني إذا غيّر العلم نتيجتي" },
     body: {

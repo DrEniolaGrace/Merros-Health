@@ -3,27 +3,9 @@
 import { useId, useState, useTransition } from "react";
 import { Check, Copy, LinkSimple, Plus, Trash } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
 import { addRelative, createInvite, removeRelative } from "@/lib/actions/family";
 import { SIDED, type Relation } from "@/lib/family/engine";
-
-function Select<T extends string>({ label, value, onChange, options }: { label: string; value: T; onChange: (v: T) => void; options: { value: T; label: string }[] }) {
-  const id = useId();
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm text-muted">{label}</label>
-      <select
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value as T)}
-        className="glass h-12 w-full appearance-none rounded-control px-4 text-base text-ink outline-none transition-[box-shadow] duration-500 focus:shadow-[0_0_0_1px_var(--rose-light),0_0_24px_-6px_var(--burgundy-glow)]"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-bg-raised text-ink">{o.label}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
 
 export interface FamilyFormLabels {
   relation: string;
@@ -59,7 +41,7 @@ export function AddRelative({ labels: L }: { labels: FamilyFormLabels }) {
         icon={<Plus />}
         pending={pending}
         className="self-start"
-        onClick={() => start(() => addRelative({ relation, side: sided ? side : "na", planning, tested }))}
+        onClick={() => start(async () => { await addRelative({ relation, side: sided ? side : "na", planning, tested }); window.location.reload(); })}
       >
         {L.add}
       </Button>
@@ -74,7 +56,7 @@ export function RemoveRelative({ id, label }: { id: string; label: string }) {
       aria-label={label}
       title={label}
       disabled={pending}
-      onClick={() => start(() => removeRelative(id))}
+      onClick={() => start(async () => { await removeRelative(id); window.location.reload(); })}
       className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-muted transition-colors duration-500 hover:bg-glass hover:text-ink disabled:opacity-40"
     >
       <Trash size={18} />
@@ -89,7 +71,7 @@ export function InviteLink({ labels: L, locale }: { labels: { create: string; co
   return (
     <div className="flex flex-col gap-3">
       {!url ? (
-        <Button variant="gold" icon={<LinkSimple />} pending={pending} className="self-start" onClick={() => start(async () => setUrl(`${window.location.origin}/${locale}/invite/${(await createInvite()).token}`))}>
+        <Button variant="gold" icon={<LinkSimple />} pending={pending} className="self-start" onClick={() => start(async () => { setUrl(`${window.location.origin}/${locale}/invite/${(await createInvite()).token}`); })}>
           {L.create}
         </Button>
       ) : (

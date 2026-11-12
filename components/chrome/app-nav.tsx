@@ -9,6 +9,8 @@ import {
   Lifebuoy,
   ListChecks,
   MagnifyingGlass,
+  MapPinLine,
+  TreeStructure,
   Path,
   ShieldCheck,
   Sparkle,
@@ -19,10 +21,10 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
 export type NavKey =
-  | "home" | "copilot" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme";
+  | "home" | "copilot" | "family" | "findCare" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme";
 
 const ICONS: Record<NavKey, typeof House> = {
-  home: House, copilot: Sparkle, result: Dna, couple: UsersThree, learn: BookOpenText, options: Compass, care: Lifebuoy,
+  home: House, copilot: Sparkle, family: TreeStructure, findCare: MapPinLine, result: Dna, couple: UsersThree, learn: BookOpenText, options: Compass, care: Lifebuoy,
   pathway: Path, privacy: ShieldCheck, screening: MagnifyingGlass, cases: ListChecks, programme: ChartLineUp,
 };
 
@@ -35,7 +37,7 @@ export interface NavItem {
 }
 
 /** Extra paths that belong to a nav item (the result import screen belongs to My result). */
-const ALSO: Record<string, string[]> = { "/result": ["/import"], "/learn": [] };
+const ALSO: Record<string, string[]> = { "/result": ["/import"], "/support": ["/session"], "/counsellor": ["/session"] };
 
 function isActive(pathname: string, href: string) {
   return [href, ...(ALSO[href] ?? [])].some((h) => pathname === h || pathname.startsWith(`${h}/`));

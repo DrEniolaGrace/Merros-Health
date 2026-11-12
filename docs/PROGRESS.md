@@ -25,3 +25,15 @@
 |---|---|---|---|
 | 2026-11-12 | Blind Couple Match: ECDH PSI over ristretto255 on the partners' devices, fixed size padding, Dual Key release, lab signed input integrity (device and server), reveal on tap, outcome shared with the counsellor only by choice. The server no longer compares results. PSI threat model in SECURITY.md | Done | 121 unit (20 new PSI) + 5 e2e (two phone flow) on Docker |
 | 2026-11-12 | Genetic Copilot (text): six agent pipeline (Orchestrator, Variant Interpreter with tools, Explainer, Dialect Adapter, Safety Verifier, Escalation Agent), provider abstraction (offline default, Claude optional), versioned prompts, chat screen with labels, sources and an agent trace, guard log. Evaluation harness with a 54 question bilingual golden set, `pnpm eval`, CI workflow | Done | 168 unit (47 new Copilot and evaluation) + 6 e2e on Docker; evaluation 54/54 with the offline provider |
+
+## Phase 3
+
+| Date | Feature | Status | Tests |
+|---|---|---|---|
+| 2026-11-12 | Living Results: reclassification detection (mock feed and live ClinVar), amended signed report held until the counsellor releases it, right not to know, impact counts, "Simulate ClinVar update" | Done | 17 unit + e2e |
+| 2026-11-12 | Family Risk Engine: Mendelian probabilities by relationship, population adjustment, side inference, ranking, family map, private invitations | Done | 23 unit + e2e |
+| 2026-11-12 | Find Care: 14 fictional providers in 8 clinics, filters, Leaflet map, distance, family doctor link with consented referral, booking with any provider | Done | 9 unit + e2e |
+| 2026-11-12 | Counselling Hub and Counsellor Copilot: pre session questions, case brief (result, couple outcome if shared, Teach Back, questions, family map), notes, drafted summary, counsellor signature, Clinical Advice label, simulated video room | Done | e2e |
+| 2026-11-12 | Phone layout fix: decorative glows no longer widen the page (the last persona card could not be reached on a 375px screen). Browser tests retry a click made in the first instant after a page loads | Done | 217 unit + 10 e2e passing (Docker), typecheck and lint clean |
+
+**Phase 3 status:** complete. Phase 3 migrations are applied to both the Docker database and the Neon fallback. Next: Phase 4 (Population Signals Dashboard with differential privacy, voice, first Azure deployment).

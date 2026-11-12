@@ -14,6 +14,8 @@ import { TEACHBACK } from "@/content/teachback";
 import { isQuestionDone, nextExplanationIndex, teachBackFailedTwice } from "@/lib/teachback/logic";
 import { redirect } from "@/i18n/navigation";
 import { verifyAuditChain } from "@/lib/audit/log";
+import { encryptString } from "@/lib/crypto/fieldEncryption";
+import { userDataKey } from "@/lib/crypto/keys";
 
 const DAY = 86_400_000;
 const purposeEnum = z.enum(PURPOSES.map((p) => p.purpose) as [ConsentPurpose, ...ConsentPurpose[]]);
@@ -131,16 +133,25 @@ export async function resetTeachBack() {
   revalidatePath("/[locale]/teach-back", "page");
 }
 
-const bookSchema = z.object({ mode: z.enum(["in_person", "video", "phone"]), startsAt: z.string().datetime() });
+const bookSchema = z.object({
+  mode: z.enum(["in_person", "video", "phone"]),
+  startsAt: z.string().datetime(),
+  clinicianId: z.string().max(40).optional(),
+  /** Questions for the session; stored encrypted with the person's own data key. */
+  questions: z.string().max(1500).optional(),
+});
 
 export async function bookSession(input: z.infer<typeof bookSchema>) {
   const user = await requireUser(["patient"]);
   const data = bookSchema.parse(input);
   const startsAt = new Date(data.startsAt);
   if (startsAt.getTime() < Date.now()) throw new Error("Slot in the past");
-  const clinician = await prisma.clinician.findFirst();
+  const clinician = data.clinicianId
+    ? await prisma.clinician.findUnique({ where: { id: data.clinicianId } })
+    : await prisma.clinician.findFirst({ where: { userId: { not: null } } });
   if (!clinician) throw new Error("No counsellor available");
-  await prisma.appointment.create({ data: { patientId: user.id, clinicianId: clinician.id, mode: data.mode, startsAt } });
+  const encQuestions = data.questions?.trim() ? encryptString(data.questions.trim(), userDataKey(user), `questions:${user.id}`) : null;
+  await prisma.appointment.create({ data: { patientId: user.id, clinicianId: clinician.id, mode: data.mode, startsAt, encQuestions } });
   await prisma.escalation.updateMany({ where: { userId: user.id, status: "open" }, data: { status: "booked" } });
   await recordStep(user.id, "counselling_booked");
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "appointment_booked", resource: `appointment:${data.mode}` });

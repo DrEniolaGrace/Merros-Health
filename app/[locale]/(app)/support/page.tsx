@@ -15,8 +15,12 @@ import { ESCALATION_TEXT, SEVERITY_TEXT } from "@/content/escalation";
 import { pick } from "@/content/types";
 import type { EscalationCode } from "@/lib/escalation/rules";
 import { Booking } from "./booking";
+import { LinkButton } from "@/components/ui/link-button";
+import { decryptString } from "@/lib/crypto/fieldEncryption";
+import { userDataKey } from "@/lib/crypto/keys";
 
 const RANK: Record<string, number> = { urgent: 0, high: 1, routine: 2 };
+const LANGUAGE_NAMES: Record<string, string> = { ar: "العربية", en: "English", hi: "हिन्दी", ur: "اردو", ml: "മലയാളം", fr: "Français" };
 
 /** Next three weekday slots at 10:00 and 15:30 local time (synthetic). */
 function slots(): string[] {
@@ -34,19 +38,25 @@ function slots(): string[] {
   return out;
 }
 
-export default async function SupportPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function SupportPage({ params, searchParams }: { params: Promise<{ locale: string }>; searchParams: Promise<{ clinician?: string }> }) {
   const { locale } = await params;
+  const chosenId = (await searchParams).clinician;
   setRequestLocale(locale);
   const user = await requireUser(["patient"]);
   const t = await getTranslations("support");
   const tp = await getTranslations("page");
   const ts = await getTranslations("safety");
   await refreshEscalations(user);
-  const [escalations, appointment, clinician] = await Promise.all([
+  const [escalations, appointment, chosen, defaultCounsellor, summaries] = await Promise.all([
     prisma.escalation.findMany({ where: { userId: user.id, status: { in: ["open", "booked"] } } }),
     prisma.appointment.findFirst({ where: { patientId: user.id, status: "booked" }, include: { clinician: true }, orderBy: { startsAt: "asc" } }),
-    prisma.clinician.findFirst(),
+    chosenId ? prisma.clinician.findUnique({ where: { id: chosenId } }) : null,
+    prisma.clinician.findFirst({ where: { userId: { not: null } } }),
+    // Only summaries the counsellor has signed are ever shown to the person.
+    prisma.patientSummary.findMany({ where: { patientId: user.id, signedAt: { not: null } }, include: { signedBy: true }, orderBy: { signedAt: "desc" } }),
   ]);
+  // A booked session shows its own clinician; otherwise the one chosen in Find Care, or the genetic counsellor.
+  const clinician = appointment?.clinician ?? chosen ?? defaultCounsellor;
   escalations.sort((a, b) => RANK[a.severity] - RANK[b.severity]);
   const ar = locale === "ar";
   const fmt = (d: Date) =>
@@ -80,7 +90,7 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
                 <p className="text-sm text-muted">{ar ? clinician.credentialsAr : clinician.credentialsEn}</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {clinician.languages.map((l) => (
-                    <Pill key={l} tone="cyan">{l === "ar" ? "العربية" : "English"}</Pill>
+                    <Pill key={l} tone="cyan">{LANGUAGE_NAMES[l] ?? l}</Pill>
                   ))}
                 </div>
               </div>
@@ -137,8 +147,42 @@ export default async function SupportPage({ params }: { params: Promise<{ locale
             </div>
           </GlassCard>
         ) : (
-          <Booking slots={slots().map((iso) => ({ iso, label: fmt(new Date(iso)) }))} />
+          <Booking clinicianId={clinician?.id ?? null} slots={slots().map((iso) => ({ iso, label: fmt(new Date(iso)) }))} />
         )}
+      </RiseItem>
+
+      {appointment && appointment.mode === "video" && (
+        <RiseItem>
+          <LinkButton href={`/session/${appointment.id}`} variant="secondary" size="lg">{t("joinVideo")}</LinkButton>
+        </RiseItem>
+      )}
+
+      {summaries.length > 0 && (
+        <RiseItem className="flex flex-col gap-4">
+          <SectionTitle>{t("summariesTitle")}</SectionTitle>
+          {summaries.map((sm) => (
+            <GlassCard key={sm.id} tone="gold" className="flex flex-col gap-4" data-summary>
+              <SafetyPill kind="clinical_advice" label={ts("clinical_advice")} className="self-start" />
+              {decryptString(sm.encText, userDataKey(user), `summary:${user.id}`).split(/\n{2,}/).map((para, i) => (
+                <p key={i} className="measure text-ink">{para}</p>
+              ))}
+              {sm.signedBy && (
+                <div className="flex items-center gap-3 border-t border-glass-border pt-4">
+                  <Monogram name={ar ? sm.signedBy.nameAr : sm.signedBy.nameEn} size={40} />
+                  <p className="text-sm text-muted">
+                    {t("signedBy", { name: ar ? sm.signedBy.nameAr : sm.signedBy.nameEn, date: fmt(sm.signedAt!) })}
+                    <br />
+                    {ar ? sm.signedBy.credentialsAr : sm.signedBy.credentialsEn} · <span dir="ltr">{sm.signedBy.licenceNo}</span>
+                  </p>
+                </div>
+              )}
+            </GlassCard>
+          ))}
+        </RiseItem>
+      )}
+
+      <RiseItem>
+        <LinkButton href="/find-care" variant="ghost">{t("findOther")}</LinkButton>
       </RiseItem>
     </Rise>
   );

@@ -20,8 +20,17 @@
 | counsellor_access | counsellor | result_and_journey | 90 days |
 | aggregate_analytics | health system (aggregate) | anonymous_events | 1 year |
 | reclassification_recontact | counsellor | variant_updates | 1 year |
+| family_doctor_referral | family doctor | carrier_summary | 90 days |
 
 All reads of a result pass the single consent gate (`lib/consent/check.ts`, 10 tests). Couple analysis requires both partners' active consent (Dual Key).
+
+## Family and referrals (Phase 3)
+
+* Relatives are stored by relationship label, side and testing status only. No name, contact detail or date of birth is collected.
+* A private invitation is a random token. The page it opens does not show the sender, the gene or the relationship, and records only that it was opened. Merros never contacts relatives itself.
+* Linking a family doctor shares nothing by default. A carrier summary is shared only if the person switches on a separate, 90 day, revocable consent in the same step.
+* Session questions, counsellor notes and signed summaries are encrypted with the patient's data key. A counsellor's brief is built only with an active `counsellor_access` consent, and every build is written to the audit log.
+* The couple match outcome appears in the counsellor's brief only if the patient chose to share it.
 
 ## Person controls (Privacy screen)
 

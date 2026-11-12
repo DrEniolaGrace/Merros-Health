@@ -67,6 +67,11 @@ Infrastructure as code (Bicep) and a GitHub Actions deploy workflow arrive with 
 | `lib/consent/` | Consent purposes and the single consent gate |
 | `lib/fhir/` | FHIR style bundle builder/parser, Ed25519 signing |
 | `lib/crypto/` | AES-256-GCM field encryption and key wrapping |
+| `lib/psi/` | Blind Couple Match protocol (runs in the browser) |
+| `lib/ai/` | Genetic Copilot pipeline, tools, Safety Verifier, providers, evaluation |
+| `lib/living/` | Living Results: reclassification detection and release |
+| `lib/family/` | Family Risk Engine and carrier frequencies |
+| `lib/care/` | Find Care filtering and distance |
 | `lib/audit/` | Hash chain (pure) and the database writer |
 | `lib/services/` | Result import, consent gated reads, escalation refresh, pathway |
 | `lib/actions/` | Server actions (all inputs validated with zod) |

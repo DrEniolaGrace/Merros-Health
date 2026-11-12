@@ -135,6 +135,8 @@
 html {
   background: var(--bg-deep);
   -webkit-text-size-adjust: 100%;
+  /* Decorative glows may reach past the edge; they must never widen the page on a phone. */
+  overflow-x: clip;
 }
 
 /* Arabic gets slightly larger size and line height (scales the whole rem scale uniformly). */
@@ -150,6 +152,7 @@ body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100dvh;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

@@ -20,10 +20,12 @@ const STEPS: { key: string; persona: string; path: string }[] = [
   { key: "s7", persona: "layla", path: "/counsellor" },
   { key: "s8", persona: "khalid", path: "/privacy" },
   { key: "s9", persona: "mariam", path: "/copilot" },
+  { key: "s10", persona: "layla", path: "/counsellor" },
+  { key: "s11", persona: "khalid", path: "/family" },
+  { key: "s12", persona: "khalid", path: "/find-care" },
 ];
 
 const LATER = [
-  { key: "l3", phase: 3 },
   { key: "l4", phase: 4 },
   { key: "l5", phase: 5 },
 ];

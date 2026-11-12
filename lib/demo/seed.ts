@@ -12,6 +12,7 @@ import { emptyContext, evaluateEscalation } from "@/lib/escalation/rules";
 import { PURPOSES } from "@/lib/consent/purposes";
 import { appendAudit } from "@/lib/audit/log";
 import { COUNSELLOR, LAB_NAME, PANEL_GENES, PERSONAS, type Persona } from "@/content/personas";
+import { CLINICIANS, CLINICS } from "@/content/directory";
 
 export interface SeedKeys {
   masterKey: string;
@@ -41,7 +42,9 @@ export async function resetDemo(keys: SeedKeys) {
   await prisma.$transaction([
     prisma.accessLog.deleteMany(),
     prisma.appointment.deleteMany(),
+    prisma.reclassificationEvent.deleteMany(),
     prisma.clinician.deleteMany(),
+    prisma.clinic.deleteMany(),
     prisma.labInbox.deleteMany(),
     prisma.coupleLink.deleteMany(),
     prisma.user.deleteMany(),
@@ -125,7 +128,32 @@ export async function resetDemo(keys: SeedKeys) {
   }
 
   // Counsellor directory entry linked to Dr. Layla's account.
-  await prisma.clinician.create({ data: { ...COUNSELLOR, userId: ids.get("layla")! } });
+  // Find Care directory: fictional clinics and clinicians. Dr. Layla's entry is linked to her account.
+  const clinicIds = new Map<string, string>();
+  for (const c of CLINICS) {
+    const row = await prisma.clinic.create({ data: { nameEn: c.name.en, nameAr: c.name.ar, city: c.city, lat: c.lat, lng: c.lng, insurance: c.insurance } });
+    clinicIds.set(c.key, row.id);
+  }
+  for (const [i, c] of CLINICIANS.entries()) {
+    await prisma.clinician.create({
+      data: {
+        userId: c.isLayla ? ids.get("layla")! : null,
+        nameEn: c.name.en,
+        nameAr: c.name.ar,
+        credentialsEn: c.credentials.en,
+        credentialsAr: c.credentials.ar,
+        licenceNo: c.isLayla ? COUNSELLOR.licenceNo : `DEMO-${String(i + 1).padStart(4, "0")}`,
+        languages: c.languages,
+        gender: c.gender,
+        service: c.service,
+        experienceYears: c.experienceYears,
+        video: c.video,
+        inPerson: c.inPerson,
+        nextSlotDays: c.nextSlotDays,
+        clinicId: clinicIds.get(c.clinic)!,
+      },
+    });
+  }
 
   // Pre existing escalations for already onboarded personas, from the same tested rules.
   for (const p of PERSONAS) {

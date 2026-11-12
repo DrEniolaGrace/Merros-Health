@@ -8,6 +8,10 @@ What Phase 1 already records, for the Population Signals Dashboard (Phase 4, wit
 | Time per pathway step and drop off | PathwayEvent timestamps (result received, understood, counselling booked, completed) |
 | Escalation reasons and volumes | Escalation (code, severity) |
 | Consent choices | Consent (purpose, granted, revoked) |
+| Reclassification impact: people affected per event | ReclassificationEvent.affected |
+| Time from reclassification to counsellor contact | CounsellorTask created and released timestamps |
+| Cascade screening: relatives added, invitations created and opened | PedigreeNode, RelativeInvite |
+| Copilot safety: which guard rule fired, by language | GuardEvent |
 | Signature refusals | AccessLog `result_import_rejected` |
 
 Never measured: marriage outcomes or any single personal decision.

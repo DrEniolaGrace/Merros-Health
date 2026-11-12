@@ -88,6 +88,7 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
           aside={carriers.length ? <CopyPair working={t("workingCopy")} changed={t("changedCopy")} label={t("copyPairLabel")} /> : undefined}
         >
           <p className="text-sm text-muted">{t("verified", { lab: LAB_NAME })}</p>
+          {/-R\d+$/.test(result.accession) && <p className="measure text-sm text-gold-ink" data-updated-result>{t("updatedNote")}</p>}
         </PageHero>
       </RiseItem>
 

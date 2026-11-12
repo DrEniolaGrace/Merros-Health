@@ -1,12 +1,11 @@
 "use server";
 
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import { revalidatePath } from "next/cache";
 import { env } from "@/lib/env";
 import { requireUser } from "@/lib/auth/session";
 import { applyReclassification, releaseTask } from "@/lib/living/service";
 import type { FeedEntry } from "@/lib/living/watch";
+import feedJson from "@/data/reference/reclassification-feed.json";
 
 function keys() {
   const e = env();
@@ -18,7 +17,7 @@ function keys() {
 export async function simulateClinvarUpdate() {
   await requireUser(["counsellor", "admin"]);
   if (env().DEMO_MODE !== "true") throw new Error("Demo only");
-  const feed = JSON.parse(readFileSync(path.join(process.cwd(), "data/reference/reclassification-feed.json"), "utf8")) as FeedEntry[];
+  const feed = feedJson as FeedEntry[];
   let affected = 0;
   let tasks = 0;
   for (const entry of feed) {

@@ -7,9 +7,10 @@ export type ConsentPurpose =
   | "couple_comparison"
   | "counsellor_access"
   | "aggregate_analytics"
-  | "reclassification_recontact";
+  | "reclassification_recontact"
+  | "family_doctor_referral";
 
-export type ConsentRecipient = "self" | "partner" | "counsellor" | "health_system_aggregate";
+export type ConsentRecipient = "self" | "partner" | "counsellor" | "health_system_aggregate" | "family_doctor";
 
 export interface PurposeDef {
   purpose: ConsentPurpose;
@@ -25,6 +26,8 @@ export const PURPOSES: PurposeDef[] = [
   { purpose: "counsellor_access", recipient: "counsellor", scope: "result_and_journey", defaultDays: 90 },
   { purpose: "aggregate_analytics", recipient: "health_system_aggregate", scope: "anonymous_events", defaultDays: 365 },
   { purpose: "reclassification_recontact", recipient: "counsellor", scope: "variant_updates", defaultDays: 365 },
+  // Offered only when the person links a family doctor in Find Care (one tap consented referral).
+  { purpose: "family_doctor_referral", recipient: "family_doctor", scope: "carrier_summary", defaultDays: 90 },
 ];
 
 export const DURATION_CHOICES = [30, 90, 365] as const;

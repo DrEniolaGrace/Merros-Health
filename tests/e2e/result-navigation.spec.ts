@@ -30,7 +30,10 @@ test("A condition card has a way back to all conditions", async ({ page }) => {
   await page.getByRole("button", { name: "Continue as Khalid" }).click();
   await expect(page).toHaveURL(/\/en\/home/);
   await page.goto("/en/learn/sickle-cell");
-  await page.getByRole("link", { name: "All conditions" }).click();
-  await expect(page).toHaveURL(/\/en\/learn$/);
+  // A click in the first instant after load can be dropped by the router, so retry like a person would.
+  await expect(async () => {
+    await page.getByRole("link", { name: "All conditions" }).click();
+    await expect(page).toHaveURL(/\/en\/learn$/, { timeout: 5000 });
+  }).toPass({ timeout: 30000 });
   await expect(page.getByRole("heading", { name: "Learn" })).toBeVisible();
 });

@@ -44,3 +44,33 @@ Six condition cards (beta thalassaemia, sickle cell disease, SMA, GJB2 hearing l
 ## Non directiveness
 
 Copy never recommends a decision. The core principle is shown on the landing page, home and onboarding. Risk numbers use calm data colours, never red.
+
+## Living Results (`lib/living/`)
+
+* Sources: live ClinVar through NCBI E-utilities (`pnpm variant-watch`, the scheduled job) and a mock national feed used by the demo. ClinVar descriptions are mapped to the five ACMG classes; unknown or empty descriptions are ignored, never guessed. "Conflicting" is treated as uncertain.
+* When a classification changes, the lab's amended signed report is stored **unreleased**, a counsellor task is created with the old and new classification and the evidence, and an escalation waits for the counsellor.
+* **The patient is told by the counsellor, never by a push notification.** Their result, risk and care page do not change until the counsellor confirms they have spoken to the person and releases the update (tested end to end).
+* **Right not to know.** People without an active recontact consent are counted for the health system but never contacted, and their result is not changed.
+* After release the risk engine uses the amended result, and any couple match is cleared so the couple can run it again on their phones.
+* The demo reclassification of Hamad's variant is simulated and labelled as such; it is not a real ClinVar change.
+
+## Family Risk Engine (`lib/family/engine.ts`)
+
+Deterministic, 23 tests. Starting from a confirmed heterozygous carrier of an autosomal recessive variant:
+
+| Relative | Chance of carrying the family variant |
+|---|---|
+| Parent, sibling, child | 1/2 |
+| Half sibling, grandparent, aunt or uncle, niece or nephew, grandchild | 1/4 |
+| First cousin | 1/8 |
+
+* Population adjustment: P = Prel + (1 − Prel) × f, where f is the population carrier frequency for the gene.
+* If a parent has been tested, the side is known: relatives on the carrier side double (parent 1, aunt or uncle 1/2, first cousin 1/4) and the other side falls to f.
+* Tested relatives are certain (1 or 0) and are not ranked. Ranking is by probability, with adults planning marriage or pregnancy first among equals.
+* **Approximation:** when the carrier's own parents are related, the variant could be on both sides; the engine then keeps the side unknown values rather than combining paths. New mutations are ignored. Pedigree likelihood software is the production upgrade.
+* **Carrier frequencies are illustrative**, not verified against gnomAD or the Greater Middle East Variome (`lib/family/frequencies.ts`). The value used is always shown on screen.
+* Relatives are stored by relationship label only. Invitation links carry a random token and the page they open names no person, gene or relationship.
+
+## Counsellor signed summaries
+
+The Copilot only drafts from the counsellor's own notes. The counsellor edits and signs; only the signed text reaches the patient, labelled Clinical Advice with the counsellor's name, credentials and licence number. This is the only place the Clinical Advice label appears.

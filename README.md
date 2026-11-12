@@ -67,8 +67,9 @@ The Copilot works offline by default with a demo model that composes approved co
 ## Tests
 
 ```bash
-pnpm test        # 168 unit tests: risk engine, escalation, consent, signatures, encryption, audit chain, PSI, Safety Verifier, Copilot pipeline, content, i18n
+pnpm test        # 217 unit tests: risk engine, escalation, consent, signatures, encryption, audit chain, PSI, Safety Verifier, Copilot, Living Results, Family Risk Engine, Find Care, content, i18n
 pnpm eval        # Copilot evaluation on the golden set, writes docs/AI_EVALUATION.md
+pnpm variant-watch  # Living Results: check stored variants against live ClinVar
 pnpm test:e2e    # Playwright smoke tests at 375px in English and Arabic (resets demo data first)
 ```
 
