@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { speak, transcribe } from "@/lib/actions/voice";
-import { speakable, STT_LOCALE, type VoiceLocale } from "@/lib/voice/azure";
+import { mergeTranscripts, speakable, STT_LOCALE, type VoiceLocale } from "@/lib/voice/azure";
 import { concat, downsample, encodeWav, MAX_SECONDS } from "@/lib/voice/wav";
 
 export type VoiceError = "mic_denied" | "not_understood" | "too_long" | "failed";
@@ -91,7 +91,7 @@ export function useVoice({ azure, locale }: { azure: boolean; locale: VoiceLocal
   const stopListening = useCallback(() => stopRef.current?.(), []);
 
   const startListening = useCallback(
-    async (onText: (text: string) => void) => {
+    async (onText: (text: string) => void, onPartial?: (text: string) => void) => {
       if (listening || working) return;
       setError(null);
       stopSpeaking();
@@ -103,19 +103,18 @@ export function useVoice({ azure, locale }: { azure: boolean; locale: VoiceLocal
         rec.lang = STT_LOCALE[locale];
         rec.interimResults = false;
         rec.maxAlternatives = 1;
-        let got = false;
+        // The recogniser reports the sentence as it grows. Keep the latest version and send it once, at the end.
+        let heard = "";
         rec.onresult = (e) => {
-          const t = e.results[0]?.[0]?.transcript?.trim();
-          if (t) {
-            got = true;
-            onText(t);
-          }
+          heard = mergeTranscripts(Array.from({ length: e.results.length }, (_, i) => e.results[i]?.[0]?.transcript ?? ""));
+          onPartial?.(heard);
         };
         rec.onerror = (e) => setError(e.error === "not-allowed" || e.error === "service-not-allowed" ? "mic_denied" : e.error === "no-speech" ? "not_understood" : "failed");
         rec.onend = () => {
           setListening(false);
           stopRef.current = null;
-          if (!got) setError((cur) => cur ?? "not_understood");
+          if (heard) onText(heard);
+          else setError((cur) => cur ?? "not_understood");
         };
         stopRef.current = () => rec.stop();
         setListening(true);

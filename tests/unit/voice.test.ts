@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildSsml, DEFAULT_VOICE, parseSttResponse, recognise, speakable, speechConfig, sttUrl, synthesize, ttsUrl } from "@/lib/voice/azure";
+import { buildSsml, DEFAULT_VOICE, mergeTranscripts, parseSttResponse, recognise, speakable, speechConfig, sttUrl, synthesize, ttsUrl } from "@/lib/voice/azure";
 import { concat, downsample, encodeWav, TARGET_RATE } from "@/lib/voice/wav";
 
 describe("Azure AI Speech configuration", () => {
@@ -41,6 +41,21 @@ describe("spoken text", () => {
 
   it("speaks Arabic with the UAE locale", () => {
     expect(buildSsml("مرحبا", "ar", DEFAULT_VOICE.ar)).toContain('xml:lang="ar-AE"');
+  });
+});
+
+describe("browser speech results", () => {
+  it("keeps one sentence when the browser repeats it as it grows", () => {
+    expect(mergeTranscripts(["What does", "What does being", "What does being a", "What does being a carrier mean"])).toBe("What does being a carrier mean");
+  });
+
+  it("joins separate phrases in order", () => {
+    expect(mergeTranscripts(["What is beta thalassaemia", " and what are our options "])).toBe("What is beta thalassaemia and what are our options");
+  });
+
+  it("ignores empty pieces and exact repeats", () => {
+    expect(mergeTranscripts(["", "ما معنى حامل", "ما معنى حامل", "  "])).toBe("ما معنى حامل");
+    expect(mergeTranscripts([])).toBe("");
   });
 });
 

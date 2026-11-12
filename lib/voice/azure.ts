@@ -40,6 +40,22 @@ export function speakable(text: string): string {
 
 export const MAX_SPEECH_CHARS = 3000;
 
+/**
+ * Joins the pieces a browser speech recogniser reports into one sentence. Some browsers report
+ * separate phrases; others repeat the whole sentence so far each time ("What does", "What does
+ * being", ...). A piece that repeats what is already there replaces it instead of being added.
+ */
+export function mergeTranscripts(parts: string[]): string {
+  let acc = "";
+  for (const raw of parts) {
+    const t = raw.replace(/\s+/g, " ").trim();
+    if (!t) continue;
+    if (!acc || t.toLowerCase().startsWith(acc.toLowerCase())) acc = t;
+    else if (!acc.toLowerCase().endsWith(t.toLowerCase())) acc = `${acc} ${t}`;
+  }
+  return acc;
+}
+
 export function buildSsml(text: string, locale: VoiceLocale, voice: string): string {
   const body = escapeXml(speakable(text).slice(0, MAX_SPEECH_CHARS));
   return `<speak version="1.0" xml:lang="${STT_LOCALE[locale]}"><voice name="${escapeXml(voice)}"><prosody rate="-4%">${body}</prosody></voice></speak>`;

@@ -227,7 +227,7 @@ export function Chat({ labels: L, voice }: { labels: ChatLabels; voice: { azure:
             aria-pressed={v.listening}
             aria-label={v.listening ? L.micStop : L.mic}
             title={v.listening ? L.micStop : L.mic}
-            onClick={() => (v.listening ? v.stopListening() : void v.startListening((t) => send(t, true)))}
+            onClick={() => (v.listening ? v.stopListening() : void v.startListening((t) => send(t, true), setText))}
             className={cn(
               "flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-glass-border text-ink transition-[background,box-shadow,opacity] duration-500 ease-calm hover:bg-glass disabled:opacity-40",
               v.listening && "border-transparent bg-[color-mix(in_oklab,var(--data-cyan)_22%,transparent)] shadow-[0_0_0_1px_var(--data-cyan),0_0_24px_-6px_var(--data-cyan)]",
