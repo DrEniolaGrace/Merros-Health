@@ -19,6 +19,8 @@ docker compose up --build -d
 
 `pnpm setup:env` creates `.env` (never committed) with the encryption master key, session secret and the simulated lab's Ed25519 key pair. Compose then starts PostgreSQL with pgvector, applies migrations, seeds the synthetic personas (only if the database is empty) and serves the app at http://localhost:3000.
 
+**On a phone:** `localhost` only works on the computer itself. Connect the phone to the same Wi-Fi and open `http://<computer's Wi-Fi address>:3000` (find the address with `ipconfig`, "IPv4 Address" under Wi-Fi). Family invitation links carry whatever address the app was opened with, so create them from that address too.
+
 | Task | Command |
 |---|---|
 | Start, or rebuild after code changes | `pnpm docker:up` |

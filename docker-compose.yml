@@ -44,7 +44,10 @@ services:
       context: .
       target: runner
     env_file: .env
-    environment: *db-env
+    environment:
+      <<: *db-env
+      # Local only: lets a phone on the same Wi-Fi sign in over plain http (http://<PC address>:3000).
+      COOKIE_SECURE: "false"
     ports:
       - "3000:3000"
     depends_on:

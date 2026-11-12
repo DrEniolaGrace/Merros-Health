@@ -16,11 +16,17 @@ export interface SessionData {
  * Demo authentication: a persona picker (no passwords) behind DEMO_MODE.
  * Production integration point is UAE Pass (OpenID Connect); see docs/ARCHITECTURE.md.
  */
+/**
+ * The session cookie requires HTTPS in production. Local Docker sets COOKIE_SECURE=false so the demo can be
+ * opened from a phone on the same Wi-Fi over plain http. Never set that on a deployed environment.
+ */
+const SECURE_COOKIE = process.env.NODE_ENV === "production" && process.env.COOKIE_SECURE !== "false";
+
 export async function getSession() {
   return getIronSession<SessionData>(await cookies(), {
     password: env().SESSION_SECRET,
     cookieName: "meros-session",
-    cookieOptions: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/" },
+    cookieOptions: { httpOnly: true, sameSite: "lax", secure: SECURE_COOKIE, path: "/" },
     ttl: 60 * 60 * 8,
   });
 }

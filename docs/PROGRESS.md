@@ -37,3 +37,4 @@
 | 2026-11-12 | Phone layout fix: decorative glows no longer widen the page (the last persona card could not be reached on a 375px screen). Browser tests retry a click made in the first instant after a page loads | Done | 217 unit + 10 e2e passing (Docker), typecheck and lint clean |
 
 **Phase 3 status:** complete. Phase 3 migrations are applied to both the Docker database and the Neon fallback. Next: Phase 4 (Population Signals Dashboard with differential privacy, voice, first Azure deployment).
+| 2026-11-12 | Phone testing on the same Wi-Fi: the Docker stack accepts sign in over plain http from the computer's network address (COOKIE_SECURE=false in compose only; deployed environments keep HTTPS only cookies). README explains how to open the app and family links on a phone | Done | 217 unit + 10 e2e passing (Docker) |
