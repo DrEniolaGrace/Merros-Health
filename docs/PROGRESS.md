@@ -38,3 +38,11 @@
 
 **Phase 3 status:** complete. Phase 3 migrations are applied to both the Docker database and the Neon fallback. Next: Phase 4 (Population Signals Dashboard with differential privacy, voice, first Azure deployment).
 | 2026-11-12 | Phone testing on the same Wi-Fi: the Docker stack accepts sign in over plain http from the computer's network address (COOKIE_SECURE=false in compose only; deployed environments keep HTTPS only cookies). README explains how to open the app and family links on a phone | Done | 217 unit + 10 e2e passing (Docker) |
+
+## Phase 4
+
+| Date | Feature | Status | Tests |
+|---|---|---|---|
+| 2026-11-12 | Population Signals Dashboard: anonymous aggregate store (consent gated live events and 2,000 synthetic journeys), discrete Laplace mechanism, per journey contribution bounds, privacy budget ledger (ε 2.0 per release, ε 6 per quarter, refusal when spent), suppression under 10, unreliable percentages withheld, demand forecast with regional split and staffing hint, region map, funnel, waiting time, comprehension gaps, before and after counselling, Safety Verifier and cascade signals | Done | 30 unit + 2 e2e |
+| 2026-11-12 | Copilot voice: ask by voice and listen to answers. Azure AI Speech through the server (ar-AE, en-US) when a key is set, browser speech otherwise. Spoken answers start with their boundary label | Done locally with browser speech. Azure path unit tested with a mocked service, not yet run against Azure | 14 unit + 1 e2e |
+| 2026-11-12 | Azure deployment: `infra/main.bicep` (registry, Container Apps web, migrate job, nightly VariantWatch job, PostgreSQL with pgvector, Key Vault, AI Speech, Blob, monitoring), manual deploy workflow, docs/DEPLOYMENT.md | Written and compiled. **Not deployed**: needs an Azure subscription and a GitHub repository | `az bicep build` passes |

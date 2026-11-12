@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUp, Lifebuoy, ShieldCheck } from "@phosphor-icons/react";
+import { ArrowUp, Lifebuoy, Microphone, ShieldCheck, SpeakerHigh, Stop } from "@phosphor-icons/react";
 import { askCopilot } from "@/lib/actions/copilot";
 import type { ChatTurn, CopilotReply } from "@/lib/ai/types";
 import { Link } from "@/i18n/navigation";
@@ -11,6 +11,7 @@ import { Disclosure } from "@/components/ui/disclosure";
 import { LinkButton } from "@/components/ui/link-button";
 import { Skeleton } from "@/components/ui/states";
 import { cn } from "@/lib/cn";
+import { useVoice, type VoiceError } from "@/components/voice/use-voice";
 
 export interface ChatLabels {
   placeholder: string;
@@ -30,6 +31,13 @@ export interface ChatLabels {
   copilot: string;
   agents: Record<string, string>;
   maxLength: number;
+  mic: string;
+  micStop: string;
+  listening: string;
+  transcribing: string;
+  listen: string;
+  listenStop: string;
+  voiceErrors: Record<VoiceError, string>;
 }
 
 type Item = { role: "user"; text: string } | { role: "assistant"; text: string; reply: CopilotReply };
@@ -49,25 +57,32 @@ export function CopilotOrb({ active, size = 48 }: { active?: boolean; size?: num
   );
 }
 
-export function Chat({ labels: L }: { labels: ChatLabels }) {
+export function Chat({ labels: L, voice }: { labels: ChatLabels; voice: { azure: boolean; locale: "ar" | "en" } }) {
   const [items, setItems] = useState<Item[]>([]);
   const [text, setText] = useState("");
   const [pending, start] = useTransition();
   const endRef = useRef<HTMLDivElement>(null);
+  const v = useVoice(voice);
+  /** True when the last question was spoken, so the answer is read aloud too. */
+  const spokenRef = useRef(false);
 
   useEffect(() => {
     if (items.length) endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [items, pending]);
 
-  function send(q: string) {
-    const question = q.trim();
+  function send(q: string, spoken = false) {
+    const question = q.trim().slice(0, L.maxLength);
     if (!question || pending) return;
     const history: ChatTurn[] = items.map((i) => ({ role: i.role, text: i.text })).slice(-8);
     setItems((prev) => [...prev, { role: "user", text: question }]);
     setText("");
+    spokenRef.current = spoken;
+    const index = items.length + 1;
     start(async () => {
       const reply = await askCopilot({ question, history });
       setItems((prev) => [...prev, { role: "assistant", text: reply.text, reply }]);
+      // The spoken answer starts with its boundary label, exactly like the written one.
+      if (spokenRef.current && v.canSpeak) void v.speakText(index, `${L[reply.label]}. ${reply.text}`);
     });
   }
 
@@ -108,6 +123,18 @@ export function Chat({ labels: L }: { labels: ChatLabels }) {
                         <ShieldCheck size={14} />
                         {L.blocked}
                       </span>
+                    )}
+                    {v.canSpeak && (
+                      <button
+                        type="button"
+                        data-listen
+                        aria-pressed={v.speakingId === i}
+                        onClick={() => (v.speakingId === i ? v.stopSpeaking() : void v.speakText(i, `${L[it.reply.label]}. ${it.text}`))}
+                        className="ms-auto inline-flex min-h-9 items-center gap-1.5 rounded-full border border-glass-border px-3 text-xs text-ink transition-colors duration-500 hover:bg-glass"
+                      >
+                        {v.speakingId === i ? <Stop size={14} weight="fill" /> : <SpeakerHigh size={14} />}
+                        {v.speakingId === i ? L.listenStop : L.listen}
+                      </button>
                     )}
                   </div>
                   {visible(it.text).split(/\n{2,}/).map((para, k) => (
@@ -162,6 +189,13 @@ export function Chat({ labels: L }: { labels: ChatLabels }) {
       </ol>
       <div ref={endRef} />
 
+      {(v.listening || v.working || v.error) && (
+        <p role="status" data-voice-status className={cn("flex items-center gap-2 text-sm", v.error ? "text-gold-ink" : "text-cyan-ink")}>
+          {v.listening && <span aria-hidden className="h-2 w-2 animate-pulse rounded-full bg-cyan" />}
+          {v.listening ? L.listening : v.working ? L.transcribing : L.voiceErrors[v.error!]}
+        </p>
+      )}
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -185,6 +219,23 @@ export function Chat({ labels: L }: { labels: ChatLabels }) {
           placeholder={L.placeholder}
           className="max-h-40 min-h-12 flex-1 resize-none bg-transparent px-4 py-3 text-base text-ink outline-none placeholder:text-muted"
         />
+        {v.canListen && (
+          <button
+            type="button"
+            data-mic
+            disabled={pending || v.working}
+            aria-pressed={v.listening}
+            aria-label={v.listening ? L.micStop : L.mic}
+            title={v.listening ? L.micStop : L.mic}
+            onClick={() => (v.listening ? v.stopListening() : void v.startListening((t) => send(t, true)))}
+            className={cn(
+              "flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-glass-border text-ink transition-[background,box-shadow,opacity] duration-500 ease-calm hover:bg-glass disabled:opacity-40",
+              v.listening && "border-transparent bg-[color-mix(in_oklab,var(--data-cyan)_22%,transparent)] shadow-[0_0_0_1px_var(--data-cyan),0_0_24px_-6px_var(--data-cyan)]",
+            )}
+          >
+            {v.listening ? <Stop size={18} weight="fill" /> : <Microphone size={20} />}
+          </button>
+        )}
         <button
           type="submit"
           disabled={!text.trim() || pending}

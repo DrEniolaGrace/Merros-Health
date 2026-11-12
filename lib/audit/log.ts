@@ -23,6 +23,7 @@ export type AuditAction =
   | "family_doctor_linked"
   | "summary_signed"
   | "summary_viewed"
+  | "signals_published"
   | "teachback_answered"
   | "escalation_raised"
   | "appointment_booked"

@@ -5,6 +5,7 @@ import { getLocale } from "next-intl/server";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { appendAudit } from "@/lib/audit/log";
+import { recordSignal } from "@/lib/services/signals";
 import { getOwnResult } from "@/lib/services/results";
 import { MAX_QUESTION_CHARS, runCopilot } from "@/lib/ai/copilot";
 import { getProvider } from "@/lib/ai/provider";
@@ -39,7 +40,9 @@ export async function askCopilot(raw: z.infer<typeof input>): Promise<CopilotRep
   const reply = await runCopilot(question, history, ctx, getProvider());
 
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "copilot_question", resource: `copilot:${reply.label}` });
+  await recordSignal(user.id, "copilot_question");
   if (reply.guard.length) {
+    await recordSignal(user.id, "copilot_blocked");
     await prisma.guardEvent.createMany({ data: reply.guard.map((g) => ({ stage: g.stage, rule: g.rule.slice(0, 120), action: g.action, locale })) });
   }
   for (const code of reply.escalations) {

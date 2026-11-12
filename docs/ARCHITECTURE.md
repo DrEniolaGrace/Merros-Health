@@ -56,7 +56,27 @@ flowchart TB
   ACA --> MON
 ```
 
-Infrastructure as code (Bicep) and a GitHub Actions deploy workflow arrive with the first Azure deployment (Phase 4).
+Infrastructure as code is in `infra/main.bicep` (registry, Container Apps web app, migrate job, nightly VariantWatch job, PostgreSQL with pgvector, Key Vault, AI Speech, Blob, monitoring) with a manual GitHub Actions workflow, `.github/workflows/deploy.yml`. It compiles but has not been deployed yet; see docs/DEPLOYMENT.md. Communication Services and the genomics service are not in the template yet.
+
+### Population Signals (Phase 4)
+
+```mermaid
+flowchart LR
+  J[Journey steps, Teach Back,<br/>Copilot questions] -->|only with consent,<br/>keyed hash instead of user id| AGG[(AggregateEvent)]
+  SYN[2,000 synthetic journeys] --> AGG
+  AGG --> REL[computeRelease:<br/>bound each journey, count,<br/>add discrete Laplace noise,<br/>hide cells under 10]
+  REL --> LEDGER[(PrivacyBudgetLedger)]
+  REL --> OUT[(SignalRelease:<br/>noised numbers only)]
+  OUT --> FC[Forecast: post processing]
+  OUT --> DASH[Dashboard]
+  FC --> DASH
+```
+
+The dashboard never reads the aggregate store. It reads the latest stored release, so reloading the page cannot be used to average the noise away, and a new release is refused once the budget for the quarter (ε 6) is spent.
+
+### Voice (Phase 4)
+
+The browser records a short question, converts it to 16 kHz mono WAV, and sends it to a server action, which calls Azure AI Speech (speech to text `ar-AE` / `en-US`). Answers are read aloud from the already verified text (text to speech, UAE Arabic neural voice). The key stays on the server. Without a key the browser's own speech features are used.
 
 ## Code map
 

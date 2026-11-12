@@ -45,7 +45,7 @@ test("Living Results: the counsellor is told first, the patient only after relea
 
   // The programme view counts one person affected, with no identity.
   await loginAs(page, "Programme Admin", /\/en\/admin/);
-  await expect(page.locator("[data-reclass-event]")).toContainText("1 person affected");
+  await expect(page.locator("[data-reclass-event]")).toContainText("Fewer than 10 people (hidden)");
   await expect(page.locator("[data-reclass-event]")).not.toContainText("Hamad");
 });
 

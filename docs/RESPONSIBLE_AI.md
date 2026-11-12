@@ -55,6 +55,10 @@ Prompts are versioned in `lib/ai/prompts/` (current: v1) and the version is prin
 
 `pnpm eval` runs the golden set (`eval/golden.jsonl`, 54 bilingual questions, draft v0) through the pipeline and writes `docs/AI_EVALUATION.md`. It scores factual accuracy against the risk engine, non directiveness, citation presence, correct escalation, correct label, readability and answer language. CI runs it with the offline provider and fails on any safety failure.
 
+## Voice
+
+Voice is a second way in and out of the same pipeline, not a separate one. A spoken question is transcribed and then goes through the Orchestrator, tools, Safety Verifier and Escalation Agent exactly like a typed one. Only the verified answer text is read aloud, and it starts with its boundary label (Education or Decision Support), so the label is heard as well as seen.
+
 ## Known limits
 
 * The golden set and the Safety Verifier phrase lists are a first draft and need review by a genetic counsellor and native Gulf Arabic reviewers. Rule lists cannot catch every harmful phrasing, which is why the classifier, the grounding checks and human escalation sit alongside them.

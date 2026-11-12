@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth/session";
 import { MAX_QUESTION_CHARS } from "@/lib/ai/copilot";
+import { speechConfig } from "@/lib/voice/azure";
 import { PageHero } from "@/components/ui/page-hero";
 import { LiveBadge } from "@/components/ui/accents";
 import { Chat, CopilotOrb } from "./chat";
@@ -12,6 +13,7 @@ export default async function CopilotPage({ params }: { params: Promise<{ locale
   const t = await getTranslations("copilot");
   const ts = await getTranslations("safety");
   const offline = (process.env.AI_PROVIDER ?? "mock").toLowerCase() === "mock";
+  const azureVoice = speechConfig() !== null;
 
   return (
     <div className="flex flex-col gap-8">
@@ -24,11 +26,13 @@ export default async function CopilotPage({ params }: { params: Promise<{ locale
           <>
             <LiveBadge tone="cyan">{t("badgeSafe")}</LiveBadge>
             {offline && <LiveBadge tone="gold">{t("badgeOffline")}</LiveBadge>}
+            <LiveBadge tone={azureVoice ? "cyan" : "rose"}>{azureVoice ? t("badgeVoiceAzure") : t("badgeVoiceBrowser")}</LiveBadge>
           </>
         }
         aside={<CopilotOrb size={120} />}
       />
       <Chat
+        voice={{ azure: azureVoice, locale: locale === "ar" ? "ar" : "en" }}
         labels={{
           placeholder: t("placeholder"),
           send: t("send"),
@@ -54,9 +58,16 @@ export default async function CopilotPage({ params }: { params: Promise<{ locale
             escalation: t("agentEscalation"),
           },
           maxLength: MAX_QUESTION_CHARS,
+          mic: t("mic"),
+          micStop: t("micStop"),
+          listening: t("listening"),
+          transcribing: t("transcribing"),
+          listen: t("listen"),
+          listenStop: t("listenStop"),
+          voiceErrors: { mic_denied: t("errMic"), not_understood: t("errNotUnderstood"), too_long: t("errTooLong"), failed: t("errFailed") },
         }}
       />
-      <p className="text-xs text-muted">{t("disclaimer")}</p>
+      <p className="text-xs text-muted">{t("disclaimer")}{azureVoice ? "" : ` ${t("voiceBrowserNote")}`}</p>
     </div>
   );
 }

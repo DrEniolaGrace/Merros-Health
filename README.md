@@ -56,7 +56,7 @@ Pick a persona on the sign in screen (no passwords; demo mode only).
 | Aisha | Arabic, simple reading level, prefers listening. Sickle cell trait. |
 | Sara | Married, planning pregnancy, never screened. Preconception Screening Finder. |
 | Dr. Layla Haddad | Fictional genetic counsellor: consent aware case queue. |
-| Programme Admin | Audit integrity check (dashboard arrives in Phase 4). |
+| Programme Admin | Population Signals Dashboard (differential privacy, privacy budget, demand forecast) and the audit integrity check. |
 
 ## Judge Tour
 

@@ -512,6 +512,32 @@ p {
 }
 
 /* ---------- Reduced motion: still, elegant versions ---------- */
+/* Population Signals map: quiet data flows and breathing glows. */
+.signal-flow {
+  animation: signal-flow 3.2s linear infinite;
+}
+.signal-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: signal-pulse 5s ease-in-out infinite;
+}
+@keyframes signal-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+@keyframes signal-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

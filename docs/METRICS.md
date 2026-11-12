@@ -1,6 +1,8 @@
 # Metrics
 
-What Phase 1 already records, for the Population Signals Dashboard (Phase 4, with differential privacy):
+The Population Signals Dashboard (Phase 4) publishes these with differential privacy from the anonymous aggregate store: funnel by region, time to counselling by region, weekly bookings with an 8 week forecast, first try comprehension by language and reading level, SURE and distress before and after counselling (synthetic until Phase 5), Safety Verifier block rate, cascade yield and Living Results impact.
+
+What the app records per person (the sources those anonymous events come from):
 
 | Metric | Source |
 |---|---|

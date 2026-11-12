@@ -29,7 +29,9 @@ Security overrides (`pnpm.overrides`): postcss ^8.5.23, sharp ^0.35.5, effect ^3
 | Neon Postgres (eu-central-1) | 1 | Development database, synthetic data only |
 | NCBI E-utilities (ClinVar) | 1 (manual), 3 (`pnpm variant-watch`) | Variant IDs verified 2026-11-08; optional `NCBI_API_KEY` |
 | OpenStreetMap tiles | 3 | Find Care map background |
-| Azure (UAE North): PostgreSQL, Container Apps, Key Vault, Blob, AI Speech, Communication Services, Monitor | 4 to 5 | Production target |
+| Azure AI Speech (REST: speech to text `ar-AE` / `en-US`, neural text to speech) | 4 | Copilot voice. Optional: falls back to the browser's Web Speech API without `AZURE_SPEECH_KEY`. No SDK dependency |
+| Azure (UAE North): Container Registry, Container Apps and jobs, PostgreSQL Flexible Server, Key Vault, Blob, Monitor | 4 | Defined in `infra/main.bicep`; not yet deployed |
+| Azure Communication Services | 5 | Video consults; not provisioned |
 | Claude via the Anthropic API (optional, `AI_PROVIDER=anthropic`) | 2 | Genetic Copilot. Microsoft Foundry route planned with the Azure deployment |
 
 ## Genomics service (Phase 5)

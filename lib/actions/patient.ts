@@ -9,6 +9,7 @@ import { appendAudit } from "@/lib/audit/log";
 import { purposeDef, PURPOSES, type ConsentPurpose } from "@/lib/consent/purposes";
 import { importResult, hasResultWaiting, type ImportOutcome } from "@/lib/services/results";
 import { refreshCoupleEscalations, refreshEscalations } from "@/lib/services/escalation";
+import { forgetSignals, recordSignal } from "@/lib/services/signals";
 import { recordStep } from "@/lib/services/pathway";
 import { TEACHBACK } from "@/content/teachback";
 import { isQuestionDone, nextExplanationIndex, teachBackFailedTwice } from "@/lib/teachback/logic";
@@ -117,6 +118,7 @@ export async function answerTeachBack(questionId: string, optionId: string, expl
     },
   });
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "teachback_answered", resource: `teachback:${questionId}` });
+  if (prior.length === 0) await recordSignal(user.id, "teachback_first", correct ? 1 : 0);
 
   const all = await prisma.teachBackAttempt.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } });
   const allDone = TEACHBACK.every((t) => isQuestionDone(all.filter((a) => a.questionId === t.questionId)));
@@ -169,6 +171,7 @@ export async function deleteMyData(confirmation: string) {
   const user = await requireUser(["patient"]);
   if (!["DELETE", "حذف"].includes(confirmation.trim())) throw new Error("Confirmation text does not match");
   if (user.labAccession) await prisma.labInbox.deleteMany({ where: { accession: user.labAccession } });
+  await forgetSignals(user.id);
   await prisma.user.delete({ where: { id: user.id } });
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "data_deleted", resource: "account" });
   const session = await getSession();

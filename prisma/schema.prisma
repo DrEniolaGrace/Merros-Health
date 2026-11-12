@@ -355,6 +355,48 @@ model CounsellorNote {
 }
 
 /// Post session summary for the patient (SPEC 4.11). Released only after the counsellor signs it.
+/// Anonymous aggregate store for the Population Signals Dashboard (SPEC 7.2).
+/// `journey` is a random id for synthetic journeys, or a keyed hash for live ones; it is never a user id.
+model AggregateEvent {
+  id           String   @id @default(cuid())
+  journey      String
+  kind         String // see lib/signals/events.ts
+  region       String // abu_dhabi | al_ain | al_dhafra
+  language     String // ar | en
+  readingLevel String // simple | standard | detailed
+  value        Float?
+  at           DateTime @default(now())
+  synthetic    Boolean  @default(false)
+
+  @@index([kind, at])
+  @@index([journey])
+}
+
+/// One differentially private publication. `data` holds only noised, thresholded statistics.
+model SignalRelease {
+  id        String                @id @default(cuid())
+  createdAt DateTime              @default(now())
+  period    String // privacy budget period, for example 2026-Q4
+  epsilon   Float
+  data      Json
+  ledger    PrivacyBudgetLedger[]
+}
+
+/// Every epsilon spent, per signal, so the budget can be audited.
+model PrivacyBudgetLedger {
+  id          String        @id @default(cuid())
+  releaseId   String
+  release     SignalRelease @relation(fields: [releaseId], references: [id], onDelete: Cascade)
+  period      String
+  signal      String
+  mechanism   String
+  sensitivity Float
+  epsilon     Float
+  at          DateTime      @default(now())
+
+  @@index([period])
+}
+
 model PatientSummary {
   id            String      @id @default(cuid())
   appointmentId String      @unique

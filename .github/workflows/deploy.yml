@@ -1,0 +1,110 @@
+name: Deploy to Azure
+
+# Manual only: run it from the Actions tab. Nothing deploys on push.
+# Setup (once) is described in docs/DEPLOYMENT.md.
+on:
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: Azure resource group (must already exist, in UAE North)
+        default: merros-rg
+        required: true
+      ai_provider:
+        description: mock (offline demo model) or anthropic (needs the AI_API_KEY secret)
+        default: mock
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency: deploy-azure
+
+env:
+  RG: ${{ inputs.resource_group }}
+  TAG: ${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Infrastructure (registry, database, vault, speech)
+        id: infra
+        run: |
+          out=$(az deployment group create -g "$RG" -n merros-infra -f infra/main.bicep \
+            -p deployApps=false \
+               dbAdminPassword="$DB_ADMIN_PASSWORD" encryptionMasterKey="$ENCRYPTION_MASTER_KEY" \
+               sessionSecret="$SESSION_SECRET" labSigningPublicKey="$LAB_SIGNING_PUBLIC_KEY" \
+               labSigningPrivateKey="$LAB_SIGNING_PRIVATE_KEY" aiProvider="$AI_PROVIDER" aiApiKey="$AI_API_KEY" \
+            --query properties.outputs -o json)
+          echo "acr=$(echo "$out" | jq -r .registryName.value)" >> "$GITHUB_OUTPUT"
+        env:
+          DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
+          ENCRYPTION_MASTER_KEY: ${{ secrets.ENCRYPTION_MASTER_KEY }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          LAB_SIGNING_PUBLIC_KEY: ${{ secrets.LAB_SIGNING_PUBLIC_KEY }}
+          LAB_SIGNING_PRIVATE_KEY: ${{ secrets.LAB_SIGNING_PRIVATE_KEY }}
+          AI_PROVIDER: ${{ inputs.ai_provider }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+
+      - name: Build and push images
+        run: |
+          az acr build -r "${{ steps.infra.outputs.acr }}" -t "merros-web:$TAG" --target runner .
+          az acr build -r "${{ steps.infra.outputs.acr }}" -t "merros-tools:$TAG" --target tools .
+
+      - name: Apps (web, migrate job, VariantWatch job)
+        id: apps
+        run: |
+          out=$(az deployment group create -g "$RG" -n merros-apps -f infra/main.bicep \
+            -p deployApps=true imageTag="$TAG" \
+               dbAdminPassword="$DB_ADMIN_PASSWORD" encryptionMasterKey="$ENCRYPTION_MASTER_KEY" \
+               sessionSecret="$SESSION_SECRET" labSigningPublicKey="$LAB_SIGNING_PUBLIC_KEY" \
+               labSigningPrivateKey="$LAB_SIGNING_PRIVATE_KEY" aiProvider="$AI_PROVIDER" aiApiKey="$AI_API_KEY" \
+            --query properties.outputs -o json)
+          echo "url=$(echo "$out" | jq -r .webUrl.value)" >> "$GITHUB_OUTPUT"
+          echo "job=$(echo "$out" | jq -r .migrateJobName.value)" >> "$GITHUB_OUTPUT"
+        env:
+          DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
+          ENCRYPTION_MASTER_KEY: ${{ secrets.ENCRYPTION_MASTER_KEY }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          LAB_SIGNING_PUBLIC_KEY: ${{ secrets.LAB_SIGNING_PUBLIC_KEY }}
+          LAB_SIGNING_PRIVATE_KEY: ${{ secrets.LAB_SIGNING_PRIVATE_KEY }}
+          AI_PROVIDER: ${{ inputs.ai_provider }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+
+      - name: Migrate the database (and seed synthetic data if empty)
+        run: |
+          az extension add --name containerapp --upgrade --only-show-errors
+          run=$(az containerapp job start -g "$RG" -n "${{ steps.apps.outputs.job }}" --query name -o tsv)
+          for i in $(seq 1 60); do
+            status=$(az containerapp job execution show -g "$RG" -n "${{ steps.apps.outputs.job }}" --job-execution-name "$run" --query properties.status -o tsv)
+            echo "migrate: $status"
+            [ "$status" = "Succeeded" ] && exit 0
+            [ "$status" = "Failed" ] && exit 1
+            sleep 10
+          done
+          exit 1
+
+      - name: Smoke check
+        run: |
+          curl --fail --silent --show-error --retry 10 --retry-delay 10 --retry-all-errors -o /dev/null "${{ steps.apps.outputs.url }}/en"
+          echo "Deployed: ${{ steps.apps.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"

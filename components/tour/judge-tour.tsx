@@ -23,6 +23,7 @@ const STEPS: { key: string; persona: string; path: string }[] = [
   { key: "s10", persona: "layla", path: "/counsellor" },
   { key: "s11", persona: "khalid", path: "/family" },
   { key: "s12", persona: "khalid", path: "/find-care" },
+  { key: "s13", persona: "admin", path: "/admin" },
 ];
 
 const LATER = [

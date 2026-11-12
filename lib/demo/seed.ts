@@ -13,6 +13,7 @@ import { PURPOSES } from "@/lib/consent/purposes";
 import { appendAudit } from "@/lib/audit/log";
 import { COUNSELLOR, LAB_NAME, PANEL_GENES, PERSONAS, type Persona } from "@/content/personas";
 import { CLINICIANS, CLINICS } from "@/content/directory";
+import { seedSignals } from "@/lib/signals/store";
 
 export interface SeedKeys {
   masterKey: string;
@@ -170,5 +171,8 @@ export async function resetDemo(keys: SeedKeys) {
   }
 
   await appendAudit({ actorId: "system", subjectId: "-", action: "demo_reset", resource: "demo" });
-  return { users: ids.size };
+  // Synthetic anonymous journeys and the first differentially private release (SPEC 7.2, 11A).
+  const signalEvents = await seedSignals(new Date());
+
+  return { users: ids.size, signalEvents };
 }
