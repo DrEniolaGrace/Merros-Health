@@ -47,3 +47,12 @@
 | 2026-11-12 | Copilot voice: ask by voice and listen to answers. Azure AI Speech through the server (ar-AE, en-US) when a key is set, browser speech otherwise. Spoken answers start with their boundary label | Done locally with browser speech. Azure path unit tested with a mocked service, not yet run against Azure | 14 unit + 1 e2e |
 | 2026-11-12 | Azure deployment: `infra/main.bicep` (registry, Container Apps web, migrate job, nightly VariantWatch job, PostgreSQL with pgvector, Key Vault, AI Speech, Blob, monitoring), manual deploy workflow, docs/DEPLOYMENT.md | Written and compiled. **Not deployed**: needs an Azure subscription and a GitHub repository | `az bicep build` passes |
 | 2026-11-13 | Testing feedback: a spoken question was sent once for every partial phrase the browser reported. It is now assembled and sent once when the person stops speaking, and shown in the box while they talk | Done | 264 unit + 13 e2e passing (Docker) |
+
+## Vercel deployment (Azure postponed)
+
+| Date | Feature | Status | Tests |
+|---|---|---|---|
+| 2026-11-14 | Database safety: Neon `dev` branch for development and all tests, `production` for the live site only. Guard makes seeds, unit tests and browser tests refuse any other database | Done | 6 unit; refusal checked by aiming seed and tests at the production host |
+| 2026-11-14 | Public site protections: demo reset behind an admin passcode, Copilot rate limit (20 per visitor per hour, 1500 per day), nightly job that resets the demo data and runs VariantWatch | Done | 14 unit |
+| 2026-11-14 | Feature flags for Azure services with fallbacks (voice, video consults, VariantWatch, result video, Risk Beyond the Panel); manual "Check ClinVar now" | Done | 4 unit |
+| 2026-11-14 | Vercel project, production secrets in Vercel environment variables, `vercel.json` (Frankfurt, migrations on build, nightly cron) | Done | 284 unit + 13 e2e passing (local build on the Neon dev branch) |

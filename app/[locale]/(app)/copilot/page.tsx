@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth/session";
 import { MAX_QUESTION_CHARS } from "@/lib/ai/copilot";
-import { speechConfig } from "@/lib/voice/azure";
+import { features } from "@/lib/features";
 import { PageHero } from "@/components/ui/page-hero";
 import { LiveBadge } from "@/components/ui/accents";
 import { Chat, CopilotOrb } from "./chat";
@@ -13,7 +13,7 @@ export default async function CopilotPage({ params }: { params: Promise<{ locale
   const t = await getTranslations("copilot");
   const ts = await getTranslations("safety");
   const offline = (process.env.AI_PROVIDER ?? "mock").toLowerCase() === "mock";
-  const azureVoice = speechConfig() !== null;
+  const azureVoice = features().voice === "azure";
 
   return (
     <div className="flex flex-col gap-8">

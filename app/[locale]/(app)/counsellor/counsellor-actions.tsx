@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { ArrowsClockwise, CheckCircle, PencilSimpleLine, SealCheck, Sparkle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { releaseReclassification, simulateClinvarUpdate } from "@/lib/actions/living";
+import { checkClinvarNow, releaseReclassification, simulateClinvarUpdate } from "@/lib/actions/living";
 import { completeSession, saveNotesAndDraft, signSummary } from "@/lib/actions/counsellor";
 
 export function SimulateUpdate({ label, done }: { label: string; done: string }) {
@@ -15,6 +15,19 @@ export function SimulateUpdate({ label, done }: { label: string; done: string })
         {label}
       </Button>
       {msg && <p role="status" className="text-sm text-cyan-ink tabular">{msg}</p>}
+    </div>
+  );
+}
+
+export function CheckClinvarNow({ label, done, failed }: { label: string; done: string; failed: string }) {
+  const [pending, start] = useTransition();
+  const [msg, setMsg] = useState<string | null>(null);
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button variant="ghost" icon={<ArrowsClockwise />} pending={pending} onClick={() => start(async () => { const r = await checkClinvarNow(); setMsg(r.error ? failed : done.replace("{checked}", String(r.checked)).replace("{changed}", String(r.changed))); })}>
+        {label}
+      </Button>
+      {msg && <p role="status" data-variantwatch-status className="text-sm text-cyan-ink tabular">{msg}</p>}
     </div>
   );
 }

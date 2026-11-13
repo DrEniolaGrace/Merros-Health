@@ -586,7 +586,11 @@
     "statInvites": "private invitations created",
     "statOpened": "invitations opened",
     "countsNote": "Counts only, never identities.",
-    "affectedHidden": "Fewer than 10 people (hidden)"
+    "affectedHidden": "Fewer than 10 people (hidden)",
+    "watchBody": "VariantWatch checks every watched variant against ClinVar each night. You can also run it now.",
+    "watchNow": "Check ClinVar now",
+    "watchDone": "Checked {checked} variants, {changed} reclassified.",
+    "watchFailed": "ClinVar could not be reached. Nothing was changed."
   },
   "tour": {
     "open": "Judge Tour",
@@ -610,7 +614,12 @@
     "s10": "Living Results: as Dr. Layla, simulate a ClinVar update and release it to Hamad",
     "s11": "Family Risk Engine: Khalid's family map and a private invitation",
     "s12": "Find Care: filter providers and see them on the map",
-    "s13": "Population Signals: private statistics with a visible privacy budget"
+    "s13": "Population Signals: private statistics with a visible privacy budget",
+    "admin": "Admin",
+    "passcode": "Admin passcode",
+    "passcodeWrong": "That passcode is not correct.",
+    "passcodeTooMany": "Too many attempts. Please try again in an hour.",
+    "nightly": "The demo data resets itself every night."
   },
   "errors": {
     "title": "Something went wrong",

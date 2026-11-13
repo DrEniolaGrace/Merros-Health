@@ -29,6 +29,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 // Every page depends on the session and theme cookies, so nothing is prerendered at build time.
 export const dynamic = "force-dynamic";
+// Serverless hosting: allow the Copilot, the demo reset and VariantWatch up to a minute.
+export const maxDuration = 60;
 
 export default async function LocaleLayout({
   children,

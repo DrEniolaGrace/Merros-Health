@@ -1,6 +1,7 @@
 "use server";
 
 import { requireUser } from "@/lib/auth/session";
+import { features } from "@/lib/features";
 import { recognise, speechConfig, speakable, synthesize, MAX_SPEECH_CHARS, type VoiceLocale } from "@/lib/voice/azure";
 import { MAX_SECONDS, TARGET_RATE } from "@/lib/voice/wav";
 
@@ -12,7 +13,7 @@ const asLocale = (l: string): VoiceLocale => (l === "ar" ? "ar" : "en");
  */
 export async function speak(text: string, locale: string): Promise<{ mode: "azure"; audio: string } | { mode: "browser" }> {
   await requireUser();
-  const cfg = speechConfig();
+  const cfg = features().voice === "azure" ? speechConfig() : null;
   const clean = speakable(String(text)).slice(0, MAX_SPEECH_CHARS);
   if (!cfg || !clean) return { mode: "browser" };
   try {
@@ -27,7 +28,7 @@ export async function speak(text: string, locale: string): Promise<{ mode: "azur
 /** Speech to text for one short spoken question (16 kHz mono WAV). The audio is not stored. */
 export async function transcribe(form: FormData): Promise<{ ok: true; text: string } | { ok: false; reason: "not_configured" | "too_long" | "not_understood" | "failed" }> {
   await requireUser();
-  const cfg = speechConfig();
+  const cfg = features().voice === "azure" ? speechConfig() : null;
   if (!cfg) return { ok: false, reason: "not_configured" };
   const file = form.get("audio");
   if (!(file instanceof Blob)) return { ok: false, reason: "failed" };

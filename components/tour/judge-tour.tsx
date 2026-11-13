@@ -7,7 +7,8 @@ import { motion } from "motion/react";
 import { Sheet } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Pill } from "@/components/ui/pill";
-import { resetDemoAction, tourGo } from "@/lib/actions/auth";
+import { getResetPolicy, resetDemoAction, tourGo } from "@/lib/actions/auth";
+import type { ResetPolicy } from "@/lib/demo/policy";
 import { cn } from "@/lib/cn";
 
 const STEPS: { key: string; persona: string; path: string }[] = [
@@ -38,11 +39,27 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
   const [active, setActive] = useState<string | null>(null);
+  // Reset is one click on a developer machine, behind an admin passcode on a public site.
+  const [policy, setPolicy] = useState<ResetPolicy | null>(null);
+  const [admin, setAdmin] = useState(false);
+  const [passcode, setPasscode] = useState("");
+  const [resetError, setResetError] = useState<"wrong_passcode" | "too_many" | null>(null);
+  const reset = () => {
+    setActive("reset");
+    setResetError(null);
+    start(async () => {
+      const r = await resetDemoAction(passcode);
+      if (r && !r.ok && r.reason !== "disabled") setResetError(r.reason);
+    });
+  };
 
   return (
     <>
       <motion.button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          if (policy === null) void getResetPolicy().then(setPolicy);
+        }}
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.97 }}
         className={cn(
@@ -89,19 +106,45 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
             </li>
           ))}
         </ul>
-        <div className="mt-8">
-          <Button
-            variant="ghost"
-            icon={<ArrowsClockwise />}
-            pending={pending && active === "reset"}
-            onClick={() => {
-              setActive("reset");
-              start(() => resetDemoAction());
-            }}
-          >
-            {pending && active === "reset" ? t("resetting") : t("reset")}
-          </Button>
-        </div>
+        {policy === "open" && (
+          <div className="mt-8">
+            <Button variant="ghost" icon={<ArrowsClockwise />} pending={pending && active === "reset"} onClick={reset}>
+              {pending && active === "reset" ? t("resetting") : t("reset")}
+            </Button>
+          </div>
+        )}
+        {policy === "passcode" && (
+          <div className="mt-8 flex flex-col gap-3" data-reset-admin>
+            {!admin ? (
+              <button type="button" onClick={() => setAdmin(true)} className="self-start text-xs text-muted underline-offset-4 hover:underline">
+                {t("admin")}
+              </button>
+            ) : (
+              <form
+                className="flex flex-col gap-3"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  reset();
+                }}
+              >
+                <label htmlFor="reset-passcode" className="text-sm text-muted">{t("passcode")}</label>
+                <input
+                  id="reset-passcode"
+                  type="password"
+                  autoComplete="off"
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
+                  className="glass h-12 w-full rounded-control px-4 text-base text-ink outline-none focus:shadow-[0_0_0_1px_var(--rose-light)]"
+                />
+                <Button type="submit" variant="ghost" icon={<ArrowsClockwise />} disabled={!passcode} pending={pending && active === "reset"} className="self-start">
+                  {pending && active === "reset" ? t("resetting") : t("reset")}
+                </Button>
+                {resetError && <p role="alert" className="text-sm text-gold-ink">{t(resetError === "too_many" ? "passcodeTooMany" : "passcodeWrong")}</p>}
+              </form>
+            )}
+            <p className="text-xs text-muted">{t("nightly")}</p>
+          </div>
+        )}
       </Sheet>
     </>
   );

@@ -1,4 +1,55 @@
-# Deploying Merros to Azure (UAE North)
+# Deployment
+
+Merros runs in two places. **Vercel is live now**; **Azure (UAE North) is the production target** and takes over when Azure credits are available. Both are deployed from the same repository, and nothing in the code is specific to either.
+
+## Now: Vercel (free Hobby plan)
+
+| What | Where |
+|---|---|
+| Web app | Vercel, region `fra1` (Frankfurt), built from the `master` branch on every push |
+| Database | Neon Postgres, branch **`production`** (eu-central-1). The `dev` branch is for development and tests only |
+| Migrations | `vercel.json` runs `prisma migrate deploy` before each build |
+| Nightly job | Vercel cron calls `/api/cron/nightly` at 22:00 UTC (02:00 UAE): resets the demo data, clears old rate limit counters, runs VariantWatch against ClinVar |
+| Secrets | Vercel environment variables only (Production environment) |
+
+### Environment variables on Vercel
+
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL`, `DIRECT_URL` | Neon `production` branch, pooled and direct |
+| `ENCRYPTION_MASTER_KEY`, `SESSION_SECRET`, `LAB_SIGNING_PUBLIC_KEY`, `LAB_SIGNING_PRIVATE_KEY` | Generated for the deployment; different from any developer machine |
+| `DEMO_MODE` | `true` (persona picker login) |
+| `DEMO_ADMIN_PASSCODE` | Passcode for "Reset demo data". Set by the project owner. Without it there is no reset button on the live site |
+| `CRON_SECRET` | Protects the nightly job. Vercel sends it automatically |
+| `AI_PROVIDER`, `AI_API_KEY` | `mock` (offline model, no key) or `anthropic` with a Claude API key |
+| `COPILOT_RATE_PER_HOUR`, `COPILOT_DAILY_CAP` | Optional. Defaults: 20 per visitor per hour, 1500 per day for the whole site |
+
+### Protections on the public link
+
+* Everything shown is synthetic. The persona picker needs no password, by design, so reviewers can open it in one click.
+* **Reset demo data** is hidden behind an "Admin" link and the passcode; wrong guesses are limited to 5 an hour per visitor.
+* **The Copilot is rate limited** per visitor and per day, checked before anything is sent to a model.
+* **The demo resets itself every night**, so changes made by one visitor do not last.
+
+### Azure fallbacks in use on Vercel (`lib/features.ts`)
+
+| Feature | On Vercel | On Azure later |
+|---|---|---|
+| Voice | Browser Web Speech API | Azure AI Speech (`FEATURE_VOICE=azure` + key) |
+| Video consults | Simulated room | Azure Communication Services |
+| VariantWatch | Nightly cron + "Check ClinVar now" button | Container Apps scheduled job |
+| My Result Video (Phase 5) | Remotion Player in the browser | Server rendering job |
+| Risk Beyond the Panel (Phase 5) | Precomputed persona results | Genomics container |
+
+### Seeding production on purpose
+
+Normal seeds refuse to touch production (`lib/db/guard.ts`). The nightly job reseeds it. To do it by hand, with the production variables loaded for that one command only:
+
+```
+CONFIRM=seed-production pnpm seed:production
+```
+
+## Later: Azure (UAE North)
 
 Everything the prototype needs is described in one file, `infra/main.bicep`, and deployed by one
 manual GitHub Actions workflow, `.github/workflows/deploy.yml`.

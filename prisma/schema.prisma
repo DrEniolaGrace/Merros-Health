@@ -355,6 +355,16 @@ model CounsellorNote {
 }
 
 /// Post session summary for the patient (SPEC 4.11). Released only after the counsellor signs it.
+/// Fixed window counters for rate limiting (Copilot questions, passcode attempts). `key` is a keyed hash, never an address.
+model RateLimit {
+  key    String
+  window DateTime
+  count  Int      @default(0)
+
+  @@id([key, window])
+  @@index([window])
+}
+
 /// Anonymous aggregate store for the Population Signals Dashboard (SPEC 7.2).
 /// `journey` is a random id for synthetic journeys, or a keyed hash for live ones; it is never a user id.
 model AggregateEvent {

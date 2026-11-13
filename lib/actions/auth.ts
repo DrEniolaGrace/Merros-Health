@@ -6,7 +6,10 @@ import { env } from "@/lib/env";
 import { appendAudit } from "@/lib/audit/log";
 import { getSession, homeFor } from "@/lib/auth/session";
 import { redirect } from "@/i18n/navigation";
+import { headers } from "next/headers";
 import { resetDemo } from "@/lib/demo/seed";
+import { passcodeMatches, resetPolicy, type ResetPolicy } from "@/lib/demo/policy";
+import { clientIp, consume, HOUR, visitorKey } from "@/lib/ratelimit";
 
 async function signIn(personaKey: string) {
   if (env().DEMO_MODE !== "true") throw new Error("Persona login is only available in demo mode");
@@ -42,11 +45,28 @@ export async function tourGo(personaKey: string, path: string) {
   redirect({ href: path, locale: await getLocale() });
 }
 
-export async function resetDemoAction() {
+/** Tells the Judge Tour whether to show the reset button, a passcode field, or nothing. */
+export async function getResetPolicy(): Promise<ResetPolicy> {
+  return resetPolicy();
+}
+
+/**
+ * Resets the demo data. On a public deployment this needs the admin passcode (DEMO_ADMIN_PASSCODE),
+ * and wrong guesses are limited to 5 an hour per visitor.
+ */
+export async function resetDemoAction(passcode = ""): Promise<{ ok: false; reason: "wrong_passcode" | "too_many" | "disabled" }> {
   const e = env();
-  if (e.DEMO_MODE !== "true" || !e.LAB_SIGNING_PRIVATE_KEY) throw new Error("Demo reset unavailable");
+  const policy = resetPolicy();
+  if (policy === "disabled" || e.DEMO_MODE !== "true" || !e.LAB_SIGNING_PRIVATE_KEY) return { ok: false, reason: "disabled" };
+  if (policy === "passcode") {
+    const who = visitorKey(clientIp(await headers()), e.SESSION_SECRET);
+    const allowance = await consume(`reset:${who}`, 5, HOUR);
+    if (!allowance.allowed) return { ok: false, reason: "too_many" };
+    if (!passcodeMatches(passcode)) return { ok: false, reason: "wrong_passcode" };
+  }
   await resetDemo({ masterKey: e.ENCRYPTION_MASTER_KEY, labPrivateKey: e.LAB_SIGNING_PRIVATE_KEY });
   const session = await getSession();
   session.destroy();
   redirect({ href: "/login", locale: await getLocale() });
+  return { ok: false, reason: "disabled" }; // unreachable: redirect throws
 }

@@ -1,7 +1,11 @@
 "use server";
 
 import { z } from "zod";
+import { headers } from "next/headers";
 import { getLocale } from "next-intl/server";
+import { env } from "@/lib/env";
+import { clientIp, consume, DAY, HOUR, positiveInt, visitorKey } from "@/lib/ratelimit";
+import { rateLimitedReply } from "@/lib/ai/limits";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { appendAudit } from "@/lib/audit/log";
@@ -27,6 +31,15 @@ export async function askCopilot(raw: z.infer<typeof input>): Promise<CopilotRep
   const user = await requireUser(["patient"]);
   const { question, history } = input.parse(raw);
   const locale = (await getLocale()) === "ar" ? "ar" : "en";
+
+  // Public demo: cap questions per visitor per hour and across the whole site per day, so the
+  // model budget cannot be used up. The limit is checked before anything is sent to a model.
+  const provider = getProvider();
+  const who = visitorKey(clientIp(await headers()), env().SESSION_SECRET);
+  const perVisitor = await consume(`copilot:${who}`, positiveInt(process.env.COPILOT_RATE_PER_HOUR, 20), HOUR);
+  const perDay = perVisitor.allowed ? await consume("copilot:all", positiveInt(process.env.COPILOT_DAILY_CAP, 1500), DAY) : null;
+  if (!perVisitor.allowed || (perDay && !perDay.allowed)) return rateLimitedReply(locale, perVisitor.allowed ? "site" : "visitor", provider.name);
+
   const own = await getOwnResult(user, { log: false });
   const ctx: CopilotContext = {
     locale,
@@ -37,7 +50,7 @@ export async function askCopilot(raw: z.infer<typeof input>): Promise<CopilotRep
         : null,
   };
 
-  const reply = await runCopilot(question, history, ctx, getProvider());
+  const reply = await runCopilot(question, history, ctx, provider);
 
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "copilot_question", resource: `copilot:${reply.label}` });
   await recordSignal(user.id, "copilot_question");

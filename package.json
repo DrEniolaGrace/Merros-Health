@@ -17,6 +17,7 @@
     "seed": "tsx prisma/seed.ts",
     "postinstall": "prisma generate",
     "seed:if-empty": "tsx prisma/seed.ts --if-empty",
+    "seed:production": "tsx prisma/seed.ts --production",
     "docker:up": "docker compose up --build -d",
     "docker:down": "docker compose down",
     "docker:seed": "docker compose run --rm migrate pnpm seed",

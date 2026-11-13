@@ -5,7 +5,14 @@
 - Synthetic data only. Risk numbers come from tested code, never from the AI model.
 - After every completed feature: run tests, update docs/PROGRESS.md, and make a git commit.
 - Windows machine with Docker Desktop. Local development runs with `docker compose up --build` (postgres with pgvector, migrate+seed, web on http://localhost:3000). Rebuild the web image after code changes.
-- Neon is the fallback: `pnpm dev` / `pnpm start` use DATABASE_URL and DIRECT_URL from .env (Neon). Compose overrides those two variables, so .env keeps the Neon URLs. Keep both paths working.
-- To run Node commands (tests, seed) against the Docker database, set DATABASE_URL and DIRECT_URL to postgresql://meros:meros@localhost:5432/meros for that command. Never point tests at Neon by accident.
-- Production target is Azure (UAE North).
+- Neon has two branches. **`dev`** is for local development and ALL tests. **`production`** is used only by the live Vercel deployment. Tests, seeds and any destructive command must NEVER run against production.
+  - .env holds the `dev` branch URLs (DATABASE_URL, DIRECT_URL) and lists its host in SAFE_DATABASE_HOSTS. The production URLs exist only in Vercel's environment variables, never in .env or in code.
+  - `lib/db/guard.ts` enforces this: `pnpm seed`, `pnpm test` and `pnpm test:e2e` refuse to start unless the database is localhost/Docker or a host in SAFE_DATABASE_HOSTS. Do not weaken or bypass the guard.
+  - Production is seeded only by the nightly job on the deployment, or deliberately with `CONFIRM=seed-production pnpm seed:production` after the user asks for it.
+- `pnpm dev` / `pnpm start` use .env (Neon `dev`). Compose overrides DATABASE_URL and DIRECT_URL to the local Postgres. Keep both paths working.
+- To run Node commands (tests, seed) against the Docker database, set DATABASE_URL and DIRECT_URL to postgresql://meros:meros@localhost:5432/meros for that command. Browser tests run against the Docker stack.
+- The live site is on **Vercel** (free Hobby plan, Frankfurt region, deploys on every push to `master`, Neon `production` branch). See docs/DEPLOYMENT.md. Secrets live in Vercel environment variables only.
+- **Azure (UAE North) is still the production target** once credits are available. Keep the Azure files (infra/main.bicep, Dockerfile, docker-compose.yml, .github/workflows/deploy.yml) working and unchanged unless asked.
+- Services that need Azure sit behind feature flags in `lib/features.ts` and default to fallbacks: browser speech, simulated video consults, nightly Vercel cron for VariantWatch, in browser video player, precomputed Risk Beyond the Panel results. Never make a feature depend on Azure without a fallback.
+- The live site is public. Keep its protections: demo reset needs DEMO_ADMIN_PASSCODE, the Copilot is rate limited, and the demo data resets nightly.
 - Write user facing text in both Arabic and English.

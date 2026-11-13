@@ -17,7 +17,7 @@ import { forecast } from "@/lib/signals/forecast";
 import { medianBucket, regionShares, SIGNALS, type SignalKey } from "@/lib/signals/release";
 import { budgetStatus, latestRelease } from "@/lib/signals/store";
 import { IntegrityCheck } from "../privacy/privacy-controls";
-import { SimulateUpdate } from "../counsellor/counsellor-actions";
+import { CheckClinvarNow, SimulateUpdate } from "../counsellor/counsellor-actions";
 
 /** Planning assumption for the staffing hint. Shown on screen; not a clinical standard. */
 const SESSIONS_PER_COUNSELLOR = 15;
@@ -270,6 +270,10 @@ export default async function AdminPage({ params }: { params: Promise<{ locale: 
       <section className="flex flex-col gap-4">
         <SectionTitle>{s("operations")}</SectionTitle>
         <p className="-mt-2 text-sm text-muted">{t("livingTitle")}</p>
+        <GlassCard className="flex flex-col gap-3">
+          <p className="text-sm text-muted">{t("watchBody")}</p>
+          <CheckClinvarNow label={t("watchNow")} done={t.raw("watchDone")} failed={t("watchFailed")} />
+        </GlassCard>
         {events.length === 0 ? (
           <GlassCard className="flex flex-col gap-4">
             <p className="text-sm text-muted">{t("livingEmpty")}</p>
