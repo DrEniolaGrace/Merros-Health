@@ -56,3 +56,4 @@
 | 2026-11-14 | Public site protections: demo reset behind an admin passcode, Copilot rate limit (20 per visitor per hour, 1500 per day), nightly job that resets the demo data and runs VariantWatch | Done | 14 unit |
 | 2026-11-14 | Feature flags for Azure services with fallbacks (voice, video consults, VariantWatch, result video, Risk Beyond the Panel); manual "Check ClinVar now" | Done | 4 unit |
 | 2026-11-14 | Vercel project, production secrets in Vercel environment variables, `vercel.json` (Frankfurt, migrations on build, nightly cron) | Done | 284 unit + 13 e2e passing (local build on the Neon dev branch) |
+| 2026-11-15 | Genetic Copilot on Claude for the live site: golden set run against Claude (54 of 54), results saved in docs/AI_EVALUATION_CLAUDE.md, daily cap lowered to 300 | Done | Evaluation 54/54 with Claude; 284 unit |
