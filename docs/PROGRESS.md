@@ -57,3 +57,11 @@
 | 2026-11-14 | Feature flags for Azure services with fallbacks (voice, video consults, VariantWatch, result video, Risk Beyond the Panel); manual "Check ClinVar now" | Done | 4 unit |
 | 2026-11-14 | Vercel project, production secrets in Vercel environment variables, `vercel.json` (Frankfurt, migrations on build, nightly cron) | Done | 284 unit + 13 e2e passing (local build on the Neon dev branch) |
 | 2026-11-15 | Genetic Copilot on Claude for the live site: golden set run against Claude (54 of 54), results saved in docs/AI_EVALUATION_CLAUDE.md, daily cap lowered to 300 | Done | Evaluation 54/54 with Claude; 284 unit |
+
+## Phase 5
+
+| Date | Feature | Status | Tests |
+|---|---|---|---|
+| 2026-11-15 | Distress Check: 0 to 10 thermometer, calm support by band, same week callback choice (simulated), unverified crisis placeholders, escalation, counsellor queue and brief, anonymous before and after statistics | Done | 5 unit + 2 e2e |
+| 2026-11-15 | Values Compass: seven values, options related to the person's own values without ranking, SURE test, encrypted storage, Values Summary shared only by separate consent | Done | 9 unit + 1 e2e |
+| 2026-11-15 | Sign in and Judge Tour persona switching now load the page in full. A redirect from inside a pending action could leave the next page unable to follow links until reloaded. Judge Tour step 13 (Population Signals) was also blocked by the tour's path list; fixed | Done | 298 unit + 16 e2e passing (local build on the Neon dev branch) |

@@ -2,6 +2,8 @@
 
 import {
   BookOpenText,
+  HandHeart,
+  Scales,
   ChartLineUp,
   Compass,
   Dna,
@@ -21,11 +23,11 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
 export type NavKey =
-  | "home" | "copilot" | "family" | "findCare" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme";
+  | "home" | "copilot" | "family" | "findCare" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme" | "values" | "wellbeing";
 
 const ICONS: Record<NavKey, typeof House> = {
   home: House, copilot: Sparkle, family: TreeStructure, findCare: MapPinLine, result: Dna, couple: UsersThree, learn: BookOpenText, options: Compass, care: Lifebuoy,
-  pathway: Path, privacy: ShieldCheck, screening: MagnifyingGlass, cases: ListChecks, programme: ChartLineUp,
+  pathway: Path, privacy: ShieldCheck, screening: MagnifyingGlass, cases: ListChecks, programme: ChartLineUp, values: Scales, wellbeing: HandHeart,
 };
 
 export interface NavItem {

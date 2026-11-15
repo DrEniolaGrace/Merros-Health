@@ -70,6 +70,7 @@ export default async function OptionsPage({ params }: { params: Promise<{ locale
       </Rise>
       <p className="measure text-sm text-muted">{t("values")} · {tc("pendingReview")}</p>
       <ActionDock>
+        <LinkButton href="/values" size="lg" variant="secondary">{t("toValues")}</LinkButton>
         <LinkButton href="/support" size="lg">{t("talk")}</LinkButton>
       </ActionDock>
     </div>

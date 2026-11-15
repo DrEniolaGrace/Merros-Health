@@ -13,7 +13,7 @@ export function PersonaCard({ personaKey, name, story, tag, cta }: { personaKey:
   return (
     <GlassCard tilt className="h-full p-0">
       <button
-        onClick={() => start(() => loginAs(personaKey))}
+        onClick={() => start(async () => { window.location.assign(await loginAs(personaKey)); })}
         disabled={pending}
         aria-label={cta}
         className={cn("group flex h-full w-full flex-col gap-4 rounded-card p-6 text-start", pending && "opacity-70")}

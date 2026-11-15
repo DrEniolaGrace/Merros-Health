@@ -25,6 +25,8 @@ const STEPS: { key: string; persona: string; path: string }[] = [
   { key: "s11", persona: "khalid", path: "/family" },
   { key: "s12", persona: "khalid", path: "/find-care" },
   { key: "s13", persona: "admin", path: "/admin" },
+  { key: "s14", persona: "khalid", path: "/values" },
+  { key: "s15", persona: "khalid", path: "/wellbeing" },
 ];
 
 const LATER = [
@@ -82,7 +84,7 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
                 disabled={pending}
                 onClick={() => {
                   setActive(s.key);
-                  start(() => tourGo(s.persona, s.path));
+                  start(async () => { window.location.assign(await tourGo(s.persona, s.path)); });
                 }}
                 className="glass group flex w-full items-center gap-4 rounded-control p-4 text-start transition-[background,box-shadow] duration-500 ease-calm hover:bg-glass-strong disabled:opacity-60"
               >

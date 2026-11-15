@@ -17,6 +17,7 @@ import { RELATIONS, type Relation } from "@/lib/family/engine";
 import { ESCALATION_TEXT } from "@/content/escalation";
 import { conditionById } from "@/content/conditions";
 import { pick } from "@/content/types";
+import { IMPORTANT_FROM, VALUES, VALUE_KEYS } from "@/content/values";
 import type { EscalationCode } from "@/lib/escalation/rules";
 import { ReleaseButton, SummaryComposer } from "../../counsellor-actions";
 
@@ -136,6 +137,26 @@ export default async function CaseBriefPage({ params }: { params: Promise<{ loca
           <LockKey size={16} weight="light" className="mt-1 shrink-0 text-gold-ink" />
           {d.sharedGenes.length ? t("coupleShared", { genes: d.sharedGenes.join(", ") }) : t("coupleUnknown")}
         </p>
+      </section>
+
+      <section className="flex flex-col gap-4" data-brief-wellbeing>
+        <SectionTitle>{t("wellbeing")}</SectionTitle>
+        <GlassCard className="flex flex-col gap-3">
+          <p className="text-sm text-ink">
+            {d.distress ? <>{t("distress", { n: d.distress.score })}{d.distress.callback ? <span className="text-gold-ink"> · {tc(d.distress.callback === "psychologist" ? "callbackPsychologist" : "callbackCounsellor")}</span> : null}</> : <span className="text-muted">{t("noDistress")}</span>}
+          </p>
+          {d.values ? (
+            <div className="flex flex-col gap-2" data-values-summary>
+              <p className="text-sm text-ink">{t("sure", { n: d.values.sure })}</p>
+              <p className="text-sm text-muted">{t("valuesImportant")}</p>
+              <ul className="flex flex-wrap gap-2">
+                {VALUE_KEYS.filter((k) => d.values!.ratings[k] >= IMPORTANT_FROM).map((k) => <li key={k}><Pill tone="gold">{pick(VALUES[k].title, locale)}</Pill></li>)}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-sm text-muted">{t("valuesNotShared")}</p>
+          )}
+        </GlassCard>
       </section>
 
       <section className="flex flex-col gap-4">

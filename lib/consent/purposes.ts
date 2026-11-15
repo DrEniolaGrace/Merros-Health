@@ -8,7 +8,8 @@ export type ConsentPurpose =
   | "counsellor_access"
   | "aggregate_analytics"
   | "reclassification_recontact"
-  | "family_doctor_referral";
+  | "family_doctor_referral"
+  | "values_summary_share";
 
 export type ConsentRecipient = "self" | "partner" | "counsellor" | "health_system_aggregate" | "family_doctor";
 
@@ -28,6 +29,8 @@ export const PURPOSES: PurposeDef[] = [
   { purpose: "reclassification_recontact", recipient: "counsellor", scope: "variant_updates", defaultDays: 365 },
   // Offered only when the person links a family doctor in Find Care (one tap consented referral).
   { purpose: "family_doctor_referral", recipient: "family_doctor", scope: "carrier_summary", defaultDays: 90 },
+  // Offered inside the Values Compass, never at onboarding.
+  { purpose: "values_summary_share", recipient: "counsellor", scope: "values_summary", defaultDays: 90 },
 ];
 
 export const DURATION_CHOICES = [30, 90, 365] as const;

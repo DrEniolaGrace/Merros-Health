@@ -31,6 +31,13 @@ export const CONSENT_TEXT: Record<ConsentPurpose, { title: Bi; body: Bi }> = {
       ar: "تساعد إحصاءات مجهولة الهوية ومحمية الخصوصية النظام الصحي في تخطيط الخدمات. ولا يمكن لأحد التعرف عليك منها. صالحة لمدة سنة.",
     },
   },
+  values_summary_share: {
+    title: { en: "Share my Values Summary with my counsellor", ar: "شارك ملخص قيمي مع مستشاري" },
+    body: {
+      en: "Your genetic counsellor can see what you said matters most to you, and your answers to the four decision questions, to prepare for your session. Lasts 90 days.",
+      ar: "يمكن لمستشارك الوراثي رؤية ما قلت إنه الأهم عندك، وإجاباتك عن أسئلة القرار الأربعة، للاستعداد لجلستك. صالحة لمدة 90 يوماً.",
+    },
+  },
   family_doctor_referral: {
     title: { en: "Share a carrier summary with my family doctor", ar: "شارك ملخص الحامل مع طبيب العائلة" },
     body: {

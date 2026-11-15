@@ -10,11 +10,12 @@ import { getOwnResult } from "./results";
  * fired reason. Result based rules only run once the person has chosen to see their result.
  */
 export async function refreshEscalations(user: User, extra: { medicalAdviceRequested?: boolean } = {}): Promise<Escalation[]> {
-  const [profile, own, attempts, existing] = await Promise.all([
+  const [profile, own, attempts, existing, distress] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id } }),
     getOwnResult(user, { log: false }),
     prisma.teachBackAttempt.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
     prisma.escalation.findMany({ where: { userId: user.id } }),
+    prisma.distressScore.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
   ]);
 
   const fired = evaluateEscalation(
@@ -25,6 +26,7 @@ export async function refreshEscalations(user: User, extra: { medicalAdviceReque
       coupleSharedGenes: existing.find((x) => x.code === "shared_pathogenic_gene")?.detail?.split(",").filter(Boolean) ?? [],
       pregnancyStatus: profile?.pregnancyStatus ?? "prefer_not_to_say",
       teachBackAttempts: attempts,
+      distressScore: distress?.score ?? null,
       medicalAdviceRequested: extra.medicalAdviceRequested || existing.some((e) => e.code === "medical_advice_requested"),
     }),
   );
@@ -34,7 +36,8 @@ export async function refreshEscalations(user: User, extra: { medicalAdviceReque
     await prisma.escalation.upsert({
       where: { userId_code: { userId: user.id, code: e.code } },
       create: { userId: user.id, code: e.code, severity: e.severity, detail: e.detail ?? null },
-      update: { severity: e.severity, detail: e.detail ?? null },
+      // A requested callback is stored in the detail of the distress reason; a re evaluation must not erase it.
+      update: e.code === "high_distress" ? { severity: e.severity } : { severity: e.severity, detail: e.detail ?? null },
     });
     if (!known.has(e.code)) {
       await appendAudit({ actorId: "system", subjectId: user.id, action: "escalation_raised", resource: `escalation:${e.code}` });

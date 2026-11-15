@@ -23,11 +23,16 @@ async function signIn(personaKey: string) {
   return user;
 }
 
-export async function loginAs(personaKey: string) {
+/**
+ * Signs in and returns where to go. The browser then loads that page in full, instead of a
+ * client side redirect: a redirect issued from inside a pending action could leave the next
+ * page unable to follow links until it was reloaded.
+ */
+export async function loginAs(personaKey: string): Promise<string> {
   const user = await signIn(personaKey);
   const locale = await getLocale();
   const target = user.role === "patient" && !user.profile?.onboardedAt ? "/onboarding" : homeFor(user.role);
-  redirect({ href: target, locale });
+  return `/${locale}${target}`;
 }
 
 export async function signOut() {
@@ -37,12 +42,12 @@ export async function signOut() {
 }
 
 /** Judge Tour: switch persona and open a screen. Only fixed, known paths are allowed. */
-const TOUR_PATHS = new Set(["/onboarding", "/import", "/copilot", "/family", "/find-care", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home"]);
+const TOUR_PATHS = new Set(["/onboarding", "/import", "/copilot", "/family", "/find-care", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home", "/admin", "/values", "/wellbeing"]);
 
-export async function tourGo(personaKey: string, path: string) {
+export async function tourGo(personaKey: string, path: string): Promise<string> {
   if (!TOUR_PATHS.has(path)) throw new Error("Unknown tour path");
   await signIn(personaKey);
-  redirect({ href: path, locale: await getLocale() });
+  return `/${await getLocale()}${path}`;
 }
 
 /** Tells the Judge Tour whether to show the reset button, a passcode field, or nothing. */

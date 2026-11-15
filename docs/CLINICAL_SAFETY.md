@@ -2,6 +2,12 @@
 
 All clinical content is **pending accredited clinical review**. Merros supports, and never replaces, licensed screening and genetic counselling services.
 
+## Distress Check and Values Compass (Phase 5)
+
+* **Distress Check** (`lib/wellbeing/distress.ts`): one question, 0 to 10 (NCCN Distress Thermometer). A score of 4 or more fires the existing `high_distress` escalation rule (urgent) and offers a same week callback from a genetic counsellor or a psychologist; 7 or more also shows crisis contacts, which are unverified placeholders. A unit test checks that the callback offer and the escalation rule agree for every score. A later score under 4 closes the open reason.
+* **Values Compass** (`lib/values/compass.ts`, `content/values.ts`): the person rates seven values; each option is then shown with which of their important values it tends to fit, may pull against, or depends on. Nothing is scored, summed, sorted or labelled best. Tests enforce this: the output has no score or rank field, the order is the caller's (the per person shuffle of the Options Explorer), every option has at least one fit and one tension, and faith and family are never presumed. The SURE test (4 items) flags decisional conflict below 4 of 4 and offers a counsellor.
+* What someone values is stored encrypted with their own data key and reaches the counsellor only through a separate consent (`values_summary_share`).
+
 ## Risk engine (`lib/risk/engine.ts`)
 
 Deterministic, pure and unit tested (28 tests). Language models never compute risk numbers.

@@ -27,7 +27,7 @@ export default async function OnboardingPage({
   const { step } = await searchParams;
   const hasPartner = (await prisma.coupleLink.count({ where: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } })) > 0;
 
-  const purposes = PURPOSES.filter((p) => p.purpose !== "family_doctor_referral" && (p.purpose !== "couple_comparison" || hasPartner)).map((p) => ({
+  const purposes = PURPOSES.filter((p) => p.purpose !== "family_doctor_referral" && p.purpose !== "values_summary_share" && (p.purpose !== "couple_comparison" || hasPartner)).map((p) => ({
     purpose: p.purpose,
     title: pick(CONSENT_TEXT[p.purpose].title, locale),
     body: pick(CONSENT_TEXT[p.purpose].body, locale),

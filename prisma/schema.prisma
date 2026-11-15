@@ -67,6 +67,7 @@ model User {
   coupleLinksB   CoupleLink[]       @relation("PartnerB")
   clinician      Clinician?
   values         ValuesAssessment[]
+  distress       DistressScore[]
   counsellorTasks CounsellorTask[]
   pedigree       PedigreeNode[]
   invites        RelativeInvite[]
@@ -246,13 +247,28 @@ model LabInbox {
   createdAt  DateTime @default(now())
 }
 
-/// Values Compass (SPEC 4.6) arrives in a later phase; table reserved.
+/// Values Compass (SPEC 4.6). Ratings and SURE answers, encrypted with the person's data key.
 model ValuesAssessment {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  ratings   Json
+  encData   String
   createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+/// Distress Check (SPEC 4.12): single item thermometer, 0 to 10.
+model DistressScore {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score     Int
+  phase     String // pre | post (before or after a completed counselling session)
+  callback  String? // counsellor | psychologist, when a same week callback was requested
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }
 
 /// Blind Couple Match relay state (SPEC 6.1). The server only stores opaque, blinded ristretto255

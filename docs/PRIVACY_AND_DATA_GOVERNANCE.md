@@ -40,6 +40,11 @@ All reads of a result pass the single consent gate (`lib/consent/check.ts`, 10 t
 * Download all data as readable JSON (`/api/export`; never includes keys).
 * Delete all data with typed confirmation (cascade delete; anonymous audit rows remain for verifiability).
 
+## Values and wellbeing (Phase 5)
+
+* **Values Compass:** ratings (including the importance of faith) and SURE answers are encrypted with the person's data key. They are shared with the genetic counsellor only if the person turns on "Share my Values Summary" (purpose `values_summary_share`, 90 days, revocable in Privacy). Access to the result does not include them.
+* **Distress Check:** the score is visible to the counsellor only through the existing counsellor access consent. With the anonymous statistics consent, one event (high or not, before or after counselling) feeds Population Signals; the score itself is never sent there.
+
 ## Population Signals: differential privacy (Phase 4)
 
 Code: `lib/signals/` (`dp.ts`, `release.ts`, `store.ts`). Tests: `tests/unit/signals.test.ts`.

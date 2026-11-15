@@ -115,7 +115,7 @@ export default async function CounsellorPage({ params }: { params: Promise<{ loc
                     {consented ? (
                       <ul className="flex flex-col gap-2">
                         {c.reasons.map((r) => (
-                          <li key={r.id} className="text-sm text-ink">• {pick(ESCALATION_TEXT[r.code as EscalationCode], locale)}{r.detail ? <span className="text-muted tabular" dir="ltr"> ({r.detail})</span> : null}</li>
+                          <li key={r.id} className="text-sm text-ink">• {pick(ESCALATION_TEXT[r.code as EscalationCode], locale)}{r.detail?.startsWith("callback:") ? <span className="text-gold-ink" data-callback-requested> · {t(r.detail === "callback:psychologist" ? "callbackPsychologist" : "callbackCounsellor")}</span> : r.detail ? <span className="text-muted tabular" dir="ltr"> ({r.detail})</span> : null}</li>
                         ))}
                       </ul>
                     ) : (

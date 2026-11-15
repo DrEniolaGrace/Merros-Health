@@ -1,4 +1,5 @@
 import "server-only";
+import { sureScore, validRatings, validSure, type Ratings } from "@/lib/values/compass";
 import type { User } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { decryptString } from "@/lib/crypto/fieldEncryption";
@@ -25,6 +26,8 @@ export async function buildBrief(counsellor: User, patientId: string) {
       escalations: true,
       teachBacks: { orderBy: { createdAt: "asc" } },
       pedigree: true,
+      distress: { orderBy: { createdAt: "desc" }, take: 1 },
+      values: { orderBy: { createdAt: "desc" }, take: 1 },
       counsellorTasks: { include: { event: true }, orderBy: { createdAt: "desc" } },
       appointments: { include: { clinician: true, note: true, summary: true }, orderBy: { startsAt: "desc" } },
     },
@@ -49,9 +52,19 @@ export async function buildBrief(counsellor: User, patientId: string) {
   const notes = appointment?.note ? decryptString(appointment.note.encNotes, dek, `notes:${patient.id}`) : "";
   const summaryText = appointment?.summary ? decryptString(appointment.summary.encText, dek, `summary:${patient.id}`) : "";
 
+  // The Values Summary is shared only through its own consent, separate from result access.
+  let values: { ratings: Ratings; sure: number } | null = null;
+  if (patient.values[0] && hasActiveConsent(patient.consents, "values_summary_share")) {
+    const data = JSON.parse(decryptString(patient.values[0].encData, dek, `values:${patient.id}`)) as { ratings: unknown; sure: unknown };
+    if (validRatings(data.ratings) && validSure(data.sure)) values = { ratings: data.ratings, sure: sureScore(data.sure) };
+  }
+  const distress = patient.distress[0] ? { score: patient.distress[0].score, callback: patient.distress[0].callback, at: patient.distress[0].createdAt } : null;
+
   return {
     ...base,
     detail: {
+      values,
+      distress,
       resultStatus: own.status,
       summary,
       sharedGenes: patient.escalations.find((e) => e.code === "shared_pathogenic_gene")?.detail?.split(",").filter(Boolean) ?? [],

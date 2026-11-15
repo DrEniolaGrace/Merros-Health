@@ -22,7 +22,9 @@
     "days": "{count, plural, one {# day} other {# days}}",
     "until": "until {date}",
     "noExpiry": "until you withdraw",
-    "phaseNote": "Coming in Phase {n}"
+    "phaseNote": "Coming in Phase {n}",
+    "yes": "Yes",
+    "no": "No"
   },
   "safety": {
     "education": "Education",
@@ -126,7 +128,9 @@
     "programme": "Programme",
     "copilot": "Copilot",
     "family": "Family",
-    "findCare": "Find care"
+    "findCare": "Find care",
+    "values": "Values",
+    "wellbeing": "Check in"
   },
   "landing": {
     "eyebrow": "Premarital and preconception genetics",
@@ -394,7 +398,8 @@
     "availability": "Availability",
     "questions": "Questions to ask a counsellor",
     "values": "Values Compass, a tool to think through what matters to you, arrives in a later phase.",
-    "talk": "Talk these through with a counsellor"
+    "talk": "Talk these through with a counsellor",
+    "toValues": "See how options fit my values"
   },
   "support": {
     "title": "Care and counselling",
@@ -571,7 +576,9 @@
       "vus": "Uncertain significance",
       "likely_benign": "Likely benign",
       "benign": "Benign"
-    }
+    },
+    "callbackCounsellor": "asked for a counsellor callback",
+    "callbackPsychologist": "asked for a psychologist callback"
   },
   "admin": {
     "title": "Population Signals",
@@ -619,7 +626,9 @@
     "passcode": "Admin passcode",
     "passcodeWrong": "That passcode is not correct.",
     "passcodeTooMany": "Too many attempts. Please try again in an hour.",
-    "nightly": "The demo data resets itself every night."
+    "nightly": "The demo data resets itself every night.",
+    "s14": "Values Compass: options related to your own values, never ranked",
+    "s15": "Distress Check: calm support and a same week callback"
   },
   "errors": {
     "title": "Something went wrong",
@@ -639,7 +648,9 @@
     "eyebrowPrivacy": "You own your data",
     "eyebrowScreening": "Before pregnancy",
     "eyebrowCases": "Counsellor workspace",
-    "eyebrowProgramme": "Health system"
+    "eyebrowProgramme": "Health system",
+    "eyebrowWellbeing": "How you are feeling",
+    "eyebrowValues": "What matters to you"
   },
   "copilot": {
     "eyebrow": "Genetic Copilot",
@@ -857,7 +868,13 @@
     "offline": "Drafted by the offline demo model, which only adds an opening and closing to your notes.",
     "joinVideo": "Open the video room",
     "noSessionWithYou": "This person has no session booked with you.",
-    "noConsentTitle": "No access to this case"
+    "noConsentTitle": "No access to this case",
+    "wellbeing": "Wellbeing and values",
+    "distress": "Latest distress score: {n} out of 10",
+    "noDistress": "No Distress Check recorded.",
+    "sure": "SURE test: {n} of 4 answered yes",
+    "valuesImportant": "Rated very important or essential:",
+    "valuesNotShared": "Values Summary not shared."
   },
   "session": {
     "back": "Back",
@@ -948,7 +965,7 @@
     "distress": "Reported high distress (4 or more out of 10)",
     "before": "Before",
     "after": "After",
-    "wellSynthetic": "SURE and distress numbers come from the synthetic journeys; the live check arrives in Phase 5.",
+    "wellSynthetic": "Almost all of these numbers come from the synthetic journeys. Live answers from the Distress Check and the Values Compass are added as people complete them.",
     "safetyTitle": "Safety Verifier",
     "safetyQuestions": "Copilot questions (at most 3 counted per person)",
     "safetyBlocked": "answers stopped or rewritten",
@@ -989,5 +1006,50 @@
     "how4": "Nothing is broken down by tribe, family name or any identity group.",
     "operations": "Live operations",
     "tooSmall": "Too small to compare reliably"
+  },
+  "wellbeing": {
+    "title": "How are you feeling?",
+    "body": "A result can stir up a lot. This one question helps Merros offer the right support. There is no right or wrong answer.",
+    "question": "How much distress have you felt in the past week, including today?",
+    "hint": "Slide to choose a number from 0 to 10.",
+    "low": "No distress",
+    "high": "Extreme distress",
+    "valueText": "{n} out of 10",
+    "save": "Save my answer",
+    "again": "Answer again",
+    "callbackTitle": "Would you like someone to call you this week?",
+    "callbackBody": "A genetic counsellor can talk through what the result means. A psychologist can help with how it feels. You choose, and you can choose neither.",
+    "counsellor": "A genetic counsellor",
+    "psychologist": "A psychologist",
+    "doneCounsellor": "Requested. A genetic counsellor will call you this week (simulated in this demonstration).",
+    "donePsychologist": "Requested. A psychologist will call you this week (simulated in this demonstration).",
+    "crisisTitle": "If you feel unsafe right now",
+    "crisisNote": "Placeholder contacts: to be verified before release.",
+    "book": "Book a session instead",
+    "privacy": "Your answer is private. Your counsellor sees it only if you gave them access. Anonymous statistics count it only if you agreed to that."
+  },
+  "values": {
+    "title": "Values Compass",
+    "body": "Say what matters to you, and see how each option relates to it. Merros does not choose for you, and no option is ranked above another.",
+    "rateTitle": "What matters to you?",
+    "rateBody": "Rate each one. There are no right answers, and you can change them any time.",
+    "relateTitle": "How the options relate to what you said",
+    "relateBody": "For the things you rated very important or essential. The options are in the same order as in Options, which is different for every person. This is a starting point for your own thinking and for a conversation, not advice.",
+    "relateEmpty": "Rate all seven above to see this.",
+    "noneImportant": "You did not rate anything as very important or essential, so there is nothing to compare. That is a valid answer.",
+    "fits": "Tends to fit with",
+    "tension": "May pull against",
+    "depends": "Depends on your own situation",
+    "sureTitle": "Four questions about your decision",
+    "sureBody": "The SURE test. It shows whether more information or support would help before you decide.",
+    "shareLabel": "Share my Values Summary with my genetic counsellor",
+    "shareDesc": "Off unless you turn it on. Lasts 90 days and can be withdrawn in Privacy.",
+    "save": "Save my values",
+    "saved": "Saved, encrypted with your own key.",
+    "sureAll": "You answered yes to all four. You seem comfortable with where you are. You can still talk to a counsellor at any time.",
+    "sureSome": "You answered no to at least one. That is common, and it usually means more information or support would help. A genetic counsellor can go through it with you.",
+    "talk": "Talk to a counsellor",
+    "incomplete": "Rate all seven and answer the four questions to save.",
+    "source": "Based on the Ottawa Decision Support Framework and the SURE test (Légaré and others, 2010). The Arabic wording of the SURE test is a working translation."
   }
 }

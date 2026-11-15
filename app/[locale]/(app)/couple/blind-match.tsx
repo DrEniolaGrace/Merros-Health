@@ -258,7 +258,7 @@ export function BlindMatch({
         )}
         {(phase === "waiting" || phase === "ready") && partnerPersona && (
           <div>
-            <Button variant="ghost" icon={<ArrowsLeftRight />} pending={pending} className="-ms-4" onClick={() => start(() => tourGo(partnerPersona, "/couple"))}>
+            <Button variant="ghost" icon={<ArrowsLeftRight />} pending={pending} className="-ms-4" onClick={() => start(async () => { window.location.assign(await tourGo(partnerPersona, "/couple")); })}>
               {L.demoSwitch}
             </Button>
           </div>
