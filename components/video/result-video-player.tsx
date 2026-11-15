@@ -4,11 +4,10 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import type { PlayerRef } from "@remotion/player";
 import { Switch } from "@/components/ui/controls";
-import { Skeleton } from "@/components/ui/states";
 import { sceneAt, type VideoScript } from "@/lib/video/script";
 import { ResultVideo, type ResultVideoProps } from "./result-video";
 
-const Player = dynamic(() => import("@remotion/player").then((m) => m.Player), { ssr: false, loading: () => <Skeleton className="aspect-video w-full rounded-card" /> });
+const Player = dynamic(() => import("@remotion/player").then((m) => m.Player), { ssr: false, loading: () => <div aria-hidden className="skeleton aspect-video w-full rounded-card" /> });
 
 /**
  * My Result Video in the browser (Remotion Player). Nothing is uploaded or rendered on a server.
