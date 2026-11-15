@@ -21,6 +21,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         : [
             { key: "home", href: "/home", label: t("home"), primary: true },
             { key: "result", href: "/result", label: t("result"), primary: true },
+            { key: "video", href: "/video", label: t("video") },
             { key: "couple", href: "/couple", label: t("couple") },
             { key: "copilot", href: "/copilot", label: t("copilot"), primary: true },
             { key: "learn", href: "/learn", label: t("learn") },

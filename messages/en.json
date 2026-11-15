@@ -130,7 +130,8 @@
     "family": "Family",
     "findCare": "Find care",
     "values": "Values",
-    "wellbeing": "Check in"
+    "wellbeing": "Check in",
+    "video": "My video"
   },
   "landing": {
     "eyebrow": "Premarital and preconception genetics",
@@ -614,9 +615,8 @@
     "s6": "Hamad's VUS routes him to a named counsellor",
     "s7": "Dr. Layla's case queue",
     "s8": "Privacy: access history and tamper evident audit",
-    "later": "Later phases",
-    "l4": "Gulf Arabic voice and Azure deployment",
-    "l5": "Risk Beyond the Panel and My Result Video",
+    "later": "Waiting for Azure",
+    "l4": "Azure: deployment in the UAE, Gulf Arabic voice, real video calls, genomics pipeline",
     "s9": "Genetic Copilot: ask a question, then try \"Should I marry my cousin?\" to see the Safety Verifier",
     "s10": "Living Results: as Dr. Layla, simulate a ClinVar update and release it to Hamad",
     "s11": "Family Risk Engine: Khalid's family map and a private invitation",
@@ -629,7 +629,9 @@
     "nightly": "The demo data resets itself every night.",
     "s14": "Values Compass: options related to your own values, never ranked",
     "s15": "Distress Check: calm support and a same week callback",
-    "s16": "Risk Beyond the Panel: both partners consent, the counsellor sees it first"
+    "s16": "Risk Beyond the Panel: both partners consent, the counsellor sees it first",
+    "s17": "My Result Video: a personal animated explainer, made on the device",
+    "needsAzure": "Needs Azure"
   },
   "errors": {
     "title": "Something went wrong",
@@ -651,7 +653,8 @@
     "eyebrowCases": "Counsellor workspace",
     "eyebrowProgramme": "Health system",
     "eyebrowWellbeing": "How you are feeling",
-    "eyebrowValues": "What matters to you"
+    "eyebrowValues": "What matters to you",
+    "eyebrowVideo": "Your result in a minute"
   },
   "copilot": {
     "eyebrow": "Genetic Copilot",
@@ -1113,5 +1116,27 @@
     "releaseBody": "Release only after you have talked this through with both partners. They will then see a plain language summary: the band, the three headline figures and that it is not a diagnosis. They do not see the consistency note or the segment map.",
     "release": "I have discussed this with the couple: release the summary",
     "demoSwitch": "Demo: continue as {name}"
+  },
+  "video": {
+    "title": "My Result Video",
+    "body": "A short animated explanation of your own result, in your language. Watch it again whenever you like.",
+    "needResultTitle": "Your video needs your result",
+    "needResultBody": "Open your result first. The video is made from it.",
+    "needResultAction": "Go to my result",
+    "working": "Working copy",
+    "changed": "Changed copy",
+    "affected": "affected",
+    "carrier": "healthy carrier",
+    "neither": "not a carrier",
+    "brand": "MERROS",
+    "narrate": "Read it aloud",
+    "narrateDesc": "Uses this device's own voice. Quality varies by device.",
+    "playerLabel": "My Result Video player",
+    "transcript": "Read the video as text",
+    "private": "The video is made on this device from your result. It is not uploaded, stored or sent anywhere.",
+    "noNames": "It contains no name or identifier, only gene names and numbers.",
+    "show": "To show it to family, play it for them on your device. Sending it as a link is not available in this demonstration.",
+    "modePlayer": "Played in your browser. Server rendering with Azure narration and time limited share links comes with the Azure deployment.",
+    "modeRender": "Rendered on the server."
   }
 }

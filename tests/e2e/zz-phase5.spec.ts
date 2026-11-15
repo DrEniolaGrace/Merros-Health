@@ -149,3 +149,22 @@ test("Risk Beyond the Panel: both partners consent, the counsellor sees it first
   await loginAs(page, "Dr. Layla Haddad", /\/en\/counsellor/);
   await expect(page.locator("[data-case=noura]")).toHaveCount(0);
 });
+
+test("My Result Video: a personal explainer plays on the device, with a text version", async ({ page }) => {
+  await loginAs(page, "Khalid", /\/en\/home/);
+  await page.goto("/en/video");
+  await expect(page.getByRole("heading", { name: "My Result Video" })).toBeVisible();
+  // Khalid is a carrier of two genes, so the video has all six scenes.
+  const player = page.locator("[data-result-video='6']");
+  await expect(player).toBeVisible();
+  await expect(player.getByText("This is your result, explained in about a minute.").first()).toBeVisible({ timeout: 20000 });
+
+  // The same content is available as text, with the engine's numbers and no name.
+  await page.getByRole("button", { name: "Read the video as text" }).click();
+  const transcript = page.locator("[data-video-transcript]");
+  await expect(transcript.locator("li")).toHaveCount(6);
+  await expect(transcript).toContainText("changes in 2 genes: GJB2 and HBB");
+  await expect(transcript).toContainText("25% chance of an affected child");
+  await expect(transcript).toContainText("none is ranked above another");
+  await expect(transcript).not.toContainText("Khalid");
+});

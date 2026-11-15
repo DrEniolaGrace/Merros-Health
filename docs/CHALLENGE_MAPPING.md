@@ -5,7 +5,7 @@ Status: ✅ built and tested (Phases 1 to 4, and the first part of Phase 5) · �
 | Challenge element | Merros features | Status |
 |---|---|---|
 | Identify inherited risk | Preconception Screening Finder (4.2) ✅, Risk Beyond the Panel (6.2) ✅ on precomputed synthetic data (no genomics pipeline), Family Risk Engine (6.4) ✅, Living Results (6.3) ✅ | ◐ |
-| Understand | Risk Explainer with multi gene analysis (4.3) ✅, Teach Back (4.4) ✅, Genetic Copilot text with Safety Verifier (6.5) ✅, voice ✅ (browser speech locally, Azure AI Speech when configured), My Result Video (6.6) ⏳ P5 | ◐ |
+| Understand | Risk Explainer with multi gene analysis (4.3) ✅, Teach Back (4.4) ✅, Genetic Copilot text with Safety Verifier (6.5) ✅, voice ✅ (browser speech locally, Azure AI Speech when configured), My Result Video (6.6) ✅ in the browser | ◐ |
 | Reduce | Options Explorer (4.5) ✅, Care Pathway (4.9) ✅, Find Care (4.10) ✅, cascade testing (6.4) ✅ | ◐ |
 | Culturally appropriate | Arabic first with RTL ✅, non directive wording with tests ✅, Values Compass (4.6) ✅ with the SURE test, Faith Perspectives ⏳ | ◐ |
 | Privacy preserving | Granular consent ✅, lab signed results ✅, field encryption ✅, hash chained audit ✅, Blind Couple Match with PSI and Dual Key (6.1) ✅, Population Signals with differential privacy, privacy budget and small group suppression (7.2) ✅ | ◐ |

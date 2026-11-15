@@ -22,6 +22,10 @@ Pinned in `package.json` and `pnpm-lock.yaml`. `pnpm audit --prod` reports no kn
 
 Security overrides (`pnpm.overrides`): postcss ^8.5.23, sharp ^0.35.5, effect ^3.20.0, deepmerge-ts ^8.0.0.
 
+## Video
+
+`remotion` and `@remotion/player` 4.0.543 (My Result Video, played in the browser). Remotion is source available, not MIT: it is free for individuals and for organisations of up to three people, and larger organisations need a company licence (remotion.dev/license). Check this before any commercial or institutional use.
+
 ## External services
 
 | Service | Phase | Notes |

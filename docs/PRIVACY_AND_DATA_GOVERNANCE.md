@@ -40,6 +40,10 @@ All reads of a result pass the single consent gate (`lib/consent/check.ts`, 10 t
 * Download all data as readable JSON (`/api/export`; never includes keys).
 * Delete all data with typed confirmation (cascade delete; anonymous audit rows remain for verifiability).
 
+## My Result Video (Phase 5)
+
+The video is drawn in the person's browser from a short script built on the server from their own result. The script holds gene symbols and engine numbers only: no name, identifier, date or variant notation (a unit test checks this). Nothing is uploaded, stored or shared.
+
 ## Risk Beyond the Panel (Phase 5)
 
 Kinship can reveal relatedness a couple did not know about, so this has the strictest handling in the app: its own consent purpose (`beyond_panel`, 90 days), required from both partners; nothing is computed or stored until both agree; the result is shown to the genetic counsellor first; the couple sees a summary only after release; the consistency note and segment map are never shown to the couple; and withdrawal by either partner deletes the analysis. The database stores only that an analysis exists and its release state, not the estimate. Every view, release and withdrawal is in the audit log.

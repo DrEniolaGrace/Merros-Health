@@ -2,6 +2,7 @@
 
 import {
   BookOpenText,
+  FilmStrip,
   HandHeart,
   Scales,
   ChartLineUp,
@@ -23,11 +24,11 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
 export type NavKey =
-  | "home" | "copilot" | "family" | "findCare" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme" | "values" | "wellbeing";
+  | "home" | "copilot" | "family" | "findCare" | "result" | "couple" | "learn" | "options" | "care" | "pathway" | "privacy" | "screening" | "cases" | "programme" | "values" | "wellbeing" | "video";
 
 const ICONS: Record<NavKey, typeof House> = {
   home: House, copilot: Sparkle, family: TreeStructure, findCare: MapPinLine, result: Dna, couple: UsersThree, learn: BookOpenText, options: Compass, care: Lifebuoy,
-  pathway: Path, privacy: ShieldCheck, screening: MagnifyingGlass, cases: ListChecks, programme: ChartLineUp, values: Scales, wellbeing: HandHeart,
+  pathway: Path, privacy: ShieldCheck, screening: MagnifyingGlass, cases: ListChecks, programme: ChartLineUp, values: Scales, wellbeing: HandHeart, video: FilmStrip,
 };
 
 export interface NavItem {

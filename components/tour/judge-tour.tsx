@@ -28,11 +28,11 @@ const STEPS: { key: string; persona: string; path: string }[] = [
   { key: "s14", persona: "khalid", path: "/values" },
   { key: "s15", persona: "khalid", path: "/wellbeing" },
   { key: "s16", persona: "khalid", path: "/couple" },
+  { key: "s17", persona: "khalid", path: "/video" },
 ];
 
 const LATER = [
   { key: "l4", phase: 4 },
-  { key: "l5", phase: 5 },
 ];
 
 /** Floating Judge Tour (SPEC 10). Phase 1 steps are live; later phases are listed, not clickable. */
@@ -105,7 +105,7 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
           {LATER.map((l) => (
             <li key={l.key} className="flex items-center justify-between gap-4 rounded-control border border-dashed border-glass-border p-4 text-sm text-muted">
               {t(l.key)}
-              <Pill>{tc("phaseNote", { n: l.phase })}</Pill>
+              <Pill>{t("needsAzure")}</Pill>
             </li>
           ))}
         </ul>
