@@ -102,3 +102,50 @@ test("Values Compass: options relate to the person's own values without ranking,
   await page.goto("/en/privacy");
   await expect(page.getByRole("switch", { name: "Share my Values Summary with my counsellor" })).toHaveAttribute("aria-checked", "true");
 });
+
+test("Risk Beyond the Panel: both partners consent, the counsellor sees it first and releases it", async ({ page }) => {
+  const consent = () => page.getByRole("switch", { name: "I agree to the Risk Beyond the Panel analysis" });
+
+  // Noura agrees. Nothing is analysed until her partner agrees too.
+  await loginAs(page, "Noura", /\/en\/home/);
+  await page.goto("/en/couple");
+  await expect(page.locator("[data-beyond=needs_consent]")).toContainText("Neither of you has agreed yet");
+  await consent().click();
+  await expect(page.locator("[data-beyond=needs_consent]")).toContainText("Waiting for Faisal to decide. Nothing has been analysed.");
+
+  // Faisal agrees. The analysis exists now, but the couple cannot see it.
+  await page.getByRole("button", { name: "Demo: continue as Faisal" }).click();
+  await expect(page).toHaveURL(/\/en\/couple/);
+  await expect(page.locator("[data-beyond=needs_consent]")).toContainText("Noura has agreed");
+  await consent().click();
+  await expect(page.locator("[data-beyond=with_counsellor]")).toContainText("is with your genetic counsellor");
+  await expect(page.locator("[data-beyond-released]")).toHaveCount(0);
+
+  // The counsellor sees the estimate, its limits and the release step.
+  await loginAs(page, "Dr. Layla Haddad", /\/en\/counsellor/);
+  await expect(async () => {
+    await page.locator("[data-case=noura]").getByRole("link", { name: "Open brief" }).click();
+    await expect(page).toHaveURL(/\/en\/counsellor\/case\//, { timeout: 5000 });
+  }).toPass({ timeout: 30000 });
+  const section = page.locator("[data-counsellor-beyond=pending_counsellor]");
+  await expect(section).toContainText("Counsellor only");
+  await expect(section).toContainText("Your chance is about the same as for any couple.");
+  await expect(section.locator("[data-beyond-consistency=consistent]")).toBeVisible();
+  await expect(section).toContainText("not produced by a genomics pipeline");
+  await section.getByRole("button", { name: "I have discussed this with the couple: release the summary" }).click();
+  await expect(page.locator("[data-counsellor-beyond=released]")).toBeVisible();
+
+  // Now the couple sees a plain language summary, marked as an estimate.
+  await loginAs(page, "Noura", /\/en\/home/);
+  await page.goto("/en/couple");
+  const released = page.locator("[data-beyond-released]");
+  await expect(released).toContainText("Your chance is about the same as for any couple.");
+  await expect(released).toContainText("This is an estimate, not a diagnosis");
+  await expect(released).not.toContainText("kinship");
+
+  // Withdrawing deletes the analysis for both.
+  await consent().click();
+  await expect(page.locator("[data-beyond=needs_consent]")).toContainText("Faisal has agreed. Nothing is analysed unless you agree too.");
+  await loginAs(page, "Dr. Layla Haddad", /\/en\/counsellor/);
+  await expect(page.locator("[data-case=noura]")).toHaveCount(0);
+});

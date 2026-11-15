@@ -37,7 +37,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
     return a ? (ar ? a.displayNameAr : a.displayNameEn) : id.slice(0, 8);
   };
 
-  const toggles = PURPOSES.filter((p) => (p.purpose !== "couple_comparison" || hasPartner > 0) && (p.purpose !== "family_doctor_referral" || !!user.familyDoctorId)).map((p) => {
+  const toggles = PURPOSES.filter((p) => (p.purpose !== "couple_comparison" || hasPartner > 0) && (p.purpose !== "beyond_panel" || hasPartner > 0) && (p.purpose !== "family_doctor_referral" || !!user.familyDoctorId)).map((p) => {
     const active = consents.filter((c) => c.purpose === p.purpose && isConsentActive(c, now)).sort((a, b) => +b.grantedAt - +a.grantedAt)[0];
     return {
       purpose: p.purpose,

@@ -118,6 +118,7 @@ model CoupleLink {
   status     String   @default("engaged") // engaged | married
   createdAt  DateTime @default(now())
   psiSession PsiSession?
+  rohAnalysis RohAnalysis?
 
   @@unique([partnerAId, partnerBId])
 }
@@ -245,6 +246,19 @@ model LabInbox {
   accession  String   @id
   encPayload String // AES-256-GCM of {"bundle":..., "signature":"..."}
   createdAt  DateTime @default(now())
+}
+
+/// Risk Beyond the Panel (SPEC 6.2). One analysis per couple, held for the counsellor until released.
+/// The estimate is not stored: it is recomputed by the tested engine from the segment data.
+model RohAnalysis {
+  id           String     @id @default(cuid())
+  coupleLinkId String     @unique
+  coupleLink   CoupleLink @relation(fields: [coupleLinkId], references: [id], onDelete: Cascade)
+  source       String // precomputed | service (lib/features.ts)
+  status       String     @default("pending_counsellor") // pending_counsellor | released
+  createdAt    DateTime   @default(now())
+  releasedAt   DateTime?
+  releasedById String?
 }
 
 /// Values Compass (SPEC 4.6). Ratings and SURE answers, encrypted with the person's data key.

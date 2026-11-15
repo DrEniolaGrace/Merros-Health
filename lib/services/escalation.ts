@@ -10,12 +10,13 @@ import { getOwnResult } from "./results";
  * fired reason. Result based rules only run once the person has chosen to see their result.
  */
 export async function refreshEscalations(user: User, extra: { medicalAdviceRequested?: boolean } = {}): Promise<Escalation[]> {
-  const [profile, own, attempts, existing, distress] = await Promise.all([
+  const [profile, own, attempts, existing, distress, beyond] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id } }),
     getOwnResult(user, { log: false }),
     prisma.teachBackAttempt.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
     prisma.escalation.findMany({ where: { userId: user.id } }),
     prisma.distressScore.findFirst({ where: { userId: user.id }, orderBy: { createdAt: "desc" } }),
+    prisma.rohAnalysis.findFirst({ where: { status: "pending_counsellor", coupleLink: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } } }),
   ]);
 
   const fired = evaluateEscalation(
@@ -27,6 +28,7 @@ export async function refreshEscalations(user: User, extra: { medicalAdviceReque
       pregnancyStatus: profile?.pregnancyStatus ?? "prefer_not_to_say",
       teachBackAttempts: attempts,
       distressScore: distress?.score ?? null,
+      riskBeyondPanelResult: !!beyond,
       medicalAdviceRequested: extra.medicalAdviceRequested || existing.some((e) => e.code === "medical_advice_requested"),
     }),
   );

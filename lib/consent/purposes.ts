@@ -9,7 +9,8 @@ export type ConsentPurpose =
   | "aggregate_analytics"
   | "reclassification_recontact"
   | "family_doctor_referral"
-  | "values_summary_share";
+  | "values_summary_share"
+  | "beyond_panel";
 
 export type ConsentRecipient = "self" | "partner" | "counsellor" | "health_system_aggregate" | "family_doctor";
 
@@ -31,6 +32,8 @@ export const PURPOSES: PurposeDef[] = [
   { purpose: "family_doctor_referral", recipient: "family_doctor", scope: "carrier_summary", defaultDays: 90 },
   // Offered inside the Values Compass, never at onboarding.
   { purpose: "values_summary_share", recipient: "counsellor", scope: "values_summary", defaultDays: 90 },
+  // Risk Beyond the Panel: separate consent from BOTH partners; the result goes to the counsellor first.
+  { purpose: "beyond_panel", recipient: "counsellor", scope: "kinship_estimate", defaultDays: 90 },
 ];
 
 export const DURATION_CHOICES = [30, 90, 365] as const;

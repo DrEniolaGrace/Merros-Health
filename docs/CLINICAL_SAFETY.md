@@ -2,6 +2,16 @@
 
 All clinical content is **pending accredited clinical review**. Merros supports, and never replaces, licensed screening and genetic counselling services.
 
+## Risk Beyond the Panel (Phase 5)
+
+Code: `lib/beyond/engine.ts` (pure, 14 unit tests), `lib/services/beyond.ts`.
+
+* **Method.** Kinship = (share of the autosomes the partners share on one copy) / 4. A child's inbreeding coefficient F equals the parents' kinship. Added risk of a significant childhood condition = the published first cousin range (1.7 to 2.8 percentage points above the general population; Bennett et al. 2002) scaled by F / (1/16), never extended beyond twice the first cousin level. Above that the result is "individual assessment" rather than a number.
+* **Never a diagnosis.** The couple's view states that it is an estimate, names no condition, and shows no kinship figure.
+* **Counsellor first.** The analysis exists only while BOTH partners hold a separate consent. It is created in a "with the counsellor" state and raises the `risk_beyond_panel_result` escalation for both. The couple sees nothing until the counsellor releases it. Either partner withdrawing deletes it.
+* **Unexpected relatedness.** The engine compares measured kinship with the declared relationship and tells the counsellor, only the counsellor, when they clearly differ.
+* **Input data is synthetic and not from a pipeline** (see LIMITATIONS).
+
 ## Distress Check and Values Compass (Phase 5)
 
 * **Distress Check** (`lib/wellbeing/distress.ts`): one question, 0 to 10 (NCCN Distress Thermometer). A score of 4 or more fires the existing `high_distress` escalation rule (urgent) and offers a same week callback from a genetic counsellor or a psychologist; 7 or more also shows crisis contacts, which are unverified placeholders. A unit test checks that the callback offer and the escalation rule agree for every score. A later score under 4 closes the open reason.

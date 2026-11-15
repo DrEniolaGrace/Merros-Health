@@ -628,7 +628,8 @@
     "passcodeTooMany": "Too many attempts. Please try again in an hour.",
     "nightly": "The demo data resets itself every night.",
     "s14": "Values Compass: options related to your own values, never ranked",
-    "s15": "Distress Check: calm support and a same week callback"
+    "s15": "Distress Check: calm support and a same week callback",
+    "s16": "Risk Beyond the Panel: both partners consent, the counsellor sees it first"
   },
   "errors": {
     "title": "Something went wrong",
@@ -1051,5 +1052,66 @@
     "talk": "Talk to a counsellor",
     "incomplete": "Rate all seven and answer the four questions to save.",
     "source": "Based on the Ottawa Decision Support Framework and the SURE test (Légaré and others, 2010). The Arabic wording of the SURE test is a working translation."
+  },
+  "beyond": {
+    "eyebrow": "Risk Beyond the Panel",
+    "title": "What the gene panel cannot see",
+    "body": "A panel checks a list of known gene changes. Couples who are related share longer stretches of identical DNA, which adds a small chance of rarer conditions that are not on any panel. This analysis estimates that chance from how much DNA you share.",
+    "point1": "It runs only if you both agree. Either of you can withdraw at any time, and the analysis is then deleted.",
+    "point2": "The result goes to a genetic counsellor first, who talks it through with you before you see it here.",
+    "point3": "It measures how related two people are. Sometimes that shows more, or less, relatedness than a family expected.",
+    "consentLabel": "I agree to the Risk Beyond the Panel analysis",
+    "consentDesc": "Off unless you turn it on. Lasts 90 days.",
+    "withdrawDesc": "Turn off to withdraw. The analysis is then deleted for both of you.",
+    "neitherAgreed": "Neither of you has agreed yet.",
+    "waitingPartner": "You have agreed. Waiting for {name} to decide. Nothing has been analysed.",
+    "partnerAgreed": "{name} has agreed. Nothing is analysed unless you agree too.",
+    "bothAgreed": "You have both agreed.",
+    "withCounsellor": "The analysis is ready and is with your genetic counsellor. They will go through it with you both before it appears here.",
+    "book": "Book a session",
+    "unavailable": "This analysis needs whole genome data from both partners, which this demonstration does not have for your couple.",
+    "band": {
+      "background": "Your chance is about the same as for any couple.",
+      "slightly_above": "Your chance is slightly above that of unrelated couples.",
+      "moderately_above": "Your chance is moderately above that of unrelated couples. Most children of couples related like this are healthy.",
+      "individual_assessment": "You share more DNA than the published figures cover, so a genetic counsellor needs to assess this with you individually."
+    },
+    "statShared": "of your DNA is shared on one copy",
+    "statChild": "of a child's DNA expected to match on both copies",
+    "statExtra": "added chance of a significant childhood condition, above any couple's",
+    "nadTitle": "This is an estimate, not a diagnosis",
+    "nadBody": "It describes a chance across many couples related the way you are. It cannot say what will happen in your family, it does not name a condition, and it does not replace the gene panel or a counsellor's advice.",
+    "method": "Worked out by tested code from the measured shared DNA, scaled from the published figures for first cousins (Bennett and others, 2002).",
+    "synthetic": "Demonstration: the DNA data is synthetic and was not produced by a genomics pipeline.",
+    "counsellorOnly": "Counsellor only",
+    "releasedBadge": "Released to the couple",
+    "cKinship": "measured kinship coefficient",
+    "cExpected": "expected for {relationship}",
+    "cChildF": "child's expected inbreeding coefficient (F)",
+    "cExtra": "added risk above the population baseline",
+    "rel": {
+      "unrelated": "unrelated",
+      "second_cousins": "second cousins",
+      "first_cousins_once_removed": "first cousins once removed",
+      "first_cousins": "first cousins",
+      "double_first_cousins": "double first cousins"
+    },
+    "consistency": {
+      "consistent": "The measured sharing is consistent with the relationship the couple declared ({relationship}).",
+      "more_than_declared": "The couple shares clearly more DNA than their declared relationship ({relationship}) predicts. This may be relatedness they do not know about. Consider how, and whether, to raise it.",
+      "less_than_declared": "The couple shares clearly less DNA than their declared relationship ({relationship}) predicts. This may mean the family tree is not as they believe. Consider how, and whether, to raise it."
+    },
+    "mapTitle": "{n} shared segments, {mb} Mb, {pct}% of the autosomes",
+    "mapLabel": "The 22 autosomes as bars, with the segments the partners share marked",
+    "limit1": "A population level estimate. It cannot predict the outcome for this couple or name a condition.",
+    "limit2": "The added risk is scaled in proportion to F from one published range for first cousins. Risk also depends on family history and on variants that this cannot see.",
+    "limit3": "Real sharing varies around the family tree value, so a first cousin couple can measure somewhat above or below 0.0625.",
+    "limit4": "Not a substitute for the carrier panel, and not a reason on its own to advise for or against any option.",
+    "references": "References: Bennett RL and others. Genetic counseling and screening of consanguineous couples and their offspring. Journal of Genetic Counseling 2002;11:97. A child's inbreeding coefficient equals the parents' kinship coefficient.",
+    "sourcePrecomputed": "Demonstration data: synthetic shared segments, not produced by a genomics pipeline. The figures are computed from them by the tested engine.",
+    "sourceService": "Computed by the genomics service.",
+    "releaseBody": "Release only after you have talked this through with both partners. They will then see a plain language summary: the band, the three headline figures and that it is not a diagnosis. They do not see the consistency note or the segment map.",
+    "release": "I have discussed this with the couple: release the summary",
+    "demoSwitch": "Demo: continue as {name}"
   }
 }

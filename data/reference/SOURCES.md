@@ -21,3 +21,9 @@ Original plain language summaries citing:
 * GeneReviews (NCBI Bookshelf): NBK1426, NBK1377, NBK1352, NBK1272, NBK1250, NBK1435
 
 No text was copied.
+
+## beyond-panel.json (Risk Beyond the Panel)
+
+Synthetic. Generated on 2026-11-15 by `scripts/gen-beyond-panel.cjs` with a fixed seed. Not the output of a genomics pipeline: no genomes were simulated and no ROH or kinship tool was run. Segments are placed at random on the GRCh38 autosomes so that the total shared length is plausible for each demo couple's stated relationship (first cousins: about a quarter of the autosomes on one copy; unrelated: almost none).
+
+Reference for the risk range: Bennett RL, Motulsky AG, Bittles A, et al. Genetic counseling and screening of consanguineous couples and their offspring: recommendations of the National Society of Genetic Counselors. J Genet Couns. 2002;11(2):97-119.

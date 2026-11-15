@@ -20,6 +20,7 @@ import { pick } from "@/content/types";
 import { IMPORTANT_FROM, VALUES, VALUE_KEYS } from "@/content/values";
 import type { EscalationCode } from "@/lib/escalation/rules";
 import { ReleaseButton, SummaryComposer } from "../../counsellor-actions";
+import { CounsellorBeyond } from "@/components/beyond/counsellor-beyond";
 
 export default async function CaseBriefPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
   const { locale, id } = await params;
@@ -40,6 +41,7 @@ export default async function CaseBriefPage({ params }: { params: Promise<{ loca
       <div className="flex flex-col gap-6">
         <BackLink href="/counsellor" label={t("back")} />
         <GlassCard><EmptyState title={t("noConsentTitle")} body={tc("noAccess")} /></GlassCard>
+        {brief.beyond && <CounsellorBeyond analysis={brief.beyond} />}
       </div>
     );
   }
@@ -138,6 +140,8 @@ export default async function CaseBriefPage({ params }: { params: Promise<{ loca
           {d.sharedGenes.length ? t("coupleShared", { genes: d.sharedGenes.join(", ") }) : t("coupleUnknown")}
         </p>
       </section>
+
+      {brief.beyond && <CounsellorBeyond analysis={brief.beyond} />}
 
       <section className="flex flex-col gap-4" data-brief-wellbeing>
         <SectionTitle>{t("wellbeing")}</SectionTitle>

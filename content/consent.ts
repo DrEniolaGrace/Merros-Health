@@ -31,6 +31,13 @@ export const CONSENT_TEXT: Record<ConsentPurpose, { title: Bi; body: Bi }> = {
       ar: "تساعد إحصاءات مجهولة الهوية ومحمية الخصوصية النظام الصحي في تخطيط الخدمات. ولا يمكن لأحد التعرف عليك منها. صالحة لمدة سنة.",
     },
   },
+  beyond_panel: {
+    title: { en: "Risk Beyond the Panel analysis", ar: "تحليل المخاطر خارج لوحة الفحص" },
+    body: {
+      en: "Compares how much DNA you and your partner share, to estimate risk the gene panel cannot see. It runs only if you both agree, and the result goes to a genetic counsellor first. It can show that two people are related. Lasts 90 days.",
+      ar: "يقارن مقدار الحمض النووي المشترك بينك وبين شريكك لتقدير مخاطر لا تكشفها لوحة الجينات. لا يُجرى إلا بموافقتكما معاً، وتذهب النتيجة إلى مستشار وراثي أولاً. وقد يُظهر وجود قرابة بين شخصين. صالحة لمدة 90 يوماً.",
+    },
+  },
   values_summary_share: {
     title: { en: "Share my Values Summary with my counsellor", ar: "شارك ملخص قيمي مع مستشاري" },
     body: {

@@ -40,6 +40,10 @@ All reads of a result pass the single consent gate (`lib/consent/check.ts`, 10 t
 * Download all data as readable JSON (`/api/export`; never includes keys).
 * Delete all data with typed confirmation (cascade delete; anonymous audit rows remain for verifiability).
 
+## Risk Beyond the Panel (Phase 5)
+
+Kinship can reveal relatedness a couple did not know about, so this has the strictest handling in the app: its own consent purpose (`beyond_panel`, 90 days), required from both partners; nothing is computed or stored until both agree; the result is shown to the genetic counsellor first; the couple sees a summary only after release; the consistency note and segment map are never shown to the couple; and withdrawal by either partner deletes the analysis. The database stores only that an analysis exists and its release state, not the estimate. Every view, release and withdrawal is in the audit log.
+
 ## Values and wellbeing (Phase 5)
 
 * **Values Compass:** ratings (including the importance of faith) and SURE answers are encrypted with the person's data key. They are shared with the genetic counsellor only if the person turns on "Share my Values Summary" (purpose `values_summary_share`, 90 days, revocable in Privacy). Access to the result does not include them.

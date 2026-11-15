@@ -11,6 +11,7 @@ import { importResult, hasResultWaiting, type ImportOutcome } from "@/lib/servic
 import { refreshCoupleEscalations, refreshEscalations } from "@/lib/services/escalation";
 import { forgetSignals, recordSignal } from "@/lib/services/signals";
 import { recordStep } from "@/lib/services/pathway";
+import { syncBeyondPanel } from "@/lib/services/beyond";
 import { TEACHBACK } from "@/content/teachback";
 import { isQuestionDone, nextExplanationIndex, teachBackFailedTwice } from "@/lib/teachback/logic";
 import { redirect } from "@/i18n/navigation";
@@ -77,6 +78,8 @@ export async function setConsent(purpose: ConsentPurpose, on: boolean) {
       await prisma.psiSession.deleteMany({ where: { coupleLink: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } } });
     }
   }
+  // Risk Beyond the Panel exists only while both partners consent, wherever the switch was changed.
+  if (p === "beyond_panel") await syncBeyondPanel(user.id);
   await refreshCoupleEscalations(user);
   revalidatePath("/[locale]", "layout");
 }

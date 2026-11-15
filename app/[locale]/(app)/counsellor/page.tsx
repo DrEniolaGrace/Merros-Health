@@ -122,7 +122,7 @@ export default async function CounsellorPage({ params }: { params: Promise<{ loc
                       <p className="flex items-start gap-2 text-sm text-muted"><LockKey size={16} weight="light" className="mt-1 shrink-0" />{t("noAccess")}</p>
                     )}
                     <div className="flex flex-wrap gap-2">
-                      {consented && <LinkButton href={`/counsellor/case/${c.user.id}`} iconEnd={<ArrowRight size={18} />}>{t("openBrief")}</LinkButton>}
+                      {(consented || hasActiveConsent(c.user.consents, "beyond_panel")) && <LinkButton href={`/counsellor/case/${c.user.id}`} iconEnd={<ArrowRight size={18} />}>{t("openBrief")}</LinkButton>}
                       {appt && !consented && <CompleteButton appointmentId={appt.id} label={t("markDone")} />}
                     </div>
                   </GlassCard>

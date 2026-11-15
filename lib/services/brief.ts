@@ -1,4 +1,5 @@
 import "server-only";
+import { beyondForCounsellor } from "./beyond";
 import { sureScore, validRatings, validSure, type Ratings } from "@/lib/values/compass";
 import type { User } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -34,7 +35,9 @@ export async function buildBrief(counsellor: User, patientId: string) {
   });
   if (!patient || patient.role !== "patient") return null;
   const consented = hasActiveConsent(patient.consents, "counsellor_access");
-  const base = { patient, consented };
+  // Risk Beyond the Panel has its own consent, naming the counsellor, separate from result access.
+  const beyond = await beyondForCounsellor(counsellor.id, patient);
+  const base = { patient, consented, beyond };
   if (!consented) return { ...base, detail: null };
 
   await appendAudit({ actorId: counsellor.id, subjectId: patient.id, action: "case_viewed", resource: "counsellor_brief" });

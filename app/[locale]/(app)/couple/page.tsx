@@ -10,6 +10,7 @@ import { conditionById } from "@/content/conditions";
 import { LIMITS, NOT_A_DIAGNOSIS } from "@/content/explainer";
 import { pick } from "@/content/types";
 import { BlindMatch } from "./blind-match";
+import { BeyondCard } from "@/components/beyond/beyond-card";
 
 export default async function CouplePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -41,6 +42,7 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
   );
 
   return (
+    <div className="flex flex-col gap-10">
     <BlindMatch
       userId={user.id}
       linkId={couple.linkId}
@@ -112,5 +114,7 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
         tryAgain: tc("tryAgain"),
       }}
     />
+    <BeyondCard user={user} partnerName={partnerName} partnerPersona={process.env.DEMO_MODE === "false" ? null : couple.partner.personaKey} />
+    </div>
   );
 }
