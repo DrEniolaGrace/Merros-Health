@@ -1,0 +1,57 @@
+{
+  "_about": "Captions for the demo video (pnpm demo). Fill in the placeholders below with your user testing results, then run: pnpm demo --render-only. Anything left empty shows on screen as a highlighted [[NAME]] so it cannot ship by accident.",
+  "placeholders": {
+    "PARTICIPANTS": "",
+    "UNDERSTOOD_FIRST_TRY": "",
+    "UNDERSTOOD_AFTER_TEACHBACK": "",
+    "COPILOT_CLEAR": "",
+    "WOULD_RECOMMEND": ""
+  },
+  "title": {
+    "eyebrow": { "en": "The problem", "ar": "المشكلة" },
+    "heading": { "en": "Many couples learn they share a carrier result, and are left with numbers, not a plan.", "ar": "كثير من الأزواج يعرفون أن لديهم نتيجة حمل مشتركة، ثم يُتركون مع أرقام بلا خطة." },
+    "body": { "en": "Results are hard to understand, genetic counsellors are few, and genetic data is deeply private. Merros helps couples build healthy families, with a plan.", "ar": "النتائج صعبة الفهم، والمستشارون الوراثيون قليلون، والبيانات الجينية شديدة الخصوصية. يساعد ميرّوس الأزواج على بناء عائلات بصحة جيدة، بخطة واضحة." }
+  },
+  "scenes": {
+    "s1": {
+      "title": { "en": "Mariam receives and understands her result", "ar": "مريم تستلم نتيجتها وتفهمها" },
+      "text": { "en": "Her result arrives signed by the lab and is checked before it opens. She chooses what to share, reads it in plain language, and ends with her own plan.", "ar": "تصل نتيجتها موقّعة من المختبر ويُتحقق منها قبل فتحها. تختار ما تشاركه، وتقرؤها بلغة بسيطة، وتنتهي بخطتها الخاصة." },
+      "evidence": { "en": "In user testing, [[UNDERSTOOD_FIRST_TRY]] understood their result first time, and [[UNDERSTOOD_AFTER_TEACHBACK]] after Teach Back.", "ar": "في اختبار المستخدمين، فهم [[UNDERSTOOD_FIRST_TRY]] نتيجتهم من المرة الأولى، و[[UNDERSTOOD_AFTER_TEACHBACK]] بعد إعادة الشرح." }
+    },
+    "s2": {
+      "title": { "en": "The Genetic Copilot, in Arabic and English", "ar": "المساعد الجيني، بالعربية والإنجليزية" },
+      "text": { "en": "Every number comes from the tested risk engine, never from the AI. A Safety Verifier checks every answer, and a counsellor is offered whenever a person is the right answer.", "ar": "كل رقم يأتي من محرك المخاطر المختبَر، لا من الذكاء الاصطناعي. ويتحقق مدقق السلامة من كل إجابة، ويُعرض المستشار متى كان الشخص هو الإجابة المناسبة." },
+      "evidence": { "en": "[[COPILOT_CLEAR]] of testers found the answers clear.", "ar": "وجد [[COPILOT_CLEAR]] من المختبِرين أن الإجابات واضحة." }
+    },
+    "s3": {
+      "title": { "en": "Blind Couple Match", "ar": "المطابقة العمياء للزوجين" },
+      "text": { "en": "Each partner turns their own key. Only a shared carrier result is revealed. Neither sees the rest of the other's result, and the server never learns it.", "ar": "يدير كل شريك مفتاحه بنفسه. لا يُكشف إلا نتيجة الحمل المشتركة. لا يرى أي منهما بقية نتيجة الآخر، ولا يعرفها الخادم أبداً." }
+    },
+    "s4": {
+      "title": { "en": "The Counsellor Copilot", "ar": "مساعد المستشار" },
+      "text": { "en": "Dr. Layla sees the couple's questions before the session. The Copilot drafts a summary from her notes; she reviews it and signs it. The counsellor always decides.", "ar": "ترى د. ليلى أسئلة الزوجين قبل الجلسة. يصوغ المساعد ملخصاً من ملاحظاتها، فتراجعه وتوقّعه. القرار دائماً للمستشار." }
+    },
+    "s5": {
+      "title": { "en": "Living Results", "ar": "النتائج الحية" },
+      "text": { "en": "When ClinVar reclassifies a variant, the counsellor is told first and releases the update after speaking to the person. Results stay current for life.", "ar": "حين يعيد ClinVar تصنيف متغير، يُبلَّغ المستشار أولاً ويفرج عن التحديث بعد التحدث إلى الشخص. تبقى النتائج محدثة مدى الحياة." }
+    },
+    "s6": {
+      "title": { "en": "The Family Risk Engine", "ar": "محرك مخاطر العائلة" },
+      "text": { "en": "Relatives are stored by relationship, never by name. Khalid sees each relative's chance of being a carrier and shares a private invitation that names no one.", "ar": "يُحفظ الأقارب بصلة القرابة، لا بالاسم. يرى خالد احتمال أن يكون كل قريب حاملاً، ويشارك دعوة خاصة لا تذكر أحداً." }
+    },
+    "s7": {
+      "title": { "en": "Risk Beyond the Panel", "ar": "المخاطر خارج لوحة الفحص" },
+      "text": { "en": "For related couples, Merros estimates the risk a gene panel cannot see. Both partners consent, the counsellor sees it first, and it is never a diagnosis.", "ar": "للأزواج الأقارب، يقدّر ميرّوس المخاطر التي لا تراها لوحة الجينات. يوافق الشريكان، ويراها المستشار أولاً، وليست تشخيصاً أبداً." }
+    },
+    "s8": {
+      "title": { "en": "Population Signals", "ar": "مؤشرات المجتمع" },
+      "text": { "en": "The health system plans counselling from privacy protected statistics, with a visible privacy budget and small groups hidden. No one is tracked.", "ar": "يخطط النظام الصحي للمشورة من إحصاءات محمية الخصوصية، مع ميزانية خصوصية ظاهرة وإخفاء المجموعات الصغيرة. لا يُتتبع أحد." }
+    }
+  },
+  "closing": {
+    "heading": { "en": "Merros. Healthy families, planned together.", "ar": "ميرّوس. عائلات بصحة جيدة، بخطة نضعها معاً." },
+    "evidence": { "en": "Tested with [[PARTICIPANTS]] people. [[WOULD_RECOMMEND]] would recommend it to a friend or relative.", "ar": "اختُبر مع [[PARTICIPANTS]] شخصاً. و[[WOULD_RECOMMEND]] سيوصون به لصديق أو قريب." },
+    "link": "merros-health.vercel.app",
+    "note": { "en": "An independent prototype, not affiliated with or endorsed by the Department of Health Abu Dhabi. All data is synthetic.", "ar": "نموذج أولي مستقل، لا يتبع دائرة الصحة أبوظبي ولا تعتمده. كل البيانات اصطناعية." }
+  }
+}

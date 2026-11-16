@@ -23,7 +23,8 @@
     "docker:seed": "docker compose run --rm migrate pnpm seed",
     "docker:logs": "docker compose logs -f web",
     "eval": "tsx scripts/eval.ts",
-    "variant-watch": "tsx scripts/variant-watch.ts"
+    "variant-watch": "tsx scripts/variant-watch.ts",
+    "demo": "tsx scripts/demo.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",
@@ -52,6 +53,9 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/test": "1.65.0",
+    "@remotion/bundler": "4.0.543",
+    "@remotion/google-fonts": "4.0.543",
+    "@remotion/renderer": "4.0.543",
     "@tailwindcss/postcss": "^4",
     "@types/leaflet": "1.9.20",
     "@types/node": "^20",

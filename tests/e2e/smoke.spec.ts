@@ -90,6 +90,9 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   // Privacy: access history and tamper evident audit chain.
   await page.goto("/en/privacy");
   await expect(page.getByText("Tampered result refused")).toBeVisible();
+  // Onboarding only changes the choices it shows: Mariam's earlier agreement to Risk Beyond the
+  // Panel (in the demo data) is still on after she finished onboarding.
+  await expect(page.getByRole("switch", { name: "Risk Beyond the Panel analysis" })).toHaveAttribute("aria-checked", "true");
   await page.getByRole("button", { name: "Verify integrity" }).click();
   await expect(page.getByText(/Intact\. \d+ entries checked\./)).toBeVisible();
 

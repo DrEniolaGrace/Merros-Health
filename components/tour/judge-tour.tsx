@@ -63,6 +63,7 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
   return (
     <>
       <motion.button
+        data-judge-tour-button
         onClick={() => {
           setOpen(true);
           if (policy === null) void getResetPolicy().then(setPolicy);

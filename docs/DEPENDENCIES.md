@@ -24,7 +24,7 @@ Security overrides (`pnpm.overrides`): postcss ^8.5.23, sharp ^0.35.5, effect ^3
 
 ## Video
 
-`remotion` and `@remotion/player` 4.0.543 (My Result Video, played in the browser). Remotion is source available, not MIT: it is free for individuals and for organisations of up to three people, and larger organisations need a company licence (remotion.dev/license). Check this before any commercial or institutional use.
+`remotion` and `@remotion/player` 4.0.543 (My Result Video, played in the browser), and the development only `@remotion/bundler`, `@remotion/renderer` and `@remotion/google-fonts` 4.0.543 (assembling the demo video, `pnpm demo`; the first run downloads a headless Chrome of about 100 MB). Remotion is source available, not MIT: it is free for individuals and for organisations of up to three people, and larger organisations need a company licence (remotion.dev/license). Check this before any commercial or institutional use.
 
 ## External services
 

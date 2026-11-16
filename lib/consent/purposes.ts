@@ -36,6 +36,12 @@ export const PURPOSES: PurposeDef[] = [
   { purpose: "beyond_panel", recipient: "counsellor", scope: "kinship_estimate", defaultDays: 90 },
 ];
 
+/**
+ * Purposes asked for later, in their own screens (Find Care, Values Compass, Risk Beyond the Panel).
+ * Onboarding neither shows nor changes them.
+ */
+export const ASKED_LATER: readonly ConsentPurpose[] = ["family_doctor_referral", "values_summary_share", "beyond_panel"];
+
 export const DURATION_CHOICES = [30, 90, 365] as const;
 
 export function purposeDef(p: string): PurposeDef | undefined {

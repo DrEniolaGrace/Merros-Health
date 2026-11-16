@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireUser, getSession } from "@/lib/auth/session";
 import { appendAudit } from "@/lib/audit/log";
-import { purposeDef, PURPOSES, type ConsentPurpose } from "@/lib/consent/purposes";
+import { ASKED_LATER, purposeDef, PURPOSES, type ConsentPurpose } from "@/lib/consent/purposes";
 import { importResult, hasResultWaiting, type ImportOutcome } from "@/lib/services/results";
 import { refreshCoupleEscalations, refreshEscalations } from "@/lib/services/escalation";
 import { forgetSignals, recordSignal } from "@/lib/services/signals";
@@ -56,9 +56,11 @@ export async function saveOnboarding(input: z.infer<typeof onboardingSchema>) {
     where: { userId: user.id },
     data: { locale: data.locale, readingLevel: data.readingLevel, mediaPref: data.mediaPref, pregnancyStatus: data.pregnancyStatus, onboardedAt: new Date() },
   });
-  // Replace any earlier choices with exactly what was chosen now.
-  for (const p of PURPOSES) await revoke(user.id, p.purpose);
-  for (const p of new Set(data.consents)) await grant(user.id, p);
+  // Replace the earlier onboarding choices with exactly what was chosen now. Consents asked for
+  // later, in their own screens, are not on this form and stay as they are.
+  const offered = PURPOSES.map((p) => p.purpose).filter((p) => !ASKED_LATER.includes(p));
+  for (const p of offered) await revoke(user.id, p);
+  for (const p of new Set(data.consents)) if (offered.includes(p)) await grant(user.id, p);
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "onboarding_completed", resource: "profile" });
   await refreshCoupleEscalations(user);
   const next = data.consents.includes("view_own_result") && (await hasResultWaiting(user)) ? "/import" : "/home";

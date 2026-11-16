@@ -69,6 +69,21 @@ Pick a persona on the sign in screen (no passwords; demo mode only).
 
 The gold **Judge Tour** button (bottom corner of every screen) walks through Phase 1 in eight steps, switching personas automatically, and lists later phase features as "Coming in Phase N". **Reset demo data** restores the starting state.
 
+## Demo video and screenshots
+
+One command records the competition demo from scratch:
+
+```
+pnpm demo
+```
+
+It resets the demo data on the Neon `dev` branch (never production), builds the app, starts it on port 3100, records eight scenes at a calm pace with Playwright, takes 64 screenshots, and assembles `docs/demo.mp4` (about 3 minutes, 1920x1080) with Remotion. It takes about 40 minutes; the Copilot uses Claude when `AI_API_KEY` is set in `.env`.
+
+* Captions and title cards: `demo/captions.json`. Fill in the user testing numbers under `placeholders`, then run `pnpm demo --render-only` (a few minutes; no re-recording). Empty placeholders show highlighted as [[NAME]].
+* Screenshots: `docs/screenshots/`, named `<language>-<desktop|mobile>-<number>-<screen>.png`.
+* Options: `--skip-build`, `--scenes-only`, `--screens-only`, `--render-only`, `--offline-ai`.
+* `docs/demo.mp4` is not committed (it is large and changes with every run); upload it to the submission directly.
+
 ## Genetic Copilot
 
 The Copilot works offline by default with a demo model that composes approved content. To use Claude, set `AI_PROVIDER=anthropic` and `AI_API_KEY` in `.env`, then run `pnpm docker:up`. See `docs/RESPONSIBLE_AI.md`.

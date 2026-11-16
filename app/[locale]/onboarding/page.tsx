@@ -3,7 +3,7 @@ import { requireUser } from "@/lib/auth/session";
 import { prisma } from "@/lib/db";
 import { TopBar } from "@/components/chrome/top-bar";
 import { JudgeTour } from "@/components/tour/judge-tour";
-import { PURPOSES } from "@/lib/consent/purposes";
+import { ASKED_LATER, PURPOSES } from "@/lib/consent/purposes";
 import { CONSENT_TEXT } from "@/content/consent";
 import { pick } from "@/content/types";
 import { Wizard } from "./wizard";
@@ -27,7 +27,7 @@ export default async function OnboardingPage({
   const { step } = await searchParams;
   const hasPartner = (await prisma.coupleLink.count({ where: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } })) > 0;
 
-  const purposes = PURPOSES.filter((p) => p.purpose !== "family_doctor_referral" && p.purpose !== "values_summary_share" && p.purpose !== "beyond_panel" && (p.purpose !== "couple_comparison" || hasPartner)).map((p) => ({
+  const purposes = PURPOSES.filter((p) => !ASKED_LATER.includes(p.purpose) && (p.purpose !== "couple_comparison" || hasPartner)).map((p) => ({
     purpose: p.purpose,
     title: pick(CONSENT_TEXT[p.purpose].title, locale),
     body: pick(CONSENT_TEXT[p.purpose].body, locale),

@@ -85,3 +85,5 @@
 | 2026-11-16 | Find Care directory reshaped to the kinds of service in Appendix 13, all names fictional; pilot plan points to Appendix 13 | Done | existing tests |
 | 2026-11-16 | About and sources page, citation of the standard, and a not affiliated statement in the footer, the page and README | Done | 1 e2e |
 | 2026-11-16 | Fix: the admin passcode field lost focus after every key | Done | 1 e2e; 338 unit + 25 e2e passing |
+| 2026-11-16 | Demo video and slide screenshots: `pnpm demo` records eight scenes with Playwright at a calm pace (visible cursor, waits for the app and the AI cut out), takes 64 screenshots (desktop and mobile, English and Arabic), and assembles `docs/demo.mp4` with Remotion: title card, captions in English with Arabic, closing card, placeholders for user testing numbers | Done | 5 unit (timeline) |
+| 2026-11-16 | Fix: finishing onboarding withdrew consents it does not show (Risk Beyond the Panel, Values Summary, family doctor referral) | Done | 1 e2e |

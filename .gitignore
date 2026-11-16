@@ -41,3 +41,7 @@ npm-debug.log*
 # Official documents kept locally, cited by URL instead (see data/reference/SOURCES.md)
 reference/*.pdf
 Reference/*.pdf
+
+# Demo recording output (re-created by pnpm demo); the video is uploaded, not committed
+demo/out/
+docs/demo.mp4
