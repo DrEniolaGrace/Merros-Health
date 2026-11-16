@@ -4,8 +4,8 @@ import type { Bi } from "./types";
 
 export const ESCALATION_TEXT: Record<EscalationCode, Bi> = {
   shared_pathogenic_gene: {
-    en: "You and your partner carry a change in the same gene. A genetic counsellor can help you understand what this means for you both.",
-    ar: "تحمل أنت وشريكك تغيراً في الجين نفسه. يمكن للمستشار الوراثي مساعدتكما على فهم ما يعنيه ذلك لكما.",
+    en: "You and your partner have a shared carrier result: you both carry a change in the same gene. A genetic counsellor can help you plan together.",
+    ar: "لديك وشريكك نتيجة حمل مشتركة: تحملان تغيراً في الجين نفسه. يمكن للمستشار الوراثي مساعدتكما على التخطيط معاً.",
   },
   vus_present: {
     en: "Your result includes a variant of uncertain significance. A counsellor can explain it and keep you informed if it changes.",

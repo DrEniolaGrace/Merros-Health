@@ -2,6 +2,11 @@
 
 All clinical content is **pending accredited clinical review**. Merros supports, and never replaces, licensed screening and genetic counselling services.
 
+## Wording and "Your plan"
+
+* A couple who both carry a change in the same gene have a **shared carrier result**. No screen, document or Copilot answer labels a couple as a mismatch or as unsuitable for each other. `tests/unit/wording.test.ts` scans every message file, content file, the video script, the README and these docs in both languages, and the Safety Verifier has rules (`en.couple_label`, `ar.couple_label`) that stop the Copilot from using such labels.
+* Every result that carries a risk ends with **Your plan**: (1) talk it through with a genetic counsellor, (2) know every option, unranked, with the Values Compass, (3) one next step. It appears on My result (carrier, uncertain variant, or a finding that needs a counsellor), on the couple screen after a shared carrier result is revealed, and after a released Risk Beyond the Panel summary. Each plan says that Merros never tells anyone whom to marry or what to decide, and every line passes the non directive rules (tested).
+
 ## Risk Beyond the Panel (Phase 5)
 
 Code: `lib/beyond/engine.ts` (pure, 14 unit tests), `lib/services/beyond.ts`.

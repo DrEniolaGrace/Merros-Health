@@ -45,7 +45,8 @@ export async function signOut() {
 const TOUR_PATHS = new Set(["/onboarding", "/import", "/copilot", "/family", "/find-care", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home", "/admin", "/values", "/wellbeing", "/video"]);
 
 export async function tourGo(personaKey: string, path: string): Promise<string> {
-  if (!TOUR_PATHS.has(path)) throw new Error("Unknown tour path");
+  // Counsellor shortcuts open one case directly: /counsellor/open/<persona key>.
+  if (!TOUR_PATHS.has(path) && !/^\/counsellor\/open\/[a-z]+$/.test(path)) throw new Error("Unknown tour path");
   await signIn(personaKey);
   return `/${await getLocale()}${path}`;
 }

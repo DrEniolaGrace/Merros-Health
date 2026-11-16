@@ -16,3 +16,4 @@
 - Services that need Azure sit behind feature flags in `lib/features.ts` and default to fallbacks: browser speech, simulated video consults, nightly Vercel cron for VariantWatch, in browser video player, precomputed Risk Beyond the Panel results. Never make a feature depend on Azure without a fallback.
 - The live site is public. Keep its protections: demo reset needs DEMO_ADMIN_PASSCODE, the Copilot is rate limited, and the demo data resets nightly.
 - Write user facing text in both Arabic and English.
+- Wording: never call a couple "incompatible" (or any label that judges a couple). Their outcome is a "shared carrier result" (Arabic: نتيجة حمل مشتركة). Merros helps couples build healthy families with a plan. Every result that carries a risk ends with "Your plan" (components/plan/your-plan.tsx): counselling, options, one next step, always non directive. tests/unit/wording.test.ts and the Safety Verifier rules en.couple_label / ar.couple_label enforce this.

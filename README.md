@@ -1,6 +1,6 @@
 # Merros
 
-A privacy preserving genomic companion that helps individuals, couples, families and the health system identify, understand and act on inherited disease risk. Built for the Future Health Digital Innovation Challenge 2026 (Abu Dhabi), Fertility Challenge 03.
+A privacy preserving genomic companion that helps couples build healthy families with a plan. It helps individuals, couples, families and the health system identify, understand and act on inherited disease risk: a shared carrier result becomes a clear plan of counselling, options and next steps, and every choice stays with the couple. Built for the Future Health Digital Innovation Challenge 2026 (Abu Dhabi), Fertility Challenge 03.
 
 > Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice.
 

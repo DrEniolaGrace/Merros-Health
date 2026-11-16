@@ -11,24 +11,28 @@ import { getResetPolicy, resetDemoAction, tourGo } from "@/lib/actions/auth";
 import type { ResetPolicy } from "@/lib/demo/policy";
 import { cn } from "@/lib/cn";
 
-const STEPS: { key: string; persona: string; path: string }[] = [
-  { key: "s1", persona: "mariam", path: "/onboarding" },
-  { key: "s2", persona: "mariam", path: "/import" },
-  { key: "s3", persona: "mariam", path: "/couple" },
-  { key: "s4", persona: "mariam", path: "/teach-back" },
-  { key: "s5", persona: "mariam", path: "/options" },
-  { key: "s6", persona: "hamad", path: "/support" },
-  { key: "s7", persona: "layla", path: "/counsellor" },
-  { key: "s8", persona: "khalid", path: "/privacy" },
-  { key: "s9", persona: "mariam", path: "/copilot" },
-  { key: "s10", persona: "layla", path: "/counsellor" },
-  { key: "s11", persona: "khalid", path: "/family" },
-  { key: "s12", persona: "khalid", path: "/find-care" },
-  { key: "s13", persona: "admin", path: "/admin" },
-  { key: "s14", persona: "khalid", path: "/values" },
-  { key: "s15", persona: "khalid", path: "/wellbeing" },
-  { key: "s16", persona: "khalid", path: "/couple" },
-  { key: "s17", persona: "khalid", path: "/video" },
+/**
+ * Order matters: the tour opens with what only Merros does, then the supporting features.
+ * Counsellor steps open a case directly through /counsellor/open/<persona>.
+ */
+const STEPS: { key: string; persona: string; path: string; group: "unique" | "supporting" }[] = [
+  { key: "s10", persona: "layla", path: "/counsellor", group: "unique" },
+  { key: "s18", persona: "layla", path: "/counsellor/open/hamad", group: "unique" },
+  { key: "s16", persona: "layla", path: "/counsellor/open/khalid", group: "unique" },
+  { key: "s13", persona: "admin", path: "/admin", group: "unique" },
+  { key: "s1", persona: "mariam", path: "/onboarding", group: "supporting" },
+  { key: "s2", persona: "mariam", path: "/import", group: "supporting" },
+  { key: "s3", persona: "mariam", path: "/couple", group: "supporting" },
+  { key: "s9", persona: "mariam", path: "/copilot", group: "supporting" },
+  { key: "s4", persona: "mariam", path: "/teach-back", group: "supporting" },
+  { key: "s5", persona: "mariam", path: "/options", group: "supporting" },
+  { key: "s14", persona: "khalid", path: "/values", group: "supporting" },
+  { key: "s15", persona: "khalid", path: "/wellbeing", group: "supporting" },
+  { key: "s17", persona: "khalid", path: "/video", group: "supporting" },
+  { key: "s11", persona: "khalid", path: "/family", group: "supporting" },
+  { key: "s12", persona: "khalid", path: "/find-care", group: "supporting" },
+  { key: "s6", persona: "hamad", path: "/support", group: "supporting" },
+  { key: "s8", persona: "khalid", path: "/privacy", group: "supporting" },
 ];
 
 const LATER = [
@@ -78,9 +82,12 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
 
       <Sheet open={open} onClose={() => setOpen(false)} title={t("title")} closeLabel={tc("close")}>
         <p className="mb-6 text-sm text-muted">{t("body")}</p>
+        {(["unique", "supporting"] as const).map((group) => (
+        <div key={group} className="mb-6 flex flex-col gap-3" data-tour-group={group}>
+        <h3 className={cn("text-sm font-medium", group === "unique" ? "text-gold-ink" : "text-muted")}>{t(group === "unique" ? "uniqueTitle" : "supportingTitle")}</h3>
         <ol className="flex flex-col gap-2">
-          {STEPS.map((s, i) => (
-            <li key={s.key}>
+          {STEPS.map((s, i) => s.group !== group ? null : (
+            <li key={s.key} data-tour-step={s.key}>
               <button
                 disabled={pending}
                 onClick={() => {
@@ -100,6 +107,8 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
             </li>
           ))}
         </ol>
+        </div>
+        ))}
         <h3 className="mb-3 mt-8 text-sm font-medium text-muted">{t("later")}</h3>
         <ul className="flex flex-col gap-2">
           {LATER.map((l) => (

@@ -1,7 +1,7 @@
 {
   "common": {
     "appName": "Merros",
-    "tagline": "Your private genomic companion",
+    "tagline": "Your private companion for a healthy family",
     "language": "Language",
     "toNight": "Switch to Night mode",
     "toPearl": "Switch to Pearl mode",
@@ -135,8 +135,8 @@
   },
   "landing": {
     "eyebrow": "Premarital and preconception genetics",
-    "title": "Understand your genes. Decide by your own values.",
-    "body": "Merros is a private genomic companion. It explains carrier results in Arabic and English, protects couples so nobody sees more than they agreed to, and connects you to qualified genetic counsellors.",
+    "title": "Healthy families, planned together.",
+    "body": "Merros helps couples understand their carrier results, plan with a qualified genetic counsellor and choose what is right for them. It explains results in Arabic and English, protects couples so nobody sees more than they agreed to, and never tells anyone what to decide.",
     "start": "Start the demo",
     "design": "See the design system",
     "f1Title": "Private by design",
@@ -363,7 +363,9 @@
     "serverSees": "What the server relayed: {n} sealed points from each phone, twice. No gene names.",
     "talkShare": "Tell our counsellor and book",
     "talkShareNote": "This shares which genes you both carry with your genetic counsellor. Until you press it, Merros does not know your match.",
-    "errorBody": "The private match could not run. Your result is safe and nothing was shared."
+    "errorBody": "The private match could not run. Your result is safe and nothing was shared.",
+    "sharedResultTitle": "Your shared carrier result",
+    "sharedResultBody": "You both carry a change in the same gene. This is common, and it is something to plan for together, not a judgement about you or your relationship."
   },
   "learn": {
     "title": "Learn",
@@ -493,7 +495,7 @@
       "demo_reset": "Demo reset",
       "psi_key_turned": "Dual key turned (sealed points sent)",
       "psi_round_relayed": "Sealed points relayed for the private match",
-      "couple_outcome_shared": "Shared genes told to counsellor",
+      "couple_outcome_shared": "Shared carrier result told to counsellor",
       "copilot_question": "Asked the Genetic Copilot",
       "reclassification_detected": "A variant in your result was reclassified",
       "reclassification_released": "Counsellor released your updated result",
@@ -609,11 +611,10 @@
     "resetting": "Resetting",
     "s1": "Mariam receives a lab signed result, sets her language and gives granular consent",
     "s2": "Signature check: Merros refuses a tampered result",
-    "s3": "Blind Couple Match: Mariam turns her key, then switch to Khalid's phone. Only shared genes are revealed",
+    "s3": "Blind Couple Match: Mariam turns her key, then switch to Khalid's phone. Only a shared carrier result is revealed, followed by their plan",
     "s4": "Teach Back checks understanding and re explains",
     "s5": "Options Explorer: every option, equal weight",
     "s6": "Hamad's VUS routes him to a named counsellor",
-    "s7": "Dr. Layla's case queue",
     "s8": "Privacy: access history and tamper evident audit",
     "later": "Waiting for Azure",
     "l4": "Azure: deployment in the UAE, Gulf Arabic voice, real video calls, genomics pipeline",
@@ -629,9 +630,12 @@
     "nightly": "The demo data resets itself every night.",
     "s14": "Values Compass: options related to your own values, never ranked",
     "s15": "Distress Check: calm support and a same week callback",
-    "s16": "Risk Beyond the Panel: both partners consent, the counsellor sees it first",
+    "s16": "Risk Beyond the Panel: Khalid and Mariam both agreed. Dr. Layla sees the estimate first and decides when to release it",
     "s17": "My Result Video: a personal animated explainer, made on the device",
-    "needsAzure": "Needs Azure"
+    "needsAzure": "Needs Azure",
+    "uniqueTitle": "What only Merros does",
+    "supportingTitle": "Supporting features",
+    "s18": "Counsellor Copilot: Dr. Layla's pre session brief for Hamad, then a summary drafted from her notes that she reviews and signs"
   },
   "errors": {
     "title": "Something went wrong",
@@ -854,8 +858,8 @@
     "needsReview": "Needs your review",
     "noFindings": "No changes found on the tested genes.",
     "noResult": "They have not opened a result.",
-    "coupleShared": "Couple match, shared by the patient: {genes}.",
-    "coupleUnknown": "Couple match: not shared with you. The match runs on the couple's phones and Merros does not know the outcome unless they choose to tell you.",
+    "coupleShared": "Shared carrier result, told by the patient: {genes}.",
+    "coupleUnknown": "Shared carrier result: not told to you. The match runs on the couple's phones, and Merros does not know the outcome unless they choose to tell you.",
     "questions": "Their questions",
     "noQuestions": "No questions were sent.",
     "pedigree": "Family map for {gene}",
@@ -1138,5 +1142,43 @@
     "show": "To show it to family, play it for them on your device. Sending it as a link is not available in this demonstration.",
     "modePlayer": "Played in your browser. Server rendering with Azure narration and time limited share links comes with the Azure deployment.",
     "modeRender": "Rendered on the server."
+  },
+  "plan": {
+    "eyebrow": "Next steps",
+    "title": "Your plan",
+    "intro": {
+      "carrier": "Being a carrier is common, and you are healthy. Many people with a result like yours go on to build healthy families. These three steps help you plan, at your own pace.",
+      "uncertain": "Part of your result is best explained by a specialist. These three steps make sure you are not left with open questions.",
+      "shared": "A shared carrier result is common, and many couples with one go on to build healthy families. Planning starts with three steps, and every choice along the way is yours.",
+      "beyond": "This estimate adds to the plan you have with your counsellor. The same three steps apply."
+    },
+    "counsellingTitle": "Talk it through",
+    "counsellingBody": {
+      "carrier": "A genetic counsellor can explain what your result means for you, and for a future partner.",
+      "uncertain": "A genetic counsellor will explain this part of your result and answer your questions.",
+      "shared": "A genetic counsellor meets you both, explains your shared carrier result and answers your questions. Telling them your match is your choice.",
+      "beyond": "Your counsellor has already been through this estimate and can talk about it with you both."
+    },
+    "counsellingCta": "Book a counsellor",
+    "optionsTitle": "Know every option",
+    "optionsBody": "There are several paths to a healthy family, and none is ranked above another. See what each involves, and how each relates to what matters to you.",
+    "optionsCta": "See all options",
+    "valuesCta": "Values Compass",
+    "nextTitle": "One next step",
+    "next": {
+      "teachback": {
+        "body": "Check that the key ideas feel clear. It takes about two minutes.",
+        "cta": "Check my understanding"
+      },
+      "family": {
+        "body": "Relatives may want to know their own chance of being a carrier. You decide whom to tell, privately.",
+        "cta": "Family"
+      },
+      "wellbeing": {
+        "body": "Results can bring up a lot. A one question check in makes sure you get the support you want.",
+        "cta": "Check in"
+      }
+    },
+    "note": "Merros never tells you whom to marry or what to decide. Your plan is yours."
   }
 }

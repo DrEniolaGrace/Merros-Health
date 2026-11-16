@@ -7,6 +7,8 @@ import { SafetyPill } from "@/components/ui/pill";
 import { LinkButton } from "@/components/ui/link-button";
 import { beyondStateFor } from "@/lib/services/beyond";
 import { BeyondConsentSwitch, DemoSwitchPartner } from "./beyond-views";
+import { YourPlan } from "@/components/plan/your-plan";
+import { planLabels } from "@/lib/plan/labels";
 
 const pct = (x: number, digits = 1) => `${(x * 100).toFixed(digits)}%`;
 
@@ -19,8 +21,10 @@ export async function BeyondCard({ user, partnerName, partnerPersona }: { user: 
   const ts = await getTranslations("safety");
   const s = await beyondStateFor(user);
   if (s.state === "no_partner") return null;
+  const plan = s.state === "released" ? await planLabels("beyond", "family") : null;
 
   return (
+    <div className="flex flex-col gap-8">
     <GlassCard hero className="relative flex flex-col gap-6 overflow-hidden" data-beyond={s.state}>
       <span aria-hidden className="pointer-events-none absolute -end-24 -top-24 h-64 w-64 rounded-full bg-gold/10 blur-3xl" />
       <div className="flex flex-col gap-3">
@@ -75,5 +79,7 @@ export async function BeyondCard({ user, partnerName, partnerPersona }: { user: 
       )}
       <p className="text-xs text-gold-ink">{t("synthetic")}</p>
     </GlassCard>
+    {plan && <YourPlan labels={plan} context="beyond" next="family" />}
+    </div>
   );
 }

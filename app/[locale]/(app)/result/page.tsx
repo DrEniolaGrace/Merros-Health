@@ -9,6 +9,8 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { EmptyState } from "@/components/ui/states";
 import { LinkButton } from "@/components/ui/link-button";
 import { ActionDock, SectionTitle } from "@/components/ui/page";
+import { YourPlan } from "@/components/plan/your-plan";
+import { planLabels } from "@/lib/plan/labels";
 import { Pill, SafetyPill } from "@/components/ui/pill";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { Disclosure } from "@/components/ui/disclosure";
@@ -57,6 +59,11 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
   const { result } = own;
   const summary = summarisePerson(result.variants);
   const carriers = summary.genes.filter((g) => g.status.kind === "carrier");
+  // Every result that carries a risk ends with "Your plan": counselling, options, one next step.
+  const needsSpecialist = summary.vus.length > 0 || summary.genes.some((g) => g.status.kind === "needs_counsellor");
+  const planContext = needsSpecialist ? ("uncertain" as const) : carriers.length > 0 ? ("carrier" as const) : null;
+  const planNext = planContext === "uncertain" ? ("wellbeing" as const) : ("teachback" as const);
+  const plan = planContext ? await planLabels(planContext, planNext) : null;
   const hasPartner = (await prisma.coupleLink.count({ where: { OR: [{ partnerAId: user.id }, { partnerBId: user.id }] } })) > 0;
   const name = (id: string) => {
     const c = conditionById(id);
@@ -203,6 +210,12 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
         </div>
         <SafetyPill kind="education" label={`${ts("education")} · ${tc("pendingReview")}`} className="self-start" />
       </RiseItem>
+
+      {plan && planContext && (
+        <RiseItem>
+          <YourPlan labels={plan} context={planContext} next={planNext} />
+        </RiseItem>
+      )}
 
       <RiseItem>
         <ActionDock>

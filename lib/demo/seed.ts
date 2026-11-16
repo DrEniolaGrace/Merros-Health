@@ -170,6 +170,29 @@ export async function resetDemo(keys: SeedKeys) {
     }
   }
 
+  // Risk Beyond the Panel: Khalid and Mariam (first cousins) have both agreed, so the counsellor
+  // has an analysis waiting. Same records the consent flow creates (lib/services/beyond.ts).
+  {
+    const def = PURPOSES.find((d) => d.purpose === "beyond_panel")!;
+    const pair = ["khalid", "mariam"].map((k) => ids.get(k)!);
+    for (const userId of pair) {
+      await prisma.consent.create({
+        data: { userId, purpose: def.purpose, scope: def.scope, recipient: def.recipient, grantedAt: new Date(Date.now() - DAY), expiresAt: new Date(Date.now() + (def.defaultDays ?? 90) * DAY) },
+      });
+    }
+    const link = await prisma.coupleLink.findFirst({ where: { OR: [{ partnerAId: pair[0], partnerBId: pair[1] }, { partnerAId: pair[1], partnerBId: pair[0] }] } });
+    if (link) {
+      await prisma.rohAnalysis.create({ data: { coupleLinkId: link.id, source: "precomputed" } });
+      for (const userId of pair) {
+        await prisma.escalation.upsert({
+          where: { userId_code: { userId, code: "risk_beyond_panel_result" } },
+          create: { userId, code: "risk_beyond_panel_result", severity: "high" },
+          update: { status: "open" },
+        });
+      }
+    }
+  }
+
   await appendAudit({ actorId: "system", subjectId: "-", action: "demo_reset", resource: "demo" });
   // Synthetic anonymous journeys and the first differentially private release (SPEC 7.2, 11A).
   const signalEvents = await seedSignals(new Date());

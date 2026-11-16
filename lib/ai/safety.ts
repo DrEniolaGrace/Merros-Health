@@ -23,6 +23,9 @@ const OUTPUT_RULES: { rule: string; kind: RuleHit["kind"]; re: RegExp }[] = [
   // Stigmatising language.
   { rule: "en.bad_genes", kind: "stigmatising", re: /\b(bad|faulty|defective|dirty|inferior) (gene|genes|blood|dna)\b|\bdefective\b|\babnormal (child|baby|person|people)\b|\bdamaged goods\b/i },
   { rule: "ar.bad_genes", kind: "stigmatising", re: /(جينات|جين|دم) (سيئ|سيئة|معيب|معيبة|فاسد|فاسدة)|معيب|معيبة|طفل (مشوه|غير طبيعي)/ },
+  // A couple is never labelled incompatible or unsuitable: they have a shared carrier result.
+  { rule: "en.couple_label", kind: "stigmatising", re: /\b(incompatib(le|ility)|not (genetically )?compatible|genetic(ally)? (unsuitable|unfit|mismatch(ed)?)|bad match)\b/i },
+  { rule: "ar.couple_label", kind: "stigmatising", re: /(غير متوافق|غير متوافقين|غير متوافقة|عدم (ال)?توافق|غير متلائم|غير مناسبين وراثيا)/ },
   // Diagnostic certainty about a person or a future child.
   { rule: "en.will_have", kind: "diagnostic", re: /\byour (baby|child|children|son|daughter) will (have|be born with|suffer|be affected|inherit the (disease|condition))\b|\byou (have|are diagnosed with) (the )?(disease|thalassaemia|thalassemia|sickle cell disease|sma)\b/i },
   { rule: "ar.will_have", kind: "diagnostic", re: /(سيصاب|سيولد|ستصاب) (طفلك|طفلكما|ابنك|ابنتك|أطفالك)|(طفلك|طفلكما) (سيصاب|سيكون مصاباً|مصاب حتماً)|أنت (مصاب|مصابة) ب/ },

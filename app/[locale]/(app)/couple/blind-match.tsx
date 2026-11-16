@@ -1,5 +1,6 @@
 "use client";
 
+import { YourPlan, type PlanLabels } from "@/components/plan/your-plan";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowsLeftRight, Key, LockKey, ShieldCheck, Sparkle, UsersThree } from "@phosphor-icons/react";
@@ -28,6 +29,8 @@ interface Local {
 }
 
 export interface BlindMatchLabels {
+  sharedResultTitle: string;
+  sharedResultBody: string;
   eyebrow: string;
   education: string;
   sealedTitle: string;
@@ -98,7 +101,9 @@ export function BlindMatch({
   labels: L,
   gridLabels,
   locale,
+  plan,
 }: {
+  plan: PlanLabels;
   userId: string;
   linkId: string;
   me: string;
@@ -282,6 +287,11 @@ export function BlindMatch({
                 <p className="measure text-sm text-muted">{L.residual}</p>
               </GlassCard>
             ) : (
+              <div className="flex flex-col gap-6" data-shared-carrier-result={shared.length}>
+              <div className="flex flex-col gap-2">
+                <h2 className="text-gradient text-2xl font-semibold">{L.sharedResultTitle}</h2>
+                <p className="measure text-muted">{L.sharedResultBody}</p>
+              </div>
               <CoupleNumbers
                 locale={locale}
                 genes={shared.map((gene) => ({
@@ -307,6 +317,7 @@ export function BlindMatch({
                 }
                 gridLabels={gridLabels}
               />
+              </div>
             )}
             <GlassCard tone="gold" hero className="flex flex-col gap-2">
               <h2 className="text-gradient-gold text-xl font-semibold">{L.nadTitle}</h2>
@@ -314,10 +325,17 @@ export function BlindMatch({
             </GlassCard>
             <div className="flex flex-col gap-3">
               {shared.length > 0 ? (
-                <>
-                  <Button size="lg" pending={pending} className="self-start" onClick={() => start(() => shareOutcomeWithCounsellor(shared))}>{L.talkShare}</Button>
-                  <p className="text-sm text-muted">{L.talkShareNote}</p>
-                </>
+                <YourPlan
+                  labels={plan}
+                  context="shared"
+                  next="family"
+                  counsellingSlot={
+                    <div className="flex flex-col gap-2">
+                      <Button variant="gold" pending={pending} className="self-start" onClick={() => start(() => shareOutcomeWithCounsellor(shared))}>{L.talkShare}</Button>
+                      <p className="text-xs text-muted">{L.talkShareNote}</p>
+                    </div>
+                  }
+                />
               ) : (
                 <LinkButton href="/support" size="lg" className="self-start">{L.talk}</LinkButton>
               )}

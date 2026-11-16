@@ -46,10 +46,16 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   await expect(page.getByText("You both carry a change in HBB")).toBeVisible();
   await expect(page.getByText("You both carry a change in GJB2")).toBeVisible();
   await expect(page.getByLabel("43.75%").first()).toBeVisible();
+  // A shared carrier result, never a label, followed by the couple's plan.
+  await expect(page.getByRole("heading", { name: "Your shared carrier result" })).toBeVisible();
+  const plan = page.locator("[data-your-plan=shared]");
+  await expect(plan.locator("[data-plan-step]")).toHaveCount(3);
+  await expect(plan).toContainText("Merros never tells you whom to marry or what to decide");
+  await expect(page.locator("main")).not.toContainText(/incompatib/i);
   // The server learns the outcome only when she chooses to tell the counsellor.
   await page.getByRole("button", { name: "Tell our counsellor and book" }).click();
   await expect(page).toHaveURL(/\/en\/support/);
-  await expect(page.getByText("You and your partner carry a change in the same gene.")).toBeVisible();
+  await expect(page.getByText("You and your partner have a shared carrier result", { exact: false })).toBeVisible();
 
   // Teach Back: one wrong answer shows a different explanation.
   await page.goto("/en/teach-back");
@@ -78,7 +84,7 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
 
   // Escalation routes to a named counsellor.
   await page.goto("/en/support");
-  await expect(page.getByText("You and your partner carry a change in the same gene.")).toBeVisible();
+  await expect(page.getByText("You and your partner have a shared carrier result", { exact: false })).toBeVisible();
   await expect(page.getByText("Dr. Layla Haddad").first()).toBeVisible();
 
   // Privacy: access history and tamper evident audit chain.

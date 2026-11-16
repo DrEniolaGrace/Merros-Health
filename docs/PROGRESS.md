@@ -70,3 +70,12 @@
 | 2026-11-15 | Judge Tour completed: steps for Values Compass, Distress Check, Risk Beyond the Panel and My Result Video; remaining Azure only items listed as waiting for Azure | Done | 321 unit + 18 e2e passing (local build on the Neon dev branch) |
 
 **Phase 5 status:** features complete on the fallbacks. Not done: server side video rendering, the genomics pipeline, real video calls and Azure voice (all need Azure); design images (none supplied); the demo video recording and content review (owner).
+
+## Pre submission changes
+
+| Date | Change | Status | Tests |
+|---|---|---|---|
+| 2026-11-16 | Reframing: "shared carrier result" wording, healthy families with a plan as the positioning (landing, tagline, README), "Your plan" (counselling, options, one next step) at the end of every result that carries a risk, Safety Verifier rules and a wording test so a couple is never labelled | Done | 7 unit + 3 e2e |
+| 2026-11-16 | Judge Tour reordered: Living Results, Counsellor Copilot, Risk Beyond the Panel and Population Signals first, then supporting features. Counsellor steps open the case directly; the demo starts with Khalid and Mariam both agreeing to Risk Beyond the Panel | Done | 1 unit + 1 e2e |
+| 2026-11-16 | Distress Check no longer waits for a full page refresh after saving (its callback buttons could stay disabled) | Done | 328 unit + 21 e2e passing (local build on the Neon dev branch) |
+| 2026-11-16 | Abu Dhabi premarital gene panel | Blocked: the DoH standard could not be downloaded from here and no public copy of the gene list was found. Waiting for the owner to provide the document | n/a |

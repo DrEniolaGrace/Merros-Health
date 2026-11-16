@@ -1,7 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth/session";
 import { appendAudit } from "@/lib/audit/log";
@@ -33,7 +32,8 @@ export async function recordDistress(score: number): Promise<{ band: DistressBan
     await prisma.escalation.updateMany({ where: { userId: user.id, code: "high_distress", status: "open" }, data: { status: "resolved", detail: null } });
   }
   await recordSignal(user.id, when === "pre" ? "distress_pre" : "distress_post", score >= DISTRESS_THRESHOLD ? 1 : 0);
-  revalidatePath("/[locale]", "layout");
+  // No revalidatePath: every page is rendered per request, and waiting for a full layout refresh
+  // here kept the screen busy (its buttons disabled) until that refresh came back.
   return { band: distressBand(score), callbackOffered: offersCallback(score) };
 }
 
@@ -50,7 +50,6 @@ export async function requestCallback(kind: CallbackKind): Promise<{ ok: boolean
     update: { status: "open", detail: `callback:${kind}` },
   });
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "callback_requested", resource: `callback:${kind}` });
-  revalidatePath("/[locale]", "layout");
   return { ok: true };
 }
 

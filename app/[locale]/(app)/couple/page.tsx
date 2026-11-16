@@ -10,6 +10,7 @@ import { conditionById } from "@/content/conditions";
 import { LIMITS, NOT_A_DIAGNOSIS } from "@/content/explainer";
 import { pick } from "@/content/types";
 import { BlindMatch } from "./blind-match";
+import { planLabels } from "@/lib/plan/labels";
 import { BeyondCard } from "@/components/beyond/beyond-card";
 
 export default async function CouplePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -51,6 +52,7 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
       partnerPersona={env().DEMO_MODE === "true" ? couple.partner.personaKey : null}
       geneConditions={geneConditions}
       locale={locale}
+      plan={await planLabels("shared", "family")}
       gridLabels={{
         title: tds("fourSquare"),
         parentA: tds("parentA"),
@@ -64,6 +66,8 @@ export default async function CouplePage({ params }: { params: Promise<{ locale:
         eyebrow: tp("eyebrowCouple"),
         education: ts("education"),
         sealedTitle: t("awaitingSelfTitle"),
+        sharedResultTitle: t("sharedResultTitle"),
+        sharedResultBody: t("sharedResultBody"),
         sealedBody: t("awaitingSelfBody"),
         turnKey: t("turnKey"),
         workingTitle: t("workingTitle"),
