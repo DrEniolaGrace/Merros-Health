@@ -40,3 +40,4 @@ npm-debug.log*
 
 # Official documents kept locally, cited by URL instead (see data/reference/SOURCES.md)
 reference/*.pdf
+Reference/*.pdf
