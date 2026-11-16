@@ -79,3 +79,4 @@
 | 2026-11-16 | Judge Tour reordered: Living Results, Counsellor Copilot, Risk Beyond the Panel and Population Signals first, then supporting features. Counsellor steps open the case directly; the demo starts with Khalid and Mariam both agreeing to Risk Beyond the Panel | Done | 1 unit + 1 e2e |
 | 2026-11-16 | Distress Check no longer waits for a full page refresh after saving (its callback buttons could stay disabled) | Done | 328 unit + 21 e2e passing (local build on the Neon dev branch) |
 | 2026-11-16 | Abu Dhabi premarital gene panel | Blocked: the DoH standard could not be downloaded from here and no public copy of the gene list was found. Waiting for the owner to provide the document | n/a |
+| 2026-11-16 | Demo data: Khalid has shared his result with Dr. Layla, so Judge Tour step 3 opens his full brief with the Risk Beyond the Panel estimate, instead of a "no access" notice | Done | 328 unit + 21 e2e passing |

@@ -45,6 +45,8 @@ test("The Judge Tour opens with what only Merros does, and its counsellor steps 
   // Step 3 opens Khalid's case: the analysis Khalid and Mariam agreed to waits for the counsellor.
   await unique.locator("[data-tour-step=s16]").getByRole("button").click();
   await expect(page).toHaveURL(/\/en\/counsellor\/case\//, { timeout: 30000 });
+  // Khalid shared his result with the counsellor, so the full brief opens, with the estimate in it.
+  await expect(page.getByText("No access to this case")).toHaveCount(0);
   const beyond = page.locator("[data-counsellor-beyond=pending_counsellor]");
   await expect(beyond).toContainText("moderately above");
   await expect(beyond.locator("[data-beyond-consistency=consistent]")).toBeVisible();

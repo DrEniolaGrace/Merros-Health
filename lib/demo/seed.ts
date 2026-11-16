@@ -29,6 +29,8 @@ function seededConsents(p: Persona): string[] {
   if (p.partnerKey) c.push("couple_comparison");
   if (p.key === "hamad") c.push("counsellor_access", "reclassification_recontact");
   if (p.key === "sara") c.push("counsellor_access");
+  // Khalid has shared his result with Dr. Layla, so the Judge Tour opens his full brief.
+  if (p.key === "khalid") c.push("counsellor_access");
   return c;
 }
 
