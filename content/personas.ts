@@ -5,7 +5,8 @@
  */
 import type { Variant } from "@/lib/risk/types";
 
-export const PANEL_GENES = ["HBB", "HBA1", "HBA2", "SMN1", "GJB2", "CFTR", "G6PD"];
+/** The Abu Dhabi premarital genetic panel (DoH standard, Appendix 12). See lib/risk/panel.ts. */
+export { PANEL_GENES } from "@/lib/risk/panel";
 export const LAB_NAME = "Synthetic Abu Dhabi Screening Lab (demo)";
 
 const HBB_IVS1_5: Variant = { gene: "HBB", hgvs: "NM_000518.5(HBB):c.92+5G>C", zygosity: "heterozygous", acmg: "pathogenic", clinvarId: "15447", conditionId: "beta-thalassaemia" };

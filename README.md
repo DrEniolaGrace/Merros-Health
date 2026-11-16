@@ -4,6 +4,10 @@ A privacy preserving genomic companion that helps couples build healthy families
 
 > Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice.
 
+**Reference standard.** Merros follows the Department of Health Abu Dhabi *Premarital Screening Standard* (DoH/STD/PSS/V3, version 3, September 2024): https://www.doh.gov.ae/-/media/Feature/Resources/Standards/Premarital-Screening-standard-for-publication.ashx. Its gene panel is the standard's Appendix 12: 563 autosomal recessive genes (570 entries as printed), updated to current HGNC names. The panel covers autosomal recessive genes only and not every recessive condition. The care pathway follows the standard's counselling process. See [About and sources](app/[locale]/sources/page.tsx) in the app and `data/reference/SOURCES.md`.
+
+**Merros is an independent prototype. It is not affiliated with or endorsed by the Department of Health Abu Dhabi; it uses the Department's published standard as a public reference only.**
+
 **All data in this prototype is synthetic.** Every person, clinician and clinic is fictional.
 
 ## Run it in under 5 minutes (Docker, recommended)

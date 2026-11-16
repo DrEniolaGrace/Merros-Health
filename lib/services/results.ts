@@ -73,6 +73,8 @@ export async function importResult(user: User, opts: { tamper?: boolean } = {}):
   });
   await prisma.labInbox.delete({ where: { accession: parsed.accession } });
   await appendAudit({ actorId: user.id, subjectId: user.id, action: "result_imported", resource: `lab:${parsed.accession}` });
+  // A lab result means the screening visit took place (consent given, samples taken).
+  await recordStep(user.id, "screening_visit");
   await recordStep(user.id, "result_received");
   return { ok: true, variantCount: parsed.variants.length };
 }

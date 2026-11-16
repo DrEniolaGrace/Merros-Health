@@ -34,6 +34,19 @@ export async function completeSession(appointmentId: string) {
   revalidatePath("/[locale]", "layout");
 }
 
+/**
+ * The Premarital Screening and Counselling Report has been issued by the screening facility. In
+ * the official process the signing physician controls its release after results counselling
+ * (DoH standard 3.3.10.2). Merros only records that it happened; it never issues the report.
+ */
+export async function markReportIssued(patientId: string) {
+  const me = await requireUser(["counsellor"]);
+  const patient = await prisma.user.findUnique({ where: { id: z.string().max(40).parse(patientId) }, include: { consents: true } });
+  if (!patient || !hasActiveConsent(patient.consents, "counsellor_access")) throw new Error("No access");
+  await recordStep(patient.id, "report_issued");
+  await appendAudit({ actorId: me.id, subjectId: patient.id, action: "report_issued_recorded", resource: "premarital_report" });
+}
+
 const notesInput = z.object({ appointmentId: z.string().max(40), notes: z.string().min(1).max(4000) });
 
 /**

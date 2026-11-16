@@ -4,6 +4,7 @@ import { PageHeader, SectionTitle } from "@/components/ui/page";
 import { Horizon } from "@/components/ui/accents";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { JudgeTour } from "@/components/tour/judge-tour";
+import { SiteFooter } from "@/components/chrome/site-footer";
 import { PERSONAS } from "@/content/personas";
 import { PersonaCard } from "./persona-card";
 
@@ -51,6 +52,7 @@ export default async function LoginPage({ params }: { params: Promise<{ locale: 
           </section>
         ))}
       </main>
+      <SiteFooter />
       <JudgeTour />
     </>
   );

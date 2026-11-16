@@ -25,18 +25,25 @@ export function Sheet({
   className?: string;
 }) {
   const panel = useRef<HTMLDivElement>(null);
+  // Callers pass a new onClose on every render. Keeping it in a ref means the effect below runs
+  // only when the sheet opens or closes; before, typing in a field inside the sheet re-ran it and
+  // pulled focus back to the panel after every key.
+  const closeRef = useRef(onClose);
+  useEffect(() => {
+    closeRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     if (!open) return;
     const prev = document.activeElement as HTMLElement | null;
     panel.current?.focus();
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeRef.current();
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
       prev?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   return (
     <AnimatePresence>

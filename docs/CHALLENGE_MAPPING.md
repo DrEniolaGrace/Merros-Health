@@ -15,3 +15,7 @@ Status: ✅ built and tested (Phases 1 to 4, and the first part of Phase 5) · �
 | Desired outcome 4: Privacy preserving family workflows | 4.8 ✅, 4.13 ✅, 6.1 ✅, 6.4 ✅, 6.4 ⏳ P3 | ◐ |
 | Desired outcome 5: Safe linkage to services | 4.9 ✅, 4.10 ✅, 4.11 ✅ (video simulated until Azure) | ◐ |
 | Desired outcome 6: Measurable comprehension and access | 4.4 before/after scores ✅, pathway timestamps ✅, Population Signals Dashboard (7.2) ✅ on synthetic journeys | ✅ |
+
+## Alignment with the Abu Dhabi programme
+
+Merros uses the Department of Health, Abu Dhabi. *Premarital Screening Standard*. Document reference DoH/STD/PSS/V3, version 3, published September 2024 (revision due September 2027). https://www.doh.gov.ae/-/media/Feature/Resources/Standards/Premarital-Screening-standard-for-publication.ashx as its reference: the gene panel is its Appendix 12 (563 genes), the care pathway follows section 3.3 and Appendices 14 and 15, and Find Care mirrors the kinds of service in Appendix 13. Merros is an independent prototype. It is not affiliated with or endorsed by the Department of Health Abu Dhabi; it uses the Department's published standard as a public reference only.

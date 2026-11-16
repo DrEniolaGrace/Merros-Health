@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Check } from "@phosphor-icons/react/dist/ssr";
-import { PATHWAY_STEPS, furthestStep } from "@/lib/pathway/steps";
+import { OPTIONAL_STEPS, PATHWAY_STEPS, currentStep, furthestStep } from "@/lib/pathway/steps";
 import { cn } from "@/lib/cn";
 
 /** Care Pathway Tracker (SPEC 4.9): timestamped journey, current step highlighted. */
@@ -8,6 +8,7 @@ export async function PathwayTimeline({ events, locale, compact = false }: { eve
   const t = await getTranslations("pathway");
   const done = new Map(events.map((e) => [e.step, e.at]));
   const furthest = furthestStep([...done.keys()]);
+  const here = currentStep([...done.keys()]);
   const fmt = (iso: string) =>
     new Intl.DateTimeFormat(locale === "ar" ? "ar-AE" : "en-GB", { day: "numeric", month: "short", timeZone: "Asia/Dubai", numberingSystem: "latn" }).format(new Date(iso));
   const steps = compact ? PATHWAY_STEPS.slice(0, 4) : PATHWAY_STEPS;
@@ -16,7 +17,9 @@ export async function PathwayTimeline({ events, locale, compact = false }: { eve
     <ol className="relative flex flex-col">
       {steps.map((s, i) => {
         const at = done.get(s);
-        const current = !at && i === furthest + 1;
+        const current = !at && i === here;
+        // An optional step that was passed without being needed.
+        const skipped = !at && i < furthest && OPTIONAL_STEPS.includes(s);
         return (
           <li key={s} className="relative flex gap-4 pb-8 last:pb-0">
             {i < steps.length - 1 && (
@@ -35,7 +38,7 @@ export async function PathwayTimeline({ events, locale, compact = false }: { eve
             <div className="flex min-w-0 flex-col pt-1">
               <span className={cn("text-base", at || current ? "text-ink" : "text-muted")}>{t(s)}</span>
               <span className={cn("text-sm", current ? "text-gold-ink" : "text-muted")}>
-                {at ? t("done", { date: fmt(at) }) : current ? t("current") : t("upcoming")}
+                {at ? t("done", { date: fmt(at) }) : current ? t("current") : skipped ? t("notNeeded") : OPTIONAL_STEPS.includes(s) ? t("ifNeeded") : t("upcoming")}
               </span>
             </div>
           </li>

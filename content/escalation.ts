@@ -4,16 +4,16 @@ import type { Bi } from "./types";
 
 export const ESCALATION_TEXT: Record<EscalationCode, Bi> = {
   shared_pathogenic_gene: {
-    en: "You and your partner have a shared carrier result: you both carry a change in the same gene. A genetic counsellor can help you plan together.",
-    ar: "لديك وشريكك نتيجة حمل مشتركة: تحملان تغيراً في الجين نفسه. يمكن للمستشار الوراثي مساعدتكما على التخطيط معاً.",
+    en: "You and your partner have a shared carrier result: you both carry a change in the same gene. In results counselling a physician or genetic counsellor goes through it with each of you, and then with you together if you both agree, to help you plan.",
+    ar: "لديك وشريكك نتيجة حمل مشتركة: تحملان تغيراً في الجين نفسه. في جلسة شرح النتائج يراجعها معكما طبيب أو مستشار وراثي، كلٌّ على حدة ثم معاً إذا وافقتما، لمساعدتكما على التخطيط.",
   },
   vus_present: {
     en: "Your result includes a variant of uncertain significance. A counsellor can explain it and keep you informed if it changes.",
     ar: "تتضمن نتيجتك متغيراً غير مؤكد الأهمية. يمكن للمستشار شرحه وإبلاغك إذا تغيّر تصنيفه.",
   },
   significant_personal_finding: {
-    en: "Your result includes a finding that is best explained in person by a genetic counsellor.",
-    ar: "تتضمن نتيجتك معلومة يُفضَّل أن يشرحها لك مستشار وراثي مباشرة.",
+    en: "Your result includes a finding that is best explained in person by a clinical geneticist or genetic counsellor.",
+    ar: "تتضمن نتيجتك معلومة يُفضَّل أن يشرحها لك مباشرة استشاري وراثة سريرية أو مستشار وراثي.",
   },
   pregnant_or_trying: {
     en: "Because you are pregnant or planning a pregnancy, timing matters. A counsellor can help you plan.",

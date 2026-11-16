@@ -2,6 +2,28 @@
 
 All clinical content is **pending accredited clinical review**. Merros supports, and never replaces, licensed screening and genetic counselling services.
 
+## Reference standard and gene panel
+
+Merros follows the Department of Health, Abu Dhabi. *Premarital Screening Standard*. Document reference DoH/STD/PSS/V3, version 3, published September 2024 (revision due September 2027). https://www.doh.gov.ae/-/media/Feature/Resources/Standards/Premarital-Screening-standard-for-publication.ashx. Merros is an independent prototype. It is not affiliated with or endorsed by the Department of Health Abu Dhabi; it uses the Department's published standard as a public reference only.
+
+* **Panel:** Appendix 12, 563 genes (`data/reference/doh-pms-panel.json`, `lib/risk/panel.ts`). Because the appendix lists autosomal recessive genes only, the risk engine treats every panel gene as autosomal recessive and computes couple chances for all of them. Genes outside both the panel and the engine's own list are never computed; they go to a counsellor. Every result shows the panel's scope: recessive genes only, not every recessive condition, and a clinical geneticist for a family condition outside the panel (Appendix 15).
+* **Personas:** a unit test checks that every carrier gene a persona has is on the panel.
+
+## Care pathway, aligned with the DoH process
+
+Merros records the journey; the screening facility does the clinical steps. No form from the standard is reproduced.
+
+| Official step (section 3.3, Appendices 14 and 15) | Merros |
+|---|---|
+| Screening visit: agreement and consent signed (genetic consent for UAE nationals), samples taken | "Screening visit" step, recorded when a signed lab result arrives |
+| Physician receives and interprets results; confirmatory haemoglobin testing for abnormal results (3.4.1.3) | "Results received"; "Confirmatory haemoglobin test" shown as needed only for some people, never as "you are here" |
+| (Merros addition) | "Results understood": Teach Back |
+| Results counselling, each person separately and then the couple together if they agree (Appendix 14) | "Results counselling booked" and "done"; the shared carrier result message describes this |
+| Positive genetic finding: the physician controls release (3.3.10.2); both sign that they were informed (3.3.13.2) | Counsellor first for Living Results and Risk Beyond the Panel; Merros never issues or replaces the declaration |
+| Premarital Screening and Counselling Report issued (3.3.10), valid three months (3.3.10.5) | "Report issued" step, recorded by the counsellor; Merros never issues a report |
+| Referral to a clinical geneticist or genetic counsellor; haemoglobinopathy carriers to assigned services; reproductive medicine options (3.10, Appendix 13) | "Referral, if chosen"; Find Care lists these kinds of service; escalation messages name them |
+| A previous genetic result is reused with a new partner (3.3.10.7) | Each person's result is kept separately and matched with a partner's (Blind Couple Match) |
+
 ## Wording and "Your plan"
 
 * A couple who both carry a change in the same gene have a **shared carrier result**. No screen, document or Copilot answer labels a couple as a mismatch or as unsuitable for each other. `tests/unit/wording.test.ts` scans every message file, content file, the video script, the README and these docs in both languages, and the Safety Verifier has rules (`en.couple_label`, `ar.couple_label`) that stop the Copilot from using such labels.

@@ -111,6 +111,7 @@ export async function resetDemo(keys: SeedKeys) {
             importedAt: new Date(Date.now() - 3 * DAY),
           },
         });
+        await prisma.pathwayEvent.create({ data: { userId: user.id, step: "screening_visit", at: new Date(Date.now() - 14 * DAY) } });
         await prisma.pathwayEvent.create({ data: { userId: user.id, step: "result_received", at: new Date(Date.now() - 3 * DAY) } });
       } else {
         await prisma.labInbox.create({

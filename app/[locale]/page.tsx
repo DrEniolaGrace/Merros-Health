@@ -17,6 +17,7 @@ import { Rise, RiseItem } from "@/components/ui/rise";
 import { Eyebrow, FloatingChip, Horizon, StatRow } from "@/components/ui/accents";
 import { CountUp } from "@/components/ui/motion";
 import { JudgeTour } from "@/components/tour/judge-tour";
+import { SiteFooter } from "@/components/chrome/site-footer";
 import { CoupleMatchWindow } from "@/components/landing/couple-match-window";
 import { JourneyGraph } from "@/components/landing/journey-graph";
 import { InheritanceExplorer } from "@/components/landing/inheritance-explorer";
@@ -178,6 +179,7 @@ export default async function Landing({ params }: { params: Promise<{ locale: st
           </GlassCard>
         </section>
       </main>
+      <SiteFooter />
       <JudgeTour />
     </>
   );

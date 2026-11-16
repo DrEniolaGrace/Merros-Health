@@ -10,8 +10,10 @@ import { EmptyState } from "@/components/ui/states";
 import { LinkButton } from "@/components/ui/link-button";
 import { ActionDock, SectionTitle } from "@/components/ui/page";
 import { YourPlan } from "@/components/plan/your-plan";
+import { PanelList } from "@/components/risk/panel-list";
+import { aliasesOf } from "@/lib/risk/panel";
 import { planLabels } from "@/lib/plan/labels";
-import { Pill, SafetyPill } from "@/components/ui/pill";
+import { SafetyPill } from "@/components/ui/pill";
 import { Rise, RiseItem } from "@/components/ui/rise";
 import { Disclosure } from "@/components/ui/disclosure";
 import { CountUp } from "@/components/ui/motion";
@@ -202,9 +204,15 @@ export default async function ResultPage({ params }: { params: Promise<{ locale:
               <p className="measure text-muted">{pick(it.body, locale)}</p>
             </Disclosure>
           ))}
-          <Disclosure title={t("panel")}>
-            <div className="flex flex-wrap gap-2" dir="ltr">
-              {result.panelGenes.map((g) => <Pill key={g}>{g}</Pill>)}
+          <Disclosure title={t("panelTitle", { n: result.panelGenes.length })}>
+            <div className="flex flex-col gap-4">
+              <p className="measure text-sm text-ink">{t("panelScope")}</p>
+              <p className="measure text-sm text-muted">{t("panelOutside")}</p>
+              <PanelList
+                genes={result.panelGenes.map((g) => ({ symbol: g, aliases: aliasesOf(g) }))}
+                labels={{ search: t("panelSearch"), count: t.raw("panelCount"), noMatch: t("panelNoMatch") }}
+              />
+              <p className="text-xs text-muted">{t("panelSource")}</p>
             </div>
           </Disclosure>
         </div>

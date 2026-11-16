@@ -5,6 +5,7 @@ import { signOut } from "@/lib/actions/auth";
 import { TopBar } from "@/components/chrome/top-bar";
 import { BottomBar, NavRail, type NavItem } from "@/components/chrome/app-nav";
 import { JudgeTour } from "@/components/tour/judge-tour";
+import { SiteFooter } from "@/components/chrome/site-footer";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
@@ -59,6 +60,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           {children}
         </main>
       </div>
+      <SiteFooter />
       {items.length > 1 && <BottomBar items={items} label={t("main")} />}
       <JudgeTour raised={items.length > 1} />
     </>

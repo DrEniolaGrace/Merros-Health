@@ -311,7 +311,14 @@
     "meaningTitle": "What being a carrier means",
     "carrierLabel": "You are a carrier for",
     "vusBadge": "Not counted",
-    "updatedNote": "This result was updated after scientists reclassified a variant. Your counsellor has discussed the change with you."
+    "updatedNote": "This result was updated after scientists reclassified a variant. Your counsellor has discussed the change with you.",
+    "panelTitle": "Genes tested ({n})",
+    "panelScope": "The Abu Dhabi premarital genetic panel. It covers autosomal recessive genes only. It does not include X linked, Y linked or dominant genes, and it does not cover every recessive condition.",
+    "panelOutside": "If a genetic condition is known in your family and its gene is not on this panel, a clinical geneticist is the right person to talk to.",
+    "panelSearch": "Search a gene, for example GBA",
+    "panelCount": "{n} of {total} genes",
+    "panelNoMatch": "That gene is not on this panel.",
+    "panelSource": "Source: Department of Health Abu Dhabi, Premarital Screening Standard DoH/STD/PSS/V3 (September 2024), Appendix 12. Names updated to current HGNC symbols; older names in brackets."
   },
   "couple": {
     "title": "Your result as a couple",
@@ -442,16 +449,20 @@
   },
   "pathway": {
     "title": "Your journey",
-    "body": "Every step, at your pace.",
-    "result_received": "Result received",
-    "understood": "Understood",
-    "counselling_booked": "Counselling booked",
-    "counselling_completed": "Counselling completed",
-    "confirmatory_testing": "Confirmatory testing",
-    "specialist_service": "Specialist service, if chosen",
+    "body": "Every step, at your pace. The steps follow the Abu Dhabi premarital screening process.",
+    "result_received": "Results received",
+    "understood": "Results understood",
+    "counselling_booked": "Results counselling booked",
+    "counselling_completed": "Results counselling done",
+    "confirmatory_testing": "Confirmatory haemoglobin test",
+    "specialist_service": "Referral: clinical geneticist, haemoglobinopathy service or reproductive medicine",
     "done": "Done {date}",
     "current": "You are here",
-    "upcoming": "Upcoming"
+    "upcoming": "Upcoming",
+    "screening_visit": "Screening visit: consent given, samples taken",
+    "report_issued": "Premarital Screening and Counselling Report issued",
+    "notNeeded": "Not needed so far",
+    "ifNeeded": "Only if needed"
   },
   "privacy": {
     "title": "Privacy",
@@ -882,7 +893,12 @@
     "noDistress": "No Distress Check recorded.",
     "sure": "SURE test: {n} of 4 answered yes",
     "valuesImportant": "Rated very important or essential:",
-    "valuesNotShared": "Values Summary not shared."
+    "valuesNotShared": "Values Summary not shared.",
+    "reportTitle": "Premarital Screening and Counselling Report",
+    "reportBody": "The screening facility issues the report after results counselling, and the signing physician controls its release. Merros records only that it was issued.",
+    "reportMark": "Record that the report was issued",
+    "reportIssued": "Recorded as issued.",
+    "reportAfterCounselling": "Can be recorded once results counselling is done."
   },
   "session": {
     "back": "Back",
@@ -1180,5 +1196,56 @@
       }
     },
     "note": "Merros never tells you whom to marry or what to decide. Your plan is yours."
+  },
+  "sources": {
+    "eyebrow": "About Merros",
+    "title": "About and sources",
+    "body": "Where the facts, numbers and processes in Merros come from.",
+    "back": "Home",
+    "independentTitle": "An independent prototype",
+    "independent": "Merros is an independent prototype built for the Future Health Digital Innovation Challenge 2026. It is not affiliated with or endorsed by the Department of Health Abu Dhabi. It follows the Department's published Premarital Screening Standard as a public reference only.",
+    "listTitle": "Sources",
+    "panelCounts": "Panel used in Merros: {unique} genes ({printed} entries as printed, duplicates merged, {renamed} renamed to their current names).",
+    "synthetic": "All people, clinicians, clinics and results in Merros are synthetic. Clinical content is pending accredited review.",
+    "footer": "Merros is an independent prototype, not affiliated with or endorsed by the Department of Health Abu Dhabi. All data is synthetic.",
+    "footerLink": "About and sources",
+    "items": {
+      "doh": {
+        "title": "Premarital Screening Standard, Department of Health Abu Dhabi",
+        "use": "The gene panel (Appendix 12), the care pathway and counselling steps (section 3.3, Appendices 14 and 15), and the kinds of counselling services in Find Care (Appendix 13)."
+      },
+      "hgnc": {
+        "title": "HUGO Gene Nomenclature Committee (HGNC)",
+        "use": "Current approved gene names, used to update the panel's gene names (complete set downloaded 16 November 2026)."
+      },
+      "clinvar": {
+        "title": "ClinVar, National Center for Biotechnology Information",
+        "use": "Classifications of the real variants given to the fictional personas, and the Living Results check."
+      },
+      "medlineplus": {
+        "title": "MedlinePlus Genetics and GeneReviews",
+        "use": "The basis for the plain language condition explanations, written in Merros's own words."
+      },
+      "acmg": {
+        "title": "ACMG and AMP variant interpretation guidelines (2015)",
+        "use": "The five classification categories used in results and by the Copilot."
+      },
+      "bennett": {
+        "title": "Bennett and others, Journal of Genetic Counseling, 2002",
+        "use": "The added risk range for related couples used in Risk Beyond the Panel."
+      },
+      "sure": {
+        "title": "Ottawa Decision Support Framework and the SURE test (Légaré and others, 2010)",
+        "use": "The Values Compass and its four decision questions."
+      },
+      "nccn": {
+        "title": "NCCN Distress Thermometer",
+        "use": "The single question in the Distress Check."
+      },
+      "osm": {
+        "title": "OpenStreetMap",
+        "use": "The map background in Find Care."
+      }
+    }
   }
 }

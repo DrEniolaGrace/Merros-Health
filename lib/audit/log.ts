@@ -31,6 +31,7 @@ export type AuditAction =
   | "beyond_panel_viewed"
   | "beyond_panel_released"
   | "beyond_panel_withdrawn"
+  | "report_issued_recorded"
   | "teachback_answered"
   | "escalation_raised"
   | "appointment_booked"

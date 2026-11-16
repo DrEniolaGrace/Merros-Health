@@ -80,3 +80,8 @@
 | 2026-11-16 | Distress Check no longer waits for a full page refresh after saving (its callback buttons could stay disabled) | Done | 328 unit + 21 e2e passing (local build on the Neon dev branch) |
 | 2026-11-16 | Abu Dhabi premarital gene panel | Blocked: the DoH standard could not be downloaded from here and no public copy of the gene list was found. Waiting for the owner to provide the document | n/a |
 | 2026-11-16 | Demo data: Khalid has shared his result with Dr. Layla, so Judge Tour step 3 opens his full brief with the Risk Beyond the Panel estimate, instead of a "no access" notice | Done | 328 unit + 21 e2e passing |
+| 2026-11-16 | Gene panel replaced with the Abu Dhabi premarital panel (DoH standard Appendix 12): 563 genes from 570 printed entries, 5 renamed to current HGNC symbols with older names kept as aliases, none unmapped; searchable list and scope note on My result; engine computes for every panel gene | Done | 10 unit + 1 e2e |
+| 2026-11-16 | Care pathway aligned with the DoH process: screening visit, confirmatory haemoglobin test (only if needed), results counselling, report issued (recorded by the counsellor), referral; escalation messages use the official routes | Done | 2 unit + 1 e2e |
+| 2026-11-16 | Find Care directory reshaped to the kinds of service in Appendix 13, all names fictional; pilot plan points to Appendix 13 | Done | existing tests |
+| 2026-11-16 | About and sources page, citation of the standard, and a not affiliated statement in the footer, the page and README | Done | 1 e2e |
+| 2026-11-16 | Fix: the admin passcode field lost focus after every key | Done | 1 e2e; 338 unit + 25 e2e passing |

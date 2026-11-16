@@ -1,3 +1,4 @@
+import { onPanel } from "./panel";
 import type { Inheritance } from "./types";
 
 /**
@@ -21,7 +22,11 @@ export const GENES: Record<string, GeneInfo> = {
   G6PD: { symbol: "G6PD", inheritance: "XL", conditionIds: ["g6pd-deficiency"] },
 };
 
-/** Unknown genes are treated conservatively: never auto computed, always escalated. */
+/**
+ * Inheritance of a gene. Genes described above win. Any other gene on the Abu Dhabi premarital
+ * panel is autosomal recessive: Appendix 12 of the DoH standard lists recessive genes only.
+ * Genes on neither list are treated conservatively: never auto computed, always escalated.
+ */
 export function inheritanceOf(gene: string): Inheritance | "unknown" {
-  return GENES[gene]?.inheritance ?? "unknown";
+  return GENES[gene]?.inheritance ?? (onPanel(gene) ? "AR" : "unknown");
 }

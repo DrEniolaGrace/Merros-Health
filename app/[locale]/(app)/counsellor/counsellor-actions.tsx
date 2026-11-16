@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { ArrowsClockwise, CheckCircle, PencilSimpleLine, SealCheck, Sparkle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { checkClinvarNow, releaseReclassification, simulateClinvarUpdate } from "@/lib/actions/living";
-import { completeSession, saveNotesAndDraft, signSummary } from "@/lib/actions/counsellor";
+import { completeSession, markReportIssued, saveNotesAndDraft, signSummary } from "@/lib/actions/counsellor";
 
 export function SimulateUpdate({ label, done }: { label: string; done: string }) {
   const [pending, start] = useTransition();
@@ -45,6 +45,15 @@ export function CompleteButton({ appointmentId, label }: { appointmentId: string
   const [pending, start] = useTransition();
   return (
     <Button variant="ghost" icon={<CheckCircle />} pending={pending} className="self-start" onClick={() => start(async () => { await completeSession(appointmentId); window.location.reload(); })}>
+      {label}
+    </Button>
+  );
+}
+
+export function ReportIssuedButton({ patientId, label }: { patientId: string; label: string }) {
+  const [pending, start] = useTransition();
+  return (
+    <Button variant="secondary" icon={<CheckCircle />} pending={pending} className="self-start" onClick={() => start(async () => { await markReportIssued(patientId); window.location.reload(); })}>
       {label}
     </Button>
   );

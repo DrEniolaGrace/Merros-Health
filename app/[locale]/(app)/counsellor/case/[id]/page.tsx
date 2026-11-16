@@ -19,7 +19,7 @@ import { conditionById } from "@/content/conditions";
 import { pick } from "@/content/types";
 import { IMPORTANT_FROM, VALUES, VALUE_KEYS } from "@/content/values";
 import type { EscalationCode } from "@/lib/escalation/rules";
-import { ReleaseButton, SummaryComposer } from "../../counsellor-actions";
+import { ReleaseButton, ReportIssuedButton, SummaryComposer } from "../../counsellor-actions";
 import { CounsellorBeyond } from "@/components/beyond/counsellor-beyond";
 
 export default async function CaseBriefPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
@@ -47,6 +47,7 @@ export default async function CaseBriefPage({ params }: { params: Promise<{ loca
   }
 
   const clinician = await prisma.clinician.findUnique({ where: { userId: me.id } });
+  const steps = new Set((await prisma.pathwayEvent.findMany({ where: { userId: patient.id }, select: { step: true } })).map((e) => e.step));
   const d = detail;
   const appt = d.appointment;
   const mineAppt = appt && clinician && appt.clinicianId === clinician.id;
@@ -209,6 +210,20 @@ export default async function CaseBriefPage({ params }: { params: Promise<{ loca
         ) : (
           <p className="text-sm text-muted">{t("noSessionWithYou")}</p>
         )}
+      </section>
+
+      <section className="flex flex-col gap-3" data-report-status={steps.has("report_issued") ? "issued" : "pending"}>
+        <SectionTitle>{t("reportTitle")}</SectionTitle>
+        <GlassCard className="flex flex-col gap-3">
+          <p className="measure text-sm text-muted">{t("reportBody")}</p>
+          {steps.has("report_issued") ? (
+            <p className="text-sm text-cyan-ink">{t("reportIssued")}</p>
+          ) : steps.has("counselling_completed") ? (
+            <ReportIssuedButton patientId={patient.id} label={t("reportMark")} />
+          ) : (
+            <p className="text-sm text-muted">{t("reportAfterCounselling")}</p>
+          )}
+        </GlassCard>
       </section>
     </div>
   );
