@@ -22,22 +22,20 @@ test("s1 Mariam understands her result", async ({ browser }) => {
   const recontact = p.getByRole("switch", { name: "Tell me if science changes my result" });
   await s.show([p.getByText("Show me my result", { exact: true }), recontact]);
   s.keep();
-  await s.hold(1600);
-  await s.click(showResult, 450);
-  await s.click(p.getByRole("switch", { name: "Compare with my partner, privately" }), 450);
-  await s.click(p.getByRole("switch", { name: "Let my genetic counsellor see my result" }), 450);
-  await s.click(recontact, 800);
+  await s.hold(1000);
+  await s.click(showResult, 250);
+  await s.click(p.getByRole("switch", { name: "Compare with my partner, privately" }), 250);
+  await s.click(p.getByRole("switch", { name: "Let my genetic counsellor see my result" }), 250);
+  await s.click(recontact, 600);
   await s.click(p.getByRole("button", { name: "Save my choices" }), 0);
   await s.settle(() => expect(p).toHaveURL(/\/en\/import/, { timeout: 60_000 }));
   await s.hold(700);
   await s.click(p.getByRole("button", { name: "Verify and open" }), 0);
   await s.settle(() => expect(p.getByText("Signature verified")).toBeVisible());
   await s.show([p.getByText("Signature verified"), p.getByRole("link", { name: "Open my result" })]);
-  await s.hold(1500);
+  await s.hold(1000);
   await s.click(p.getByRole("link", { name: "Open my result" }), 0);
   await s.settle(() => expect(p.getByRole("heading", { name: "You carry 2 gene changes" })).toBeVisible());
-  await s.hold(2600);
-  await s.show(p.locator("[data-your-plan]"));
   await s.hold(2600);
   s.cut();
 
@@ -45,23 +43,22 @@ test("s1 Mariam understands her result", async ({ browser }) => {
   await s.go("/en/teach-back");
   const check = p.getByRole("button", { name: "Check my answer" });
   const next = p.getByRole("button", { name: "Next question" });
-  await s.show([p.getByText("In your own words, what does being a carrier mean?"), check]);
-  s.keep();
-  await s.hold(1200);
-  await s.click(p.getByText("I have one changed copy of a gene and I am usually healthy"), 350);
-  await s.click(check, 0);
-  await s.settle(() => expect(p.getByText("That's right")).toBeVisible());
-  await s.hold(900);
-  await s.click(next, 0);
+  // Off camera: the first question, answered correctly.
+  await p.getByText("I have one changed copy of a gene and I am usually healthy").click();
+  await check.click();
+  await expect(p.getByText("That's right")).toBeVisible();
+  await next.click();
   const wrong = p.getByText("If the first child is affected, the next three will not be");
-  await s.settle(() => expect(wrong).toBeVisible());
+  await expect(wrong).toBeVisible();
   await s.show([p.getByText("If both partners carry a change in the same gene", { exact: false }), check]);
+  s.keep();
+  await s.hold(900);
   await s.click(wrong, 350);
   await s.click(check, 0);
   const retry = p.getByText("Not quite. Here is another way to think about it.");
   await s.settle(() => expect(retry).toBeVisible());
   await s.show([retry, check]);
-  await s.hold(2600);
+  await s.hold(2000);
   await s.click(p.getByText("1 in 4 for every pregnancy, each time"), 350);
   await s.click(check, 0);
   await s.settle(() => expect(p.getByText("That's right")).toBeVisible());
@@ -77,7 +74,7 @@ test("s1 Mariam understands her result", async ({ browser }) => {
   await expect(summary).toBeVisible();
   await s.show(summary);
   s.keep();
-  await s.hold(2600);
+  await s.hold(1800);
   await s.finish();
 });
 
@@ -88,7 +85,7 @@ test("s2 Blind Couple Match: a plan, not a verdict", async ({ browser }) => {
   const key = () => p.getByRole("button", { name: "Turn my key" });
   await s.show([p.locator("main h1").first(), key()]);
   s.keep();
-  await s.hold(1800);
+  await s.hold(1300);
   await s.click(key(), 0);
   await s.settle(() => expect(p.getByRole("heading", { name: "Your key is turned" })).toBeVisible());
   await s.hold(1200);
@@ -104,12 +101,16 @@ test("s2 Blind Couple Match: a plan, not a verdict", async ({ browser }) => {
   await s.click(p.getByRole("button", { name: "Reveal our result" }), 0);
   await s.settle(() => expect(p.getByRole("heading", { name: "Your shared carrier result" })).toBeVisible());
   await s.show([p.getByRole("heading", { name: "Your shared carrier result" }), p.getByText("You both carry a change in GJB2")]);
-  await s.hold(3200);
+  await s.hold(2800);
   await s.show(p.locator("[data-your-plan=shared]"));
-  await s.hold(3600);
+  await s.hold(3200);
   await s.click(p.getByRole("button", { name: "Tell our counsellor and book" }), 0);
-  await s.settle(() => expect(p).toHaveURL(/\/en\/support/, { timeout: 60_000 }));
-  await s.hold(1800);
+  await s.settle(async () => {
+    await expect(p).toHaveURL(/\/en\/support/, { timeout: 60_000 });
+    await expect(p.getByText("You and your partner have a shared carrier result", { exact: false })).toBeVisible({ timeout: 60_000 });
+  });
+  await s.show(p.getByText("You and your partner have a shared carrier result", { exact: false }));
+  await s.hold(1300);
   s.cut();
 
   // Off camera: Mariam books a session and sends a question for it.
@@ -195,8 +196,8 @@ test("m1 Copilot in Arabic", async ({ browser }) => {
   await expect(answer).toBeVisible({ timeout: 120_000 });
   await expect(answer).not.toContainText("[");
   await s.hold(2000);
-  // The question and the answer together.
-  await s.show([p.getByText(q, { exact: true }).first(), answer]);
+  // The question and the whole answer text together, clear of the question box pinned at the bottom.
+  await s.show([p.locator("p").filter({ hasText: q }).first(), answer.locator("p").first(), answer.locator("p").last()]);
   s.keep();
   await s.hold(5200);
   await s.finish();

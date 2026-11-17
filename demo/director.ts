@@ -23,8 +23,8 @@ export const BASE = process.env.DEMO_BASE_URL ?? "http://localhost:3100";
 /** A soft cursor dot (Playwright's video does not show the real pointer) and no Judge Tour button. */
 const STAGE = `
 (() => {
-  document.documentElement.style.zoom = "${ZOOM}";
   const css = \`
+    html { zoom: ${ZOOM}; }
     [data-judge-tour-button] { display: none !important; }
     #demo-cursor { position: fixed; left: 0; top: 0; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%;
       background: rgba(240,166,184,0.85); box-shadow: 0 0 0 3px rgba(255,255,255,0.55), 0 0 24px 4px rgba(194,65,95,0.55);
@@ -107,6 +107,7 @@ export class Scene {
     this.cut();
     await done();
     await this.hold(350);
+    await this.pinned();
     if (wasOpen) this.keep();
   }
 
@@ -129,6 +130,7 @@ export class Scene {
     if (pathname) await p.goto(pathname);
     await p.waitForLoadState("networkidle").catch(() => undefined);
     await this.hold(600); // let entrance animations finish before the camera rolls
+    await this.pinned();
     if (wasOpen) this.keep();
   }
 
@@ -136,15 +138,40 @@ export class Scene {
     await this.page.goto(pathname);
     await this.page.waitForLoadState("networkidle").catch(() => undefined);
     await this.hold(500);
+    await this.pinned();
   }
 
-  /** Bottom of the sticky header (in video pixels), so nothing is framed underneath it. */
-  private async topInset(): Promise<number> {
-    const header = this.page.locator("header").first();
-    if (!(await header.count())) return 0;
-    const sticky = await header.evaluate((el) => ["sticky", "fixed"].includes(getComputedStyle(el).position)).catch(() => false);
-    const b = sticky ? await header.boundingBox() : null;
-    return b ? Math.max(0, b.y + b.height) : 0;
+  private insets: { url: string; top: number; bottom: number } | null = null;
+
+  /**
+   * What is pinned to the screen, in video pixels: the sticky header at the top and anything at the
+   * bottom (like the Copilot's question box), so nothing is framed behind them. Measured in one quick
+   * pass and remembered per page, so it never slows the footage down.
+   */
+  private async pinned(): Promise<{ top: number; bottom: number }> {
+    const url = this.page.url();
+    if (this.insets?.url === url) return this.insets;
+    const m = await this.page.evaluate(() => {
+      // Element rectangles may be reported before the page zoom: scale them to screen pixels.
+      const scale = window.innerWidth / Math.max(1, document.documentElement.getBoundingClientRect().width);
+      const vh = window.innerHeight;
+      let top = 0;
+      let bottom = vh;
+      for (const el of Array.from(document.querySelectorAll("body *"))) {
+        if (el.id === "demo-cursor" || el.classList.contains("demo-ripple")) continue;
+        const pos = getComputedStyle(el).position;
+        if (pos !== "fixed" && pos !== "sticky") continue;
+        const r = el.getBoundingClientRect();
+        const y = r.top * scale;
+        const h = r.height * scale;
+        if (h <= 0 || h > vh / 2) continue;
+        if (y < vh / 2 && y + h < vh / 2) top = Math.max(top, y + h);
+        else if (y > vh / 2 && y < vh) bottom = Math.min(bottom, y);
+      }
+      return { top, bottom: vh - bottom };
+    });
+    this.insets = { url, ...m };
+    return this.insets;
   }
 
   private async union(targets: Locator[]) {
@@ -170,30 +197,32 @@ export class Scene {
   async show(targets: Locator | Locator[], opts: { strict?: boolean } = {}) {
     const list = Array.isArray(targets) ? targets : [targets];
     for (const t of list) await t.first().waitFor({ state: "visible" });
-    const inset = await this.topInset();
-    const free = SIZE.height - inset - 2 * MARGIN;
+    const { top: inset, bottom: below } = await this.pinned();
+    const free = SIZE.height - inset - below - 2 * MARGIN;
     const target = async () => {
       const u = await this.union(list);
       const want = u.height <= free ? inset + MARGIN + (free - u.height) / 2 : inset + MARGIN;
       return { u, delta: u.top - want };
     };
+    // Scroll distances are in screen pixels, the same units as the element boxes (zoom included).
     let { delta } = await target();
     if (Math.abs(delta) > 4) {
-      await this.page.evaluate((dy) => window.scrollBy({ top: dy, behavior: "smooth" }), delta / ZOOM);
-      await this.hold(1000);
-      // Pages that cannot scroll further, or that moved while loading, are corrected once, instantly.
-      ({ delta } = await target());
-      if (Math.abs(delta) > 6) {
-        await this.page.evaluate((dy) => window.scrollBy({ top: dy }), delta / ZOOM);
+      await this.page.evaluate((dy) => window.scrollBy({ top: dy, behavior: "smooth" }), delta);
+      await this.hold(800);
+      // Content that moved while loading is corrected, instantly, a few times at most.
+      for (let i = 0; i < 3; i++) {
+        ({ delta } = await target());
+        if (Math.abs(delta) <= 6) break;
+        await this.page.evaluate((dy) => window.scrollBy({ top: dy }), delta);
         await this.hold(200);
       }
     }
-    await this.hold(250);
+    await this.hold(150);
     if (opts.strict !== false) {
       const { u } = await target();
-      const fits = u.height <= free ? u.top >= inset - 2 && u.bottom <= SIZE.height + 2 : u.top >= inset - 2;
+      const fits = u.height <= free ? u.top >= inset - 2 && u.bottom <= SIZE.height - below + 2 : u.top >= inset - 2;
       if (!fits || u.left < -2 || u.right > SIZE.width + 2) {
-        throw new Error(`${this.key}: could not frame the element (top ${Math.round(u.top)}, bottom ${Math.round(u.bottom)}, left ${Math.round(u.left)}, right ${Math.round(u.right)}, header ${Math.round(inset)})`);
+        throw new Error(`${this.key}: could not frame the element (top ${Math.round(u.top)}, bottom ${Math.round(u.bottom)}, left ${Math.round(u.left)}, right ${Math.round(u.right)}, header ${Math.round(inset)}, pinned below ${Math.round(below)})`);
       }
     }
   }
@@ -208,18 +237,20 @@ export class Scene {
     const el = target.first();
     await el.waitFor({ state: "visible" });
     const box = await el.boundingBox();
-    const inset = await this.topInset();
-    if (!box || box.y < inset + 20 || box.y + box.height > SIZE.height - 40) {
+    const { top: inset, bottom: below } = await this.pinned();
+    if (!box || box.y < inset + 20 || box.y + box.height > SIZE.height - below - 20) {
       await this.show(el, { strict: false });
     }
     const b = (await el.boundingBox())!;
-    await this.page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 12 });
-    await this.hold(150);
+    await this.page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 6 });
+    await this.hold(80);
   }
 
   async click(target: Locator, after = 700) {
     await this.glide(target);
-    await target.first().click();
+    // The element is already visible and framed: click at once. (Playwright's own "is it still
+    // moving" checks wait a long time on this heavily animated page at 150%, and that wait was filmed.)
+    await target.first().click({ force: true });
     await this.hold(after);
   }
 

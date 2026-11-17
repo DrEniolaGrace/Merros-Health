@@ -8,6 +8,8 @@
  */
 export const FPS = 30;
 export const MAX_RATE = 1.6;
+/** If the story would still run past the limit, its scenes may play up to this fast instead. */
+export const HARD_MAX_RATE = 1.9;
 export const TITLE_SECONDS = 7;
 export const CLOSING_SECONDS = 9;
 /** The video must never run longer than this. */
@@ -28,13 +30,13 @@ export interface ClipInfo {
   segments: { from: number; to: number }[];
 }
 
-export function sceneTiming(clip: ClipInfo, targetSeconds: number, opts: { trim?: boolean } = {}) {
+export function sceneTiming(clip: ClipInfo, targetSeconds: number, opts: { trim?: boolean; maxRate?: number } = {}) {
   let segments = clip.segments
     .map((s) => ({ from: Math.max(0, Math.round((s.from / 1000) * FPS)), to: Math.round((s.to / 1000) * FPS) }))
     .filter((s) => s.to - s.from >= 3);
   const kept = segments.reduce((n, s) => n + (s.to - s.from), 0);
   const target = Math.round(targetSeconds * FPS);
-  const rate = kept > target ? Math.min(MAX_RATE, kept / target) : 1;
+  const rate = kept > target ? Math.min(opts.maxRate ?? MAX_RATE, kept / target) : 1;
   if (opts.trim) {
     // Keep only as much source as fits the target at this rate: the last parts whole, the lead-up shortened.
     let budget = Math.round(target * rate);

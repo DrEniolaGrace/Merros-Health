@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
-import { CLOSING_SECONDS, FPS, INTRO_SECONDS, MAX_TOTAL_SECONDS, MONTAGE, STORY, TARGET_SECONDS, TITLE_SECONDS, sceneTiming, totalSeconds, type ClipInfo } from "./timeline";
+import { CLOSING_SECONDS, FPS, HARD_MAX_RATE, INTRO_SECONDS, MAX_RATE, MAX_TOTAL_SECONDS, MONTAGE, STORY, TARGET_SECONDS, TITLE_SECONDS, sceneTiming, totalSeconds, type ClipInfo } from "./timeline";
 import type { DemoProps, TimelineScene } from "./video/composition";
 
 const ROOT = process.cwd();
@@ -48,12 +48,23 @@ const OUT = path.join(ROOT, "docs", "demo.mp4");
 async function main() {
   const captions = JSON.parse(fs.readFileSync(path.join(ROOT, "demo", "captions.json"), "utf8"));
   const keys = [...STORY, ...MONTAGE] as string[];
+  const clips = Object.fromEntries(
+    keys.map((key) => {
+      const file = path.join(PUBLIC, "clips", `${key}.json`);
+      if (!fs.existsSync(file)) throw new Error(`Missing clip ${key}. Record the scenes first: pnpm demo`);
+      return [key, JSON.parse(fs.readFileSync(file, "utf8")) as ClipInfo];
+    }),
+  );
+  const isMontage = (key: string) => (MONTAGE as readonly string[]).includes(key);
+  // The video must stay under the limit: if the story runs long, it plays a little faster (up to HARD_MAX_RATE).
+  let maxRate = MAX_RATE;
+  const timingAt = (r: number) => keys.map((key) => sceneTiming(clips[key], TARGET_SECONDS[key], { trim: isMontage(key), maxRate: r }));
+  while (totalSeconds(timingAt(maxRate).map((t) => t.frames)) > MAX_TOTAL_SECONDS && maxRate < HARD_MAX_RATE) maxRate = Math.min(HARD_MAX_RATE, maxRate + 0.05);
+  if (maxRate > MAX_RATE) console.log(`The story runs long: scenes may play up to ${maxRate.toFixed(2)}x to stay under ${MAX_TOTAL_SECONDS} s.`);
   const scenes: TimelineScene[] = keys.map((key) => {
-    const file = path.join(PUBLIC, "clips", `${key}.json`);
-    if (!fs.existsSync(file)) throw new Error(`Missing clip ${key}. Record the scenes first: pnpm demo`);
-    const clip = JSON.parse(fs.readFileSync(file, "utf8")) as ClipInfo;
-    const montage = (MONTAGE as readonly string[]).includes(key);
-    const t = sceneTiming(clip, TARGET_SECONDS[key], { trim: montage });
+    const clip = clips[key];
+    const montage = isMontage(key);
+    const t = sceneTiming(clip, TARGET_SECONDS[key], { trim: montage, maxRate });
     const c = captions.scenes[key];
     console.log(`${key}: ${t.keptSeconds.toFixed(1)} s kept, played at ${t.rate}x, ${(t.frames / FPS).toFixed(1)} s on screen`);
     return {
