@@ -52,6 +52,8 @@ describe("Copilot source markers never reach the screen", () => {
         const reply = await runCopilot(q, [], ctx, mockProvider);
         expect(stripCitations(reply.text), q).not.toMatch(RAW_KEY);
         for (const c of reply.citations) expect(c.title, q).not.toMatch(RAW_KEY);
+        const titles = reply.citations.map((c) => `${c.title}|${c.href ?? ""}`);
+        expect(new Set(titles).size, `${q}: each source listed once`).toBe(titles.length);
       }
     }
   });

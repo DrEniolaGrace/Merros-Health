@@ -130,7 +130,8 @@ export async function runCopilot(questionRaw: string, history: ChatTurn[], ctx: 
     return {
       text,
       label,
-      citations: cited.map((p) => ({ id: p.id, title: p.title, href: p.href })),
+      // Several passages can share one title (the classification guide has one per class): list each source once.
+      citations: cited.filter((p, i) => cited.findIndex((q) => q.title === p.title && q.href === p.href) === i).map((p) => ({ id: p.id, title: p.title, href: p.href })),
       escalations,
       blocked: false,
       guard: intent === "medical_advice" ? [{ stage: "input", rule: "medical_advice", action: "escalated" }] : [],
