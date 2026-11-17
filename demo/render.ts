@@ -28,17 +28,19 @@ function ffmpegPath(): string {
 }
 
 /**
- * Browser recordings have uneven frame timing, which the compositor cannot always seek in.
- * Each clip is converted once to a steady 30 frames per second, every frame a keyframe, so any
- * moment can be found when a scene plays faster than real time.
+ * Browser recordings have uneven frame timing, and the compositor cannot find a frame between two
+ * frames. So each clip is converted once, already sped up to the scene's rate (by scaling its
+ * timestamps), to a steady 30 frames per second with every frame a keyframe. The video then plays
+ * it at normal speed, and every frame it asks for exists.
  */
-function steadyClip(key: string): string {
+function steadyClip(key: string, rate: number): string {
+  const name = `${key}@${rate}.mp4`;
   const src = path.join(PUBLIC, "clips", `${key}.webm`);
-  const dest = path.join(PUBLIC, "clips", `${key}.mp4`);
-  if (fs.existsSync(dest) && fs.statSync(dest).mtimeMs > fs.statSync(src).mtimeMs) return `clips/${key}.mp4`;
-  const r = spawnSync(ffmpegPath(), ["-v", "error", "-y", "-i", src, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-g", "1", "-bf", "0", "-pix_fmt", "yuv420p", "-an", dest], { stdio: "inherit" });
+  const dest = path.join(PUBLIC, "clips", name);
+  if (fs.existsSync(dest) && fs.statSync(dest).mtimeMs > fs.statSync(src).mtimeMs) return `clips/${name}`;
+  const r = spawnSync(ffmpegPath(), ["-v", "error", "-y", "-itsscale", String(1 / rate), "-i", src, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-g", "1", "-bf", "0", "-pix_fmt", "yuv420p", "-an", dest], { stdio: "inherit" });
   if (r.status !== 0) throw new Error(`Could not convert ${key}.webm`);
-  return `clips/${key}.mp4`;
+  return `clips/${name}`;
 }
 const PUBLIC = path.join(ROOT, "demo", "out", "public");
 const OUT = path.join(ROOT, "docs", "demo.mp4");
@@ -56,16 +58,19 @@ async function main() {
     console.log(`${key}: ${t.keptSeconds.toFixed(1)} s kept, played at ${t.rate}x, ${(t.frames / FPS).toFixed(1)} s on screen`);
     return {
       key,
-      clip: steadyClip(key),
+      clip: steadyClip(key, t.rate),
       index: montage ? 0 : (STORY as readonly string[]).indexOf(key) + 1,
       caption: c.caption,
       evidence: c.evidence,
       intro: c.intro,
       introFrames: Math.round((INTRO_SECONDS[key] ?? 0) * FPS),
-      segments: t.segments,
-      rate: t.rate,
+      // The clip is already at the scene's speed: map the kept parts onto it and play at 1x.
+      segments: t.segments.map((seg) => {
+        const from = Math.round(seg.from / t.rate);
+        return { from, to: from + Math.max(1, Math.round((seg.to - seg.from) / t.rate)) };
+      }),
+      rate: 1,
       frames: t.frames,
-      camera: clip.camera ?? [],
     };
   });
   const props: DemoProps = { fps: FPS, titleFrames: TITLE_SECONDS * FPS, closingFrames: CLOSING_SECONDS * FPS, scenes, captions };

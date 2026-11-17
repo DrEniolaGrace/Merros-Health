@@ -93,4 +93,4 @@
 | 2026-11-17 | Family invite link uses the public address (PUBLIC_SITE_URL) when set | Done | existing e2e |
 | 2026-11-17 | Mariam carries a real ClinVar VUS (CFTR, VCV 5034488); the feed has a simulated change to likely benign for the Living Results story | Done | 2 unit updated |
 | 2026-11-17 | Early user testing results in docs/USER_TESTING.md (12 participants, simulated scenario) | Done | — |
-| 2026-11-17 | Demo video rebuilt: one couple, four scenes, 15 second montage, under 3 minutes, English captions in a bar under the app, camera zoom on what matters, logo on the cards | Done | 7 unit (timeline) |
+| 2026-11-17 | Demo video rebuilt: one couple, four scenes, a montage of about 28 seconds, under 3 minutes, English captions in a bar under the app, the whole app shown (no zoom), logo on the cards, no web address at the end | Done | 6 unit (timeline) |

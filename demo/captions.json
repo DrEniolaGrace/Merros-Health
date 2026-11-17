@@ -17,19 +17,29 @@
       "caption": "Dr. Layla reads their questions, drafts with the Copilot, and signs."
     },
     "s4": {
-      "intro": { "eyebrow": "One year later", "heading": "Science changes. Mariam's result keeps up." },
+      "intro": {
+        "eyebrow": "One year later",
+        "heading": "Science changes. Mariam's result keeps up."
+      },
       "caption": "Her counsellor hears first, talks to her, then releases the update."
     },
-    "m1": { "caption": "The Genetic Copilot answers in Arabic, with numbers from tested code." },
-    "m2": { "caption": "Family Risk Engine: relatives by relationship, never by name." },
-    "m3": { "caption": "Risk Beyond the Panel, seen by the counsellor first." },
-    "m4": { "caption": "Population Signals: planning from privacy protected statistics." }
+    "m1": {
+      "caption": "The Genetic Copilot answers in Arabic, with numbers from tested code."
+    },
+    "m2": {
+      "caption": "Family Risk Engine: relatives by relationship, never by name."
+    },
+    "m3": {
+      "caption": "Risk Beyond the Panel, seen by the counsellor first."
+    },
+    "m4": {
+      "caption": "Population Signals: planning from privacy protected statistics."
+    }
   },
   "montage": "Also in Merros",
   "closing": {
     "heading": "Merros. Healthy families, planned together.",
     "evidence": "12 of 12 testers would recommend Merros",
-    "link": "merros-health.vercel.app",
     "note": "An independent prototype, not affiliated with or endorsed by the Department of Health Abu Dhabi. All data is synthetic."
   }
 }

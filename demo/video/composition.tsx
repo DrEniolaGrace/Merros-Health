@@ -1,7 +1,7 @@
 import React from "react";
 import { AbsoluteFill, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { loadFont as loadSora } from "@remotion/google-fonts/Sora";
-import { SCREEN, cameraAt, sourceMs, type CameraKey } from "../timeline";
+import { SCREEN } from "../timeline";
 
 const sora = loadSora();
 const FONT = `${sora.fontFamily}, sans-serif`;
@@ -37,7 +37,6 @@ export interface TimelineScene {
   rate: number;
   /** Frames of footage (the intro card comes on top of this). */
   frames: number;
-  camera: CameraKey[];
 }
 
 export interface DemoProps extends Record<string, unknown> {
@@ -48,7 +47,7 @@ export interface DemoProps extends Record<string, unknown> {
   captions: {
     title: { eyebrow: string; heading: string; body: string };
     montage: string;
-    closing: { heading: string; evidence: string; link: string; note: string };
+    closing: { heading: string; evidence: string; note: string };
   };
 }
 
@@ -126,9 +125,6 @@ function ClosingCard({ c }: { c: DemoProps["captions"] }) {
         <Rise delay={14}>
           <p style={{ margin: 0, fontSize: 42, color: C.gold, fontWeight: 600 }}>{c.closing.evidence}</p>
         </Rise>
-        <Rise delay={22}>
-          <p style={{ margin: 0, fontSize: 40, color: C.ink, letterSpacing: 1 }}>{c.closing.link}</p>
-        </Rise>
         <Rise delay={30}>
           <p style={{ margin: 0, fontSize: 24, color: C.muted, maxWidth: 1300 }}>{c.closing.note}</p>
         </Rise>
@@ -187,10 +183,8 @@ function CaptionBar({ s, montage }: { s: TimelineScene; montage: string }) {
   );
 }
 
-/** The recorded app, in its window, with the camera zooming in on what matters. */
+/** The recorded app, whole, in its window. */
 function AppWindow({ s }: { s: TimelineScene }) {
-  const frame = useCurrentFrame();
-  const view = cameraAt(s.camera, sourceMs(s.segments, s.rate, frame));
   const fit = APP.w / SCREEN.w;
   let at = 0;
   return (
@@ -203,7 +197,7 @@ function AppWindow({ s }: { s: TimelineScene }) {
           width: SCREEN.w,
           height: SCREEN.h,
           transformOrigin: "0 0",
-          transform: `scale(${fit}) translate(${SCREEN.w / 2 - view.cx * view.scale}px, ${SCREEN.h / 2 - view.cy * view.scale}px) scale(${view.scale})`,
+          transform: `scale(${fit})`,
         }}
       >
         {s.segments.map((seg, i) => {
