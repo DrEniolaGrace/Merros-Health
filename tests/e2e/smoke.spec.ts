@@ -100,7 +100,7 @@ test("Mariam: onboarding, consent, signed import, result, couple risk, teach bac
   const res = await page.request.get("/api/export");
   expect(res.ok()).toBeTruthy();
   const json = await res.json();
-  expect(json.result.variants.map((v: { gene: string }) => v.gene).sort()).toEqual(["GJB2", "HBB"]);
+  expect(json.result.variants.map((v: { gene: string }) => v.gene).sort()).toEqual(["CFTR", "GJB2", "HBB"]);
   expect(JSON.stringify(json)).not.toContain("wrappedDataKey");
 });
 

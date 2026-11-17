@@ -25,7 +25,7 @@ const SECURE_COOKIE = process.env.NODE_ENV === "production" && process.env.COOKI
 export async function getSession() {
   return getIronSession<SessionData>(await cookies(), {
     password: env().SESSION_SECRET,
-    cookieName: "meros-session",
+    cookieName: "merros-session",
     cookieOptions: { httpOnly: true, sameSite: "lax", secure: SECURE_COOKIE, path: "/" },
     ttl: 60 * 60 * 8,
   });

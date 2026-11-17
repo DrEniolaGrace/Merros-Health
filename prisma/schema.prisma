@@ -1,4 +1,4 @@
-// Meros data model, Phase 1 subset of SPEC section 11.
+// Merros data model, Phase 1 subset of SPEC section 11.
 // Further models (PsiSession, PedigreeNode, ReclassificationEvent, ...) are added in their own phases.
 
 generator client {

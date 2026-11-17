@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { expect, type Browser, type BrowserContext, type Locator, type Page } from "@playwright/test";
+import type { CameraKey, Rect } from "./timeline";
 
 export const SIZE = { width: 1920, height: 1080 };
 export const OUT = path.resolve("demo/out");
@@ -54,6 +55,7 @@ const STAGE = `
 
 export class Scene {
   private segments: { from: number; to: number }[] = [];
+  private camera: CameraKey[] = [];
   private open: number | null = null;
   private t0 = 0;
   private constructor(
@@ -101,6 +103,29 @@ export class Scene {
     if (wasOpen) this.keep();
   }
 
+  /**
+   * Points the camera at one or more elements (the video assembly zooms in on them so the text is
+   * readable). Call after the page has finished scrolling.
+   */
+  async focus(...targets: Locator[]) {
+    const boxes: Rect[] = [];
+    for (const t of targets) {
+      const b = await t.first().boundingBox();
+      if (b) boxes.push({ x: b.x, y: b.y, w: b.width, h: b.height });
+    }
+    if (!boxes.length) return this.wide();
+    const x = Math.max(0, Math.min(...boxes.map((b) => b.x)));
+    const y = Math.max(0, Math.min(...boxes.map((b) => b.y)));
+    const r = Math.min(SIZE.width, Math.max(...boxes.map((b) => b.x + b.w)));
+    const btm = Math.min(SIZE.height, Math.max(...boxes.map((b) => b.y + b.h)));
+    this.camera.push({ t: this.now(), rect: { x, y, w: r - x, h: btm - y } });
+  }
+
+  /** Shows the whole screen again. */
+  wide() {
+    this.camera.push({ t: this.now(), rect: null });
+  }
+
   async hold(ms = 2500) {
     await this.page.waitForTimeout(ms);
   }
@@ -120,6 +145,7 @@ export class Scene {
     if (pathname) await p.goto(pathname);
     await p.waitForLoadState("networkidle").catch(() => undefined);
     await this.hold(600); // let entrance animations finish before the camera rolls
+    this.wide();
     if (wasOpen) this.keep();
   }
 
@@ -127,6 +153,7 @@ export class Scene {
     await this.page.goto(pathname);
     await this.page.waitForLoadState("networkidle").catch(() => undefined);
     await this.hold(500);
+    this.wide();
   }
 
   /** Smoothly brings an element to the middle of the screen. */
@@ -174,6 +201,6 @@ export class Scene {
     const src = await video!.path();
     const dest = path.join(CLIPS, `${this.key}.webm`);
     fs.copyFileSync(src, dest);
-    fs.writeFileSync(path.join(CLIPS, `${this.key}.json`), JSON.stringify({ key: this.key, segments: this.segments }, null, 1));
+    fs.writeFileSync(path.join(CLIPS, `${this.key}.json`), JSON.stringify({ key: this.key, segments: this.segments, camera: this.camera }, null, 1));
   }
 }

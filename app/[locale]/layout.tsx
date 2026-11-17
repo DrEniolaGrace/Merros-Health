@@ -42,7 +42,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const theme = (await cookies()).get("meros-theme")?.value === "pearl" ? "pearl" : "night";
+  const theme = (await cookies()).get("merros-theme")?.value === "pearl" ? "pearl" : "night";
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} data-theme={theme} className={`${sora.variable} ${readex.variable}`}>

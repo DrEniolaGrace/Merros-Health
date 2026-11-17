@@ -145,7 +145,7 @@ export default async function FamilyPage({ params, searchParams }: { params: Pro
         <GlassCard tone="gold" hero className="flex flex-col gap-4">
           <h2 className="text-gradient-gold text-xl font-semibold">{t("inviteTitle")}</h2>
           <p className="measure text-ink">{t("inviteBody")}</p>
-          <InviteLink locale={locale} labels={{ create: t("inviteCreate"), copy: t("inviteCopy"), copied: t("inviteCopied"), hint: t("inviteHint") }} />
+          <InviteLink locale={locale} siteUrl={process.env.PUBLIC_SITE_URL || undefined} labels={{ create: t("inviteCreate"), copy: t("inviteCopy"), copied: t("inviteCopied"), hint: t("inviteHint") }} />
         </GlassCard>
       </RiseItem>
 

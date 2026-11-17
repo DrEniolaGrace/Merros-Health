@@ -1,12 +1,10 @@
 import React from "react";
-import { AbsoluteFill, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
+import { AbsoluteFill, Img, OffthreadVideo, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { loadFont as loadSora } from "@remotion/google-fonts/Sora";
-import { loadFont as loadReadex } from "@remotion/google-fonts/ReadexPro";
+import { SCREEN, cameraAt, sourceMs, type CameraKey } from "../timeline";
 
 const sora = loadSora();
-const readex = loadReadex();
-const FONT = `${sora.fontFamily}, ${readex.fontFamily}, sans-serif`;
-const AR_FONT = `${readex.fontFamily}, sans-serif`;
+const FONT = `${sora.fontFamily}, sans-serif`;
 
 /** Brand values from the design system (literal, so rendering needs no CSS variables). */
 const C = {
@@ -18,22 +16,28 @@ const C = {
   rose: "#f0a6b8",
   gold: "#e2c98f",
   line: "rgba(255,220,230,0.16)",
-  glass: "rgba(22,12,16,0.82)",
+  glass: "rgba(22,12,16,0.86)",
 };
 
-export type Bi = { en: string; ar: string };
+/** The app is shown in this window; the caption bar sits underneath it, never on top. */
+const APP = { x: 176, y: 34, w: 1568, h: 882 };
+const BAR = { x: APP.x, y: APP.y + APP.h + 22, w: APP.w, h: 96 };
 
 export interface TimelineScene {
   key: string;
   clip: string;
+  /** 1 to 4 for the story; 0 for a montage shot. */
   index: number;
-  title: Bi;
-  text: Bi;
-  evidence?: Bi;
+  caption: string;
+  evidence?: string;
+  intro?: { eyebrow: string; heading: string };
+  introFrames: number;
   /** Kept parts of the clip, in source frames, played at `rate`. */
   segments: { from: number; to: number }[];
   rate: number;
+  /** Frames of footage (the intro card comes on top of this). */
   frames: number;
+  camera: CameraKey[];
 }
 
 export interface DemoProps extends Record<string, unknown> {
@@ -42,29 +46,10 @@ export interface DemoProps extends Record<string, unknown> {
   closingFrames: number;
   scenes: TimelineScene[];
   captions: {
-    placeholders: Record<string, string>;
-    title: { eyebrow: Bi; heading: Bi; body: Bi };
-    closing: { heading: Bi; evidence: Bi; link: string; note: Bi };
+    title: { eyebrow: string; heading: string; body: string };
+    montage: string;
+    closing: { heading: string; evidence: string; link: string; note: string };
   };
-}
-
-/** Replaces [[NAME]] with the value, or shows a highlighted placeholder when there is none yet. */
-function Fill({ text, values }: { text: string; values: Record<string, string> }) {
-  const parts = text.split(/(\[\[[A-Z_]+\]\])/g);
-  return (
-    <>
-      {parts.map((p, i) => {
-        const m = /^\[\[([A-Z_]+)\]\]$/.exec(p);
-        if (!m) return <React.Fragment key={i}>{p}</React.Fragment>;
-        const v = values[m[1]]?.trim();
-        return v ? (
-          <strong key={i} style={{ color: C.gold }}>{v}</strong>
-        ) : (
-          <span key={i} style={{ color: C.bg, background: C.gold, borderRadius: 8, padding: "0 10px", fontWeight: 600 }}>[[{m[1]}]]</span>
-        );
-      })}
-    </>
-  );
 }
 
 function Backdrop() {
@@ -88,10 +73,10 @@ function Rise({ delay = 0, children, style }: { delay?: number; children: React.
   return <div style={{ opacity: p, transform: `translateY(${(1 - p) * 30}px)`, ...style }}>{children}</div>;
 }
 
-function Fade({ children }: { children: React.ReactNode }) {
+function Fade({ children, edge = 14 }: { children: React.ReactNode; edge?: number }) {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
-  const o = interpolate(frame, [0, 14, durationInFrames - 14, durationInFrames], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const o = interpolate(frame, [0, edge, durationInFrames - edge, durationInFrames], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return <AbsoluteFill style={{ opacity: o }}>{children}</AbsoluteFill>;
 }
 
@@ -103,20 +88,24 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
   );
 }
 
+function Mark({ size }: { size: number }) {
+  return <Img src={staticFile("brand/merros-mark.png")} style={{ width: size, height: size, borderRadius: size * 0.28, boxShadow: `0 0 60px -10px ${C.glow}` }} />;
+}
+
 function TitleCard({ c }: { c: DemoProps["captions"] }) {
   return (
     <Fade>
       <Backdrop />
-      <AbsoluteFill style={{ padding: "0 200px", justifyContent: "center", gap: 34, fontFamily: FONT }}>
-        <Rise><Eyebrow>{c.title.eyebrow.en} · <span style={{ fontFamily: AR_FONT }}>{c.title.eyebrow.ar}</span></Eyebrow></Rise>
+      <AbsoluteFill style={{ padding: "0 200px", justifyContent: "center", gap: 36, fontFamily: FONT }}>
+        <Rise style={{ display: "flex", alignItems: "center", gap: 26 }}>
+          <Mark size={84} />
+          <Eyebrow>{c.title.eyebrow}</Eyebrow>
+        </Rise>
         <Rise delay={8}>
-          <h1 style={{ margin: 0, fontSize: 76, lineHeight: 1.08, fontWeight: 600, color: C.ink, maxWidth: 1400 }}>{c.title.heading.en}</h1>
+          <h1 style={{ margin: 0, fontSize: 78, lineHeight: 1.08, fontWeight: 600, color: C.ink, maxWidth: 1450 }}>{c.title.heading}</h1>
         </Rise>
         <Rise delay={16}>
-          <p style={{ margin: 0, fontSize: 36, lineHeight: 1.4, color: C.muted, maxWidth: 1300 }}>{c.title.body.en}</p>
-        </Rise>
-        <Rise delay={24}>
-          <p style={{ margin: 0, fontSize: 30, lineHeight: 1.6, color: C.muted, maxWidth: 1300, direction: "rtl", fontFamily: AR_FONT, textAlign: "right" }}>{c.title.heading.ar}</p>
+          <p style={{ margin: 0, fontSize: 38, lineHeight: 1.4, color: C.muted, maxWidth: 1300 }}>{c.title.body}</p>
         </Rise>
       </AbsoluteFill>
     </Fade>
@@ -129,81 +118,125 @@ function ClosingCard({ c }: { c: DemoProps["captions"] }) {
       <Backdrop />
       <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", gap: 34, textAlign: "center", padding: "0 220px", fontFamily: FONT }}>
         <Rise>
-          <h1 style={{ margin: 0, fontSize: 84, fontWeight: 600, color: C.ink }}>{c.closing.heading.en}</h1>
+          <Mark size={150} />
         </Rise>
         <Rise delay={6}>
-          <p style={{ margin: 0, fontSize: 40, color: C.muted, direction: "rtl", fontFamily: AR_FONT }}>{c.closing.heading.ar}</p>
+          <h1 style={{ margin: 0, fontSize: 84, fontWeight: 600, color: C.ink }}>{c.closing.heading}</h1>
         </Rise>
         <Rise delay={14}>
-          <p style={{ margin: 0, fontSize: 38, color: C.ink }}><Fill text={c.closing.evidence.en} values={c.placeholders} /></p>
+          <p style={{ margin: 0, fontSize: 42, color: C.gold, fontWeight: 600 }}>{c.closing.evidence}</p>
         </Rise>
         <Rise delay={22}>
-          <p style={{ margin: 0, fontSize: 46, color: C.gold, letterSpacing: 1 }}>{c.closing.link}</p>
+          <p style={{ margin: 0, fontSize: 40, color: C.ink, letterSpacing: 1 }}>{c.closing.link}</p>
         </Rise>
         <Rise delay={30}>
-          <p style={{ margin: 0, fontSize: 24, color: C.muted, maxWidth: 1300 }}>{c.closing.note.en}</p>
+          <p style={{ margin: 0, fontSize: 24, color: C.muted, maxWidth: 1300 }}>{c.closing.note}</p>
         </Rise>
       </AbsoluteFill>
     </Fade>
   );
 }
 
-/** Lower third: scene number and title, what it proves, and any testing evidence, in English with Arabic beneath. */
-function Caption({ s, values }: { s: TimelineScene; values: Record<string, string> }) {
-  const p = useRise(10);
+/** "One year later": a short card before the footage of a scene. */
+function IntroCard({ intro }: { intro: NonNullable<TimelineScene["intro"]> }) {
   return (
-    <AbsoluteFill style={{ justifyContent: "flex-end", padding: "0 56px 44px", fontFamily: FONT, pointerEvents: "none" }}>
-      <div
-        style={{
-          opacity: p,
-          transform: `translateY(${(1 - p) * 40}px)`,
-          background: C.glass,
-          border: `1px solid ${C.line}`,
-          borderRadius: 30,
-          padding: "26px 34px",
-          boxShadow: "0 30px 80px -30px rgba(125,26,53,0.8)",
-          display: "flex",
-          gap: 28,
-          alignItems: "flex-start",
-        }}
-      >
-        <span style={{ flexShrink: 0, width: 58, height: 58, borderRadius: "50%", background: C.burgundy, color: C.ink, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, fontWeight: 600 }}>{s.index}</span>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 0, flex: 1 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 24, alignItems: "baseline" }}>
-            <span style={{ fontSize: 34, fontWeight: 600, color: C.gold }}>{s.title.en}</span>
-            <span style={{ fontSize: 28, color: C.gold, direction: "rtl", fontFamily: AR_FONT }}>{s.title.ar}</span>
-          </div>
-          <p style={{ margin: 0, fontSize: 28, lineHeight: 1.35, color: C.ink }}>{s.text.en}</p>
-          <p style={{ margin: 0, fontSize: 22, lineHeight: 1.5, color: C.muted, direction: "rtl", fontFamily: AR_FONT }}>{s.text.ar}</p>
-          {s.evidence && (
-            <p style={{ margin: "6px 0 0", fontSize: 26, color: C.ink }}>
-              <Fill text={s.evidence.en} values={values} />
-            </p>
-          )}
-        </div>
-      </div>
-    </AbsoluteFill>
+    <Fade edge={10}>
+      <Backdrop />
+      <AbsoluteFill style={{ alignItems: "center", justifyContent: "center", gap: 30, textAlign: "center", fontFamily: FONT }}>
+        <Rise><Eyebrow>{intro.eyebrow}</Eyebrow></Rise>
+        <Rise delay={6}><h1 style={{ margin: 0, fontSize: 72, fontWeight: 600, color: C.ink }}>{intro.heading}</h1></Rise>
+      </AbsoluteFill>
+    </Fade>
   );
 }
 
-function SceneBlock({ s, values }: { s: TimelineScene; values: Record<string, string> }) {
+/** A small bar under the app window: scene number, one short line, and any testing result. */
+function CaptionBar({ s, montage }: { s: TimelineScene; montage: string }) {
+  const p = useRise(6);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: BAR.x,
+        top: BAR.y,
+        width: BAR.w,
+        height: BAR.h,
+        opacity: p,
+        transform: `translateY(${(1 - p) * 16}px)`,
+        background: C.glass,
+        border: `1px solid ${C.line}`,
+        borderRadius: 24,
+        padding: "0 26px",
+        display: "flex",
+        alignItems: "center",
+        gap: 22,
+        fontFamily: FONT,
+        boxSizing: "border-box",
+      }}
+    >
+      {s.index > 0 ? (
+        <span style={{ flexShrink: 0, width: 50, height: 50, borderRadius: "50%", background: C.burgundy, color: C.ink, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, fontWeight: 600 }}>{s.index}</span>
+      ) : (
+        <span style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, background: C.burgundy, color: C.ink, fontSize: 20, fontWeight: 600, letterSpacing: 1 }}>{montage}</span>
+      )}
+      <span style={{ flex: 1, minWidth: 0, fontSize: 32, color: C.ink, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.caption}</span>
+      {s.evidence && (
+        <span style={{ flexShrink: 0, maxWidth: 640, padding: "10px 18px", borderRadius: 16, border: `1.5px solid ${C.gold}`, color: C.gold, fontSize: 22, lineHeight: 1.25, fontWeight: 600 }}>{s.evidence}</span>
+      )}
+    </div>
+  );
+}
+
+/** The recorded app, in its window, with the camera zooming in on what matters. */
+function AppWindow({ s }: { s: TimelineScene }) {
+  const frame = useCurrentFrame();
+  const view = cameraAt(s.camera, sourceMs(s.segments, s.rate, frame));
+  const fit = APP.w / SCREEN.w;
   let at = 0;
   return (
-    <Fade>
-      <AbsoluteFill style={{ background: C.bg }}>
+    <div style={{ position: "absolute", left: APP.x, top: APP.y, width: APP.w, height: APP.h, overflow: "hidden", borderRadius: 22, border: `1px solid ${C.line}`, boxShadow: "0 40px 90px -40px rgba(125,26,53,0.9)", background: C.bg }}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: SCREEN.w,
+          height: SCREEN.h,
+          transformOrigin: "0 0",
+          transform: `scale(${fit}) translate(${SCREEN.w / 2 - view.cx * view.scale}px, ${SCREEN.h / 2 - view.cy * view.scale}px) scale(${view.scale})`,
+        }}
+      >
         {s.segments.map((seg, i) => {
           const len = Math.max(1, Math.round((seg.to - seg.from) / s.rate));
           const start = at;
           at += len;
           return (
             <Sequence key={i} from={start} durationInFrames={len}>
-              <OffthreadVideo src={staticFile(s.clip)} startFrom={seg.from} endAt={seg.to} playbackRate={s.rate} muted />
+              <OffthreadVideo src={staticFile(s.clip)} startFrom={seg.from} endAt={seg.to} playbackRate={s.rate} muted style={{ width: SCREEN.w, height: SCREEN.h }} />
             </Sequence>
           );
         })}
-      </AbsoluteFill>
-      <Caption s={s} values={values} />
-    </Fade>
+      </div>
+    </div>
+  );
+}
+
+function SceneBlock({ s, montage }: { s: TimelineScene; montage: string }) {
+  return (
+    <AbsoluteFill>
+      {s.intro && s.introFrames > 0 && (
+        <Sequence durationInFrames={s.introFrames}>
+          <IntroCard intro={s.intro} />
+        </Sequence>
+      )}
+      <Sequence from={s.introFrames} durationInFrames={s.frames}>
+        <Fade edge={s.index > 0 ? 12 : 6}>
+          <Backdrop />
+          <AppWindow s={s} />
+          <CaptionBar s={s} montage={montage} />
+        </Fade>
+      </Sequence>
+    </AbsoluteFill>
   );
 }
 
@@ -216,10 +249,10 @@ export function Demo(props: DemoProps) {
       </Sequence>
       {props.scenes.map((s) => {
         const from = at;
-        at += s.frames;
+        at += s.introFrames + s.frames;
         return (
-          <Sequence key={s.key} from={from} durationInFrames={s.frames}>
-            <SceneBlock s={s} values={props.captions.placeholders} />
+          <Sequence key={s.key} from={from} durationInFrames={s.introFrames + s.frames}>
+            <SceneBlock s={s} montage={props.captions.montage} />
           </Sequence>
         );
       })}

@@ -94,8 +94,8 @@ describe("persona expectations", () => {
     return evaluateEscalation(emptyContext({ ownVariants: p.variants ?? [], coupleSharedGenes: shared, pregnancyStatus: p.pregnancyStatus }))
       .map((e) => e.code);
   };
-  it("Mariam and Khalid escalate for their shared genes", () => {
-    expect(forPersona("mariam", "khalid")).toEqual(["shared_pathogenic_gene"]);
+  it("Mariam and Khalid escalate for their shared genes (Mariam also for her CFTR VUS)", () => {
+    expect(forPersona("mariam", "khalid")).toEqual(["shared_pathogenic_gene", "vus_present"]);
     expect(forPersona("khalid", "mariam")).toEqual(["shared_pathogenic_gene"]);
   });
   it("Noura does not escalate (carrier, partner not a carrier)", () => {

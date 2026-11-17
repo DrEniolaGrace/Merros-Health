@@ -1,4 +1,4 @@
-# MEROS DESIGN SYSTEM
+# MERROS DESIGN SYSTEM
 
 Read this before building or changing any screen. It replaces the design tokens in SPEC.md section 12. If my reference images arrive later, they refine this system; they do not replace the principles.
 
@@ -6,7 +6,7 @@ Read this before building or changing any screen. It replaces the design tokens 
 
 ## 1. The feeling
 
-**"Bioluminescent calm."** Meros should feel like a glimpse of the future of medicine: alive, luminous, three dimensional and precise, but never cold or frightening. People open this app on one of the most emotional days of their lives. The design must feel like a calm, intelligent, private space that glows gently around them.
+**"Bioluminescent calm."** Merros should feel like a glimpse of the future of medicine: alive, luminous, three dimensional and precise, but never cold or frightening. People open this app on one of the most emotional days of their lives. The design must feel like a calm, intelligent, private space that glows gently around them.
 
 Three words to test every screen against: **Alive. Calm. Precise.**
 

@@ -34,7 +34,14 @@ describe("detecting a reclassification", () => {
   });
   it("people without the variant are not affected", () => {
     expect(changesFor(persona("noura").variants!, feed)).toEqual([]);
-    expect(changesFor(persona("mariam").variants!, feed)).toEqual([]);
+    expect(changesFor(persona("khalid").variants!, feed)).toEqual([]);
+  });
+  it("Mariam's CFTR VUS moves to likely benign (simulated), which does not make her a CF carrier", () => {
+    const changes = changesFor(persona("mariam").variants!, feed);
+    expect(changes).toHaveLength(1);
+    expect(changes[0].entry.clinvarId).toBe("5034488");
+    expect(changes[0].entry.classification).toBe("likely_benign");
+    expect(changesCarrierStatus(changes[0])).toBe(false);
   });
   it("no change when the classification is already the same", () => {
     const [c] = changesFor(hamad, feed);

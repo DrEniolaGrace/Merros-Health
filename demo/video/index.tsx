@@ -15,7 +15,7 @@ function Root() {
       defaultProps={{} as Record<string, unknown>}
       calculateMetadata={({ props }) => {
         const p = props as unknown as DemoProps;
-        return { durationInFrames: p.titleFrames + p.closingFrames + p.scenes.reduce((n, s) => n + s.frames, 0), fps: p.fps };
+        return { durationInFrames: p.titleFrames + p.closingFrames + p.scenes.reduce((n, s) => n + s.introFrames + s.frames, 0), fps: p.fps };
       }}
     />
   );

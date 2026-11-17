@@ -64,14 +64,15 @@ export function RemoveRelative({ id, label }: { id: string; label: string }) {
   );
 }
 
-export function InviteLink({ labels: L, locale }: { labels: { create: string; copy: string; copied: string; hint: string }; locale: string }) {
+/** `siteUrl` is the public address (PUBLIC_SITE_URL); without it the link uses the address the app is open at. */
+export function InviteLink({ labels: L, locale, siteUrl }: { labels: { create: string; copy: string; copied: string; hint: string }; locale: string; siteUrl?: string }) {
   const [url, setUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [pending, start] = useTransition();
   return (
     <div className="flex flex-col gap-3">
       {!url ? (
-        <Button variant="gold" icon={<LinkSimple />} pending={pending} className="self-start" onClick={() => start(async () => { setUrl(`${window.location.origin}/${locale}/invite/${(await createInvite()).token}`); })}>
+        <Button variant="gold" icon={<LinkSimple />} pending={pending} className="self-start" onClick={() => start(async () => { setUrl(`${(siteUrl || window.location.origin).replace(/\/$/, "")}/${locale}/invite/${(await createInvite()).token}`); })}>
           {L.create}
         </Button>
       ) : (

@@ -6,5 +6,13 @@
     "classification": "likely_pathogenic",
     "source": "national_feed_mock",
     "evidence": "SIMULATED for the demo, not a real ClinVar change. Scenario: new functional studies and family segregation data were submitted and an expert panel reviewed the variant, moving it from uncertain significance to likely pathogenic."
+  },
+  {
+    "clinvarId": "5034488",
+    "gene": "CFTR",
+    "hgvs": "NM_000492.4(CFTR):c.3439G>C (p.Val1147Leu)",
+    "classification": "likely_benign",
+    "source": "national_feed_mock",
+    "evidence": "SIMULATED for the demo, not a real ClinVar change. Scenario: population data showed the variant is common in healthy adults, and a reviewer moved it from uncertain significance to likely benign."
   }
 ]

@@ -1,18 +1,8 @@
-/** Merros mark: two interlaced strands meeting at a single point of gold light. */
-export function LogoMark({ size = 28 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden>
-      <defs>
-        <linearGradient id="lm-a" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="var(--rose-light)" />
-          <stop offset="1" stopColor="var(--burgundy-glow)" />
-        </linearGradient>
-      </defs>
-      <path d="M8 4 C 24 12, 8 20, 24 28" fill="none" stroke="url(#lm-a)" strokeWidth="2.2" strokeLinecap="round" />
-      <path d="M24 4 C 8 12, 24 20, 8 28" fill="none" stroke="url(#lm-a)" strokeWidth="2.2" strokeLinecap="round" opacity="0.6" />
-      <circle cx="16" cy="16" r="2.4" fill="var(--pearl-gold)" />
-    </svg>
-  );
+import Image from "next/image";
+
+/** The Merros mark (public/brand/merros-mark.png), as a rounded tile. */
+export function LogoMark({ size = 30 }: { size?: number }) {
+  return <Image src="/brand/merros-mark.png" alt="" aria-hidden width={size} height={size} className="shrink-0 rounded-[28%] shadow-[0_0_18px_-6px_var(--burgundy-glow)]" priority />;
 }
 
 export function Logo({ name }: { name: string }) {

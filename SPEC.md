@@ -1,8 +1,8 @@
-# MEROS: Technical Specification and Build Brief (v4)
+# MERROS: Technical Specification and Build Brief (v4)
 
 **For:** Claude Code
 **Competition:** Future Health Digital Innovation Challenge 2026 (Abu Dhabi), Fertility Challenge 03: Understanding and Reducing Inherited Disease Risk
-**Team:** Meros
+**Team:** Merros
 **Deadline:** 20 November 2026. Submit a working prototype plus technical documentation including assumptions, dependencies and limitations.
 **Scoring rubric (expert panel, top three win):** 1. Health impact and clinical relevance. 2. Technical depth and architecture. 3. Working solution and demonstration quality. 4. Responsible AI, safety and data governance. 5. Scalability and deployment readiness. 6. Commercial viability and path to pilot.
 
@@ -25,12 +25,12 @@
 
 Abu Dhabi has invested heavily in population genomics and mandatory premarital genetic screening. Testing is solved. Understanding and acting on results is not. Genetic information is complex, probabilistic and shared across families. Misunderstood results cause anxiety, stigma, family tension or false certainty. Consanguineous marriage is a long standing cultural practice, so technology must support informed choice, never judgement or coercion. The unmet need is private, culturally and linguistically appropriate communication that links premarital and preconception screening to counselling and care, while protecting genetic data and never exposing one family member's information to another without permission.
 
-## 2. What Meros is
+## 2. What Merros is
 
-**Meros is a privacy preserving genomic companion that helps individuals, couples, families and the health system identify, understand and act on inherited disease risk.** It explains results through a safe multi agent AI copilot with Gulf Arabic voice, protects couples with cryptography so nobody sees more than they consented to, keeps results up to date as science changes, extends protection to relatives without exposing anyone, and turns every interaction into privacy safe population signals the health system can act on.
+**Merros is a privacy preserving genomic companion that helps individuals, couples, families and the health system identify, understand and act on inherited disease risk.** It explains results through a safe multi agent AI copilot with Gulf Arabic voice, protects couples with cryptography so nobody sees more than they consented to, keeps results up to date as science changes, extends protection to relatives without exposing anyone, and turns every interaction into privacy safe population signals the health system can act on.
 
 ### Core principle (show in app and docs)
-> Meros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice. Cancelled marriages or any single personal decision are never a success measure.
+> Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling, and confident personal choice. Cancelled marriages or any single personal decision are never a success measure.
 
 ### Two beneficiaries, one loop
 * **The person:** understands their result, reaches a counsellor faster, decides by their own values, stays protected as science evolves.
@@ -38,7 +38,7 @@ Abu Dhabi has invested heavily in population genomics and mandatory premarital g
 
 ---
 
-## 2A. How Meros works (end to end)
+## 2A. How Merros works (end to end)
 
 **Step 1. Result arrives.** A licensed screening lab sends a signed result (FHIR Genomics JSON). The person gets a private invitation, signs in, chooses Arabic or English, reading level and text or voice, and gives granular consent. Nothing is shown before consent.
 
@@ -60,10 +60,10 @@ Abu Dhabi has invested heavily in population genomics and mandatory premarital g
 
 ## 3. Coverage map (keep this table updated in docs/CHALLENGE_MAPPING.md)
 
-| Challenge element | Meros features |
+| Challenge element | Merros features |
 |---|---|
 | Identify inherited risk | Preconception Screening Finder (4.2), Risk Beyond the Panel (6.2), Family Risk Engine (6.4), Living Results (6.3) |
-| Understand | Risk Explainer (4.3), Meros Genetic Copilot with voice (6.5), My Result Video (6.6), Teach Back (4.4) |
+| Understand | Risk Explainer (4.3), Merros Genetic Copilot with voice (6.5), My Result Video (6.6), Teach Back (4.4) |
 | Reduce | Options Explorer (4.5), Care Pathway and Find Care (4.9, 4.10), Family Risk Engine cascade testing (6.4) |
 | Culturally appropriate | Arabic first with Gulf dialect voice, non directive safety verifier, Values Compass, optional Faith Perspectives |
 | Privacy preserving | Blind Couple Match with PSI (6.1), Dual Key consent, field encryption, hash chained audit, differential privacy (7.2) |
@@ -96,7 +96,7 @@ For people outside the mandatory premarital programme (already married couples, 
 Two or three gentle questions after each explanation. Wrong answer triggers a different explanation (new analogy, visual, audio, or the copilot). Store before and after comprehension scores per language and reading level.
 
 ### 4.5 Options Explorer
-All clinically appropriate options with equal visual weight, never ranked or labelled recommended: no change to plans; prenatal testing; IVF with PGT-M; donor gametes where permitted; adoption or fostering; not having biological children; postponing decisions until after counselling. Each card: what it involves, timing, cost placeholder, availability, questions to ask a counsellor.
+All clinically appropriate options with equal visual weight, never ranked or labelled recommended: no change to plans; prenatal testing; IVF with PGT-M; donor gametes where permitted; adoption or fostering; not having biological children; postponing decisions until after counselling. Each card: what it involves, timing, availability, questions to ask a counsellor.
 
 ### 4.6 Values Compass
 Decision aid based on the Ottawa Decision Support Framework. User rates what matters (faith, family expectations, biological children, avoiding procedures, certainty, cost, time). Shows how options fit their own stated values without choosing. Includes the 4 item SURE decisional conflict screen. Optional private "My Values Summary" to share with a counsellor.
@@ -117,7 +117,7 @@ Directory of fictional genetic counsellors, family doctors, IVF and PGT-M clinic
 Book in person, video or phone. Pre session question list and optional Values Summary. Working video call between patient and counsellor personas using Azure Communication Services (simulated scheduling, real call). Post session summary in the patient's language and reading level, labelled Clinical Advice, signed by the counsellor.
 
 ### 4.12 Distress Check
-Single item Distress Thermometer (0 to 10) after results. High scores show calm support content and offer a same week counsellor or psychologist callback. Crisis numbers as placeholders marked "verify before release". Feeds escalation and anonymised analytics.
+Single item Distress Thermometer (0 to 10) after results. High scores show calm support content and offer a same week counsellor or psychologist callback. A high score shows safety guidance: call your genetic counsellor or doctor, or go to the nearest emergency department. No phone numbers are listed. Feeds escalation and anonymised analytics.
 
 ### 4.13 Privacy controls
 Each person owns their data. Nothing shared by default. Granular, time limited, revocable sharing. "Who has seen my data" access history. Relatives stored by relationship label only. Export and delete all data from settings.
@@ -139,7 +139,7 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 ## 6. Hero features (what wins)
 
 ### 6.1 Blind Couple Match (Private Set Intersection)
-**What:** Partners learn whether they share a carrier gene, and which one, without either partner or the Meros server ever seeing the other's full result.
+**What:** Partners learn whether they share a carrier gene, and which one, without either partner or the Merros server ever seeing the other's full result.
 
 **How:**
 * ECDH based PSI over ristretto255 (use `@noble/curves`), or the OpenMined PSI library (`@openmined/psi.js`) if it fits better. Each client hashes its carrier gene identifiers to curve points, blinds them with a secret scalar, exchanges via the server (which only relays opaque points), double blinds the partner's set, and compares. Output is the intersection only.
@@ -150,10 +150,10 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 * After intersection, the deterministic risk engine (4.3) computes couple risk locally.
 * Tests: correctness on synthetic sets, server never receives plaintext, protocol refuses unsigned inputs.
 
-**Where it is used:** preconception couples, couples rechecking after a reclassification (6.3), and any couple who wants to compare results privately inside Meros.
+**Where it is used:** preconception couples, couples rechecking after a reclassification (6.3), and any couple who wants to compare results privately inside Merros.
 
 ### 6.2 Risk Beyond the Panel (runs of homozygosity)
-**What:** Standard panels only test known variants. Couples who are related share longer identical stretches of DNA, which carries extra recessive risk that panels cannot see. Meros estimates this residual risk from whole genome data.
+**What:** Standard panels only test known variants. Couples who are related share longer identical stretches of DNA, which carries extra recessive risk that panels cannot see. Merros estimates this residual risk from whole genome data.
 
 **How:**
 * Python microservice (FastAPI, in its own Docker container) with a pipeline over synthetic VCFs: generate synthetic genomes for personas with msprime (or by recombining real 1000 Genomes haplotypes) and simulate a pedigree so related couples genuinely share segments by descent. Call ROH with `bcftools roh` or PLINK `--homozyg`, estimate pairwise kinship with KING (or PLINK `--genome` in prototype), and derive the expected inbreeding coefficient of a child (equal to the parents' kinship coefficient; for first cousins about 1/16, so about 6.25% of the genome expected to be homozygous by descent).
@@ -162,7 +162,7 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 * If live pipeline is too slow for the demo, precompute persona results and show the pipeline running on a small chromosome segment.
 
 ### 6.3 Living Results (variant reclassification watch)
-**What:** Genetic science changes. A VUS today may be reclassified tomorrow. There is no good system to recontact people. Meros watches for reclassification and closes the loop through the counsellor.
+**What:** Genetic science changes. A VUS today may be reclassified tomorrow. There is no good system to recontact people. Merros watches for reclassification and closes the loop through the counsellor.
 
 **How:**
 * `VariantWatch` scheduled job queries ClinVar (NCBI E utilities, by ClinVar variation ID) and a mock local reclassification feed (representing national data). Compare current classification against stored classification.
@@ -172,7 +172,7 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 * Health system view: number of people affected by each reclassification, without identities.
 
 ### 6.4 Family Risk Engine (privacy preserving cascade screening)
-**What:** When someone is a carrier, relatives have a raised chance of being carriers too. Meros calculates which relatives are most worth testing, without storing names, and lets the user invite them without exposing who they are.
+**What:** When someone is a carrier, relatives have a raised chance of being carriers too. Merros calculates which relatives are most worth testing, without storing names, and lets the user invite them without exposing who they are.
 
 **How:**
 * Pedigree builder storing relationship labels only (for example "paternal aunt").
@@ -181,7 +181,7 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 * User controlled private invitation link for relatives that never names the sender. Relatives get their own private onboarding and Preconception Finder.
 * Health system output: expected cascade testing yield, aggregated with differential privacy (7.2).
 
-### 6.5 Meros Genetic Copilot (multi agent AI with Gulf Arabic voice)
+### 6.5 Merros Genetic Copilot (multi agent AI with Gulf Arabic voice)
 **What:** A conversational copilot that explains any part of a result, risk, option or process, in text or voice, safely.
 
 **Agents (orchestrated pipeline):**
@@ -212,13 +212,13 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 Case queue sorted by urgency (pregnant, Living Results changes, VUS, high distress first) with escalation reasons. Auto generated pre session brief: results, couple PSI outcome (if consented), Risk Beyond the Panel (counsellor only), teach back scores, questions, values summary if shared, distress score, auto drawn pedigree. Post session: counsellor notes become a patient friendly summary drafted by the copilot; counsellor must review and sign before release. The counsellor always decides.
 
 ### 7.2 Population Signals Dashboard (differential privacy)
-**What:** Like routine care becoming real time population signals, every Meros interaction becomes privacy safe intelligence for the Department of Health.
+**What:** Like routine care becoming real time population signals, every Merros interaction becomes privacy safe intelligence for the Department of Health.
 
 **How:**
 * Events stream into an aggregate store. Every published statistic uses differential privacy (Laplace or Gaussian mechanism; use OpenDP or a carefully tested implementation) with a tracked privacy budget, plus suppression of any group smaller than 10.
 * Signals: funnel and time to counselling by region; counselling demand forecast for the next 8 weeks per region (simple time series model) so the system can staff counsellors in advance; comprehension gaps by language and reading level; Living Results impact counts; cascade testing yield; SURE and distress trends before and after counselling; Safety Verifier block rates.
 * Never break down by tribe, family name or any identity group that could create stigma.
-* Visible statement: "Meros does not track marriage outcomes or any single personal decision as a success measure."
+* Visible statement: "Merros does not track marriage outcomes or any single personal decision as a success measure."
 
 ---
 
@@ -296,7 +296,7 @@ Calm, private, dignified. Warm sand background #F3EFE8, deep teal primary #1F5C5
 Document, as design intent subject to legal review:
 * Federal Decree Law No. 49 of 2023 regulating the use of the human genome: consent, confidentiality of genetic data, right to know results and to withdraw.
 * UAE personal data protection law: health and genetic data are sensitive; explicit consent, purpose limitation, security.
-* Premarital screening: results are confidential and disclosed to couples with consent; couples may still marry after informed counselling. Meros works alongside licensed screening and counselling services and never replaces them.
+* Premarital screening: results are confidential and disclosed to couples with consent; couples may still marry after informed counselling. Merros works alongside licensed screening and counselling services and never replaces them.
 * Data residency in a UAE cloud region.
 
 ---
@@ -305,7 +305,7 @@ Document, as design intent subject to legal review:
 
 **Phase 1 (by 9 Nov):** setup, i18n and RTL, auth, personas, signed result import, consent, Risk Explainer with multi gene, Teach Back, Options Explorer, boundary labels, Escalation Engine with tests, Care Pathway, privacy controls, Judge Tour skeleton.
 
-**Phase 2 (by 12 Nov):** Blind Couple Match with Dual Key and tests. Meros Genetic Copilot (text) with Safety Verifier and evaluation harness.
+**Phase 2 (by 12 Nov):** Blind Couple Match with Dual Key and tests. Merros Genetic Copilot (text) with Safety Verifier and evaluation harness.
 
 **Phase 3 (by 15 Nov):** Living Results with ClinVar simulation. Family Risk Engine. Find Care, Counselling Hub, Counsellor Copilot.
 

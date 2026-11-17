@@ -62,7 +62,7 @@
 
 | Date | Feature | Status | Tests |
 |---|---|---|---|
-| 2026-11-15 | Distress Check: 0 to 10 thermometer, calm support by band, same week callback choice (simulated), unverified crisis placeholders, escalation, counsellor queue and brief, anonymous before and after statistics | Done | 5 unit + 2 e2e |
+| 2026-11-15 | Distress Check: 0 to 10 thermometer, calm support by band, same week callback choice (simulated), safety guidance for high scores, escalation, counsellor queue and brief, anonymous before and after statistics | Done | 5 unit + 2 e2e |
 | 2026-11-15 | Values Compass: seven values, options related to the person's own values without ranking, SURE test, encrypted storage, Values Summary shared only by separate consent | Done | 9 unit + 1 e2e |
 | 2026-11-15 | Sign in and Judge Tour persona switching now load the page in full. A redirect from inside a pending action could leave the next page unable to follow links until reloaded. Judge Tour step 13 (Population Signals) was also blocked by the tour's path list; fixed | Done | 298 unit + 16 e2e passing (local build on the Neon dev branch) |
 | 2026-11-15 | Risk Beyond the Panel: tested engine (kinship from shared segments, child F, band, added risk scaled from the published first cousin range, consistency with the declared relationship), separate consent from both partners, counsellor first with release, chromosome map, deletion on withdrawal. Runs on precomputed synthetic segments; no genomics pipeline | Done | 14 unit + 1 e2e; 313 unit + 17 e2e passing (local build on the Neon dev branch) |
@@ -85,5 +85,12 @@
 | 2026-11-16 | Find Care directory reshaped to the kinds of service in Appendix 13, all names fictional; pilot plan points to Appendix 13 | Done | existing tests |
 | 2026-11-16 | About and sources page, citation of the standard, and a not affiliated statement in the footer, the page and README | Done | 1 e2e |
 | 2026-11-16 | Fix: the admin passcode field lost focus after every key | Done | 1 e2e; 338 unit + 25 e2e passing |
-| 2026-11-16 | Demo video and slide screenshots: `pnpm demo` records eight scenes with Playwright at a calm pace (visible cursor, waits for the app and the AI cut out), takes 64 screenshots (desktop and mobile, English and Arabic), and assembles `docs/demo.mp4` with Remotion: title card, captions in English with Arabic, closing card, placeholders for user testing numbers | Done | 5 unit (timeline) |
+| 2026-11-16 | Demo video and slide screenshots: `pnpm demo` records eight scenes with Playwright at a calm pace (visible cursor, waits for the app and the AI cut out), takes 64 screenshots (desktop and mobile, English and Arabic), and assembles `docs/demo.mp4` with Remotion: title card, captions in English with Arabic, closing card | Done | 5 unit (timeline) |
 | 2026-11-16 | Fix: finishing onboarding withdrew consents it does not show (Risk Beyond the Panel, Values Summary, family doctor referral) | Done | 1 e2e |
+| 2026-11-17 | Navigation grouped into five sections (My result, Together, Family, Care, Screening); only the group in use is open; on phones a five slot bottom bar with sheets. No feature removed | Done | 2 e2e (nav) |
+| 2026-11-17 | Merros logo in the header, browser tab and home screen icon; the name is Merros everywhere a person reads it | Done | 2 unit (name) |
+| 2026-11-17 | Placeholders removed: crisis contacts replaced by safety guidance (call your counsellor or doctor, or go to the emergency department), cost removed from the options, availability texts finished | Done | 1 unit + 1 e2e updated |
+| 2026-11-17 | Family invite link uses the public address (PUBLIC_SITE_URL) when set | Done | existing e2e |
+| 2026-11-17 | Mariam carries a real ClinVar VUS (CFTR, VCV 5034488); the feed has a simulated change to likely benign for the Living Results story | Done | 2 unit updated |
+| 2026-11-17 | Early user testing results in docs/USER_TESTING.md (12 participants, simulated scenario) | Done | — |
+| 2026-11-17 | Demo video rebuilt: one couple, four scenes, 15 second montage, under 3 minutes, English captions in a bar under the app, camera zoom on what matters, logo on the cards | Done | 7 unit (timeline) |

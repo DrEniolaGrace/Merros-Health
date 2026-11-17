@@ -35,7 +35,7 @@ export async function GET() {
   return new NextResponse(JSON.stringify(body, null, 2), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Content-Disposition": `attachment; filename="meros-export-${user.personaKey}.json"`,
+      "Content-Disposition": `attachment; filename="merros-export-${user.personaKey}.json"`,
       "Cache-Control": "no-store",
     },
   });

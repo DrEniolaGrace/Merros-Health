@@ -28,7 +28,7 @@ test("Distress Check: a high score brings calm support, a callback choice, and r
   await expect(page.getByRole("heading", { name: "How are you feeling?" })).toBeVisible();
   await setDistress(page, "8");
   await expect(page.locator("[data-distress-band=high]")).toBeVisible();
-  await expect(page.locator("[data-crisis]")).toContainText("to be verified before release");
+  await expect(page.locator("[data-crisis]")).toContainText("Call your genetic counsellor or your doctor now");
   await page.getByRole("button", { name: "A psychologist" }).click();
   await expect(page.locator("[data-callback-done]")).toContainText("A psychologist will call you this week");
 

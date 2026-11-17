@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "@phosphor-icons/react";
 
 export type Theme = "night" | "pearl";
-export const THEME_COOKIE = "meros-theme";
+export const THEME_COOKIE = "merros-theme";
 
 /** Night (signature) / Pearl switch. Persists in a cookie so the server renders the right mode. */
 export function ThemeToggle({ labels }: { labels: { toNight: string; toPearl: string } }) {

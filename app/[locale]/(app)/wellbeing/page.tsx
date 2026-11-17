@@ -2,7 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { requireUser } from "@/lib/auth/session";
 import { prisma } from "@/lib/db";
 import { PageHeader } from "@/components/ui/page";
-import { CRISIS_PLACEHOLDERS, DISTRESS_SUPPORT } from "@/content/values";
+import { CRISIS_GUIDANCE, DISTRESS_SUPPORT } from "@/content/values";
 import { pick } from "@/content/types";
 import { distressBand, type CallbackKind } from "@/lib/wellbeing/distress";
 import { DistressCheck } from "./distress-check";
@@ -37,8 +37,7 @@ export default async function WellbeingPage({ params }: { params: Promise<{ loca
           psychologist: t("psychologist"),
           callbackDone: { counsellor: t("doneCounsellor"), psychologist: t("donePsychologist") },
           crisisTitle: t("crisisTitle"),
-          crisis: CRISIS_PLACEHOLDERS.map((c) => pick(c, locale)),
-          crisisNote: t("crisisNote"),
+          crisis: CRISIS_GUIDANCE.map((c) => pick(c, locale)),
           book: t("book"),
           support: { low: support("low"), moderate: support("moderate"), high: support("high") },
         }}

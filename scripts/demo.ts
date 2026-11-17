@@ -11,6 +11,8 @@
  *   --scenes-only    record the clips, no screenshots
  *   --screens-only   only the screenshots
  *   --render-only    only re-assemble the video from existing clips (after editing demo/captions.json)
+ *
+ * The video follows one couple, Mariam and Khalid: four scenes and a short montage, under three minutes.
  *   --offline-ai     use the offline demo model instead of Claude for the Copilot
  */
 import "dotenv/config";
@@ -69,7 +71,7 @@ async function main() {
 
   const offline = args.has("--offline-ai") || !process.env.AI_API_KEY;
   if (offline && !args.has("--offline-ai")) console.log("No AI_API_KEY in .env: the Copilot uses the offline demo model.");
-  const env: NodeJS.ProcessEnv = { ...process.env, PORT, AI_PROVIDER: offline ? "mock" : "anthropic", DEMO_MODE: "true" };
+  const env: NodeJS.ProcessEnv = { ...process.env, PORT, AI_PROVIDER: offline ? "mock" : "anthropic", DEMO_MODE: "true", PUBLIC_SITE_URL: "https://merros-health.vercel.app" };
   delete env.DEMO_ADMIN_PASSCODE;
   console.log(`\n> starting the app on ${BASE} (Copilot: ${offline ? "offline model" : "Claude"})`);
   const server = spawn("pnpm", ["start"], { shell: true, env, stdio: "ignore" });

@@ -14,14 +14,18 @@ test("My result shows the imported result without needing another page first", a
   await expect(page).toHaveURL(/\/en\/import/);
 
   // Visit My result before importing: it offers to open the waiting result.
-  await page.getByRole("navigation").getByRole("link", { name: "My result" }).click();
+  // On a phone, My result is a group: open it, then follow its first page.
+  await page.locator("[data-bottom=result]").click();
+  await page.locator("[data-nav-sheet] [data-nav-item=result]").click();
   await expect(page.getByText("Your result is ready to open")).toBeVisible();
 
   // Import, then use the navigation again (client side).
   await page.getByRole("link", { name: "Verify and open" }).click();
   await page.getByRole("button", { name: "Verify and open" }).click();
   await expect(page.getByText("Signature verified")).toBeVisible();
-  await page.getByRole("navigation").getByRole("link", { name: "My result" }).click();
+  // On a phone, My result is a group: open it, then follow its first page.
+  await page.locator("[data-bottom=result]").click();
+  await page.locator("[data-nav-sheet] [data-nav-item=result]").click();
   await expect(page.getByRole("heading", { name: "Sickle cell disease" })).toBeVisible({ timeout: 8000 });
 });
 

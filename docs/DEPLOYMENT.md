@@ -22,6 +22,7 @@ Merros runs in two places. **Vercel is live now**; **Azure (UAE North) is the pr
 | `DEMO_ADMIN_PASSCODE` | Passcode for "Reset demo data". Set by the project owner. Without it there is no reset button on the live site |
 | `CRON_SECRET` | Protects the nightly job. Vercel sends it automatically |
 | `AI_PROVIDER`, `AI_API_KEY` | `mock` (offline model, no key) or `anthropic` with a Claude API key |
+| `PUBLIC_SITE_URL` | Optional. The public address used in family invitation links (for example `https://merros-health.vercel.app`). Without it the link uses the address the app is open at |
 | `COPILOT_RATE_PER_HOUR`, `COPILOT_DAILY_CAP` | Defaults: 20 per visitor per hour, 1500 per day for the whole site. The live site sets the daily cap to 300 |
 
 ### Protections on the public link

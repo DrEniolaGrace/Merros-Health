@@ -13,6 +13,8 @@ const HBB_IVS1_5: Variant = { gene: "HBB", hgvs: "NM_000518.5(HBB):c.92+5G>C", z
 const HBB_CD39: Variant = { gene: "HBB", hgvs: "NM_000518.5(HBB):c.118C>T (p.Gln40Ter)", zygosity: "heterozygous", acmg: "pathogenic", clinvarId: "15402", conditionId: "beta-thalassaemia" };
 const HBB_HBS: Variant = { gene: "HBB", hgvs: "NM_000518.5(HBB):c.20A>T (p.Glu7Val)", zygosity: "heterozygous", acmg: "pathogenic", clinvarId: "15333", conditionId: "sickle-cell" };
 const HBB_VUS: Variant = { gene: "HBB", hgvs: "NM_000518.4(HBB):c.371C>A (p.Thr124Asn)", zygosity: "heterozygous", acmg: "vus", clinvarId: "15584", conditionId: "beta-thalassaemia" };
+/** Real ClinVar record (VCV 5034488), "Uncertain significance", checked 2026-11-17. Assigned to a fictional person. */
+const CFTR_VUS: Variant = { gene: "CFTR", hgvs: "NM_000492.4(CFTR):c.3439G>C (p.Val1147Leu)", zygosity: "heterozygous", acmg: "vus", clinvarId: "5034488", conditionId: "cystic-fibrosis" };
 const GJB2_35DEL: Variant = { gene: "GJB2", hgvs: "NM_004004.6(GJB2):c.35del (p.Gly12fs)", zygosity: "heterozygous", acmg: "pathogenic", clinvarId: "17004", conditionId: "gjb2-hearing-loss" };
 // SMA carrier status is a copy number result (one SMN1 copy), not a single ClinVar variant.
 const SMN1_ONE_COPY: Variant = { gene: "SMN1", hgvs: "SMN1 exon 7 copy number = 1 (deletion of one copy)", zygosity: "heterozygous", acmg: "pathogenic", clinvarId: null, conditionId: "sma" };
@@ -44,7 +46,7 @@ export const PERSONAS: Persona[] = [
     key: "mariam", role: "patient", nameEn: "Mariam", nameAr: "مريم",
     storyEn: "Engaged to her first cousin Khalid. Her premarital screening result has just arrived.",
     storyAr: "مخطوبة لابن عمها خالد. وصلت للتو نتيجة فحص ما قبل الزواج.",
-    variants: [HBB_IVS1_5, GJB2_35DEL], partnerKey: "khalid", coupleStatus: "engaged",
+    variants: [HBB_IVS1_5, GJB2_35DEL, CFTR_VUS], partnerKey: "khalid", coupleStatus: "engaged",
     onboarded: false, locale: "en", readingLevel: "standard", mediaPref: "text", pregnancyStatus: "none", showInPicker: true,
   },
   {

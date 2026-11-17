@@ -131,8 +131,9 @@ export const DISTRESS_SUPPORT: Record<"low" | "moderate" | "high", { title: Bi; 
   },
 };
 
-/** Crisis contacts are placeholders. They must be verified and filled in before any release. */
-export const CRISIS_PLACEHOLDERS: Bi[] = [
-  { en: "Emergency services: number to be verified before release", ar: "خدمات الطوارئ: يُتحقق من الرقم قبل الإصدار" },
-  { en: "Mental health support line: number to be verified before release", ar: "خط دعم الصحة النفسية: يُتحقق من الرقم قبل الإصدار" },
+/** What to do when someone feels unsafe. No phone numbers are listed, so none can be out of date. */
+export const CRISIS_GUIDANCE: Bi[] = [
+  { en: "Call your genetic counsellor or your doctor now and tell them how you feel.", ar: "اتصل الآن بمستشارك الوراثي أو طبيبك وأخبره بما تشعر به." },
+  { en: "If you might be in danger, go to the nearest emergency department.", ar: "إذا كنت قد تكون في خطر، فتوجه إلى أقرب قسم طوارئ." },
+  { en: "Tell someone you trust and stay with them.", ar: "أخبر شخصاً تثق به وابقَ معه." },
 ];

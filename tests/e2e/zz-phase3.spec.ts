@@ -17,7 +17,8 @@ test("Living Results: the counsellor is told first, the patient only after relea
   // The counsellor simulates the ClinVar update and gets a task.
   await loginAs(page, "Dr. Layla Haddad", /\/en\/counsellor/);
   await page.getByRole("button", { name: "Simulate ClinVar update" }).click();
-  const task = page.locator("[data-task]").first();
+  // Only people who agreed to be told about changes get a task; Hamad did.
+  const task = page.locator("[data-task]").filter({ hasText: "Hamad" });
   await expect(task).toContainText("Likely pathogenic");
   await expect(task).toContainText("Hamad");
 
@@ -31,8 +32,8 @@ test("Living Results: the counsellor is told first, the patient only after relea
 
   // The counsellor releases it after speaking to him.
   await loginAs(page, "Dr. Layla Haddad", /\/en\/counsellor/);
-  await page.getByRole("button", { name: "I have told the patient: release the update" }).first().click();
-  await expect(page.locator("[data-task]")).toHaveCount(0);
+  await page.locator("[data-task]").filter({ hasText: "Hamad" }).getByRole("button", { name: "I have told the patient: release the update" }).click();
+  await expect(page.locator("[data-task]").filter({ hasText: "Hamad" })).toHaveCount(0);
 
   // Now Hamad sees the amended, lab signed result: he is an HBB carrier.
   await loginAs(page, "Hamad", /\/en\/home/);
@@ -45,8 +46,9 @@ test("Living Results: the counsellor is told first, the patient only after relea
 
   // The programme view counts one person affected, with no identity.
   await loginAs(page, "Programme Admin", /\/en\/admin/);
-  await expect(page.locator("[data-reclass-event]")).toContainText("Fewer than 10 people (hidden)");
-  await expect(page.locator("[data-reclass-event]")).not.toContainText("Hamad");
+  const reclass = page.locator("[data-reclass-event]").filter({ hasText: "HBB" });
+  await expect(reclass).toContainText("Fewer than 10 people (hidden)");
+  await expect(page.locator("main")).not.toContainText("Hamad");
 });
 
 test("Counselling Hub: questions reach the counsellor, and only a signed summary reaches the patient", async ({ page }) => {

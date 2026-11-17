@@ -131,7 +131,11 @@
     "findCare": "Find care",
     "values": "Values",
     "wellbeing": "Check in",
-    "video": "My video"
+    "video": "My video",
+    "groupResult": "My result",
+    "groupTogether": "Together",
+    "groupCare": "Care",
+    "more": "More"
   },
   "landing": {
     "eyebrow": "Premarital and preconception genetics",
@@ -404,7 +408,6 @@
     "body": "Every option is shown with equal weight. Merros never ranks them or tells you what to choose.",
     "involves": "What it involves",
     "timing": "Timing",
-    "cost": "Cost",
     "availability": "Availability",
     "questions": "Questions to ask a counsellor",
     "values": "Values Compass, a tool to think through what matters to you, arrives in a later phase.",
@@ -1048,7 +1051,6 @@
     "doneCounsellor": "Requested. A genetic counsellor will call you this week (simulated in this demonstration).",
     "donePsychologist": "Requested. A psychologist will call you this week (simulated in this demonstration).",
     "crisisTitle": "If you feel unsafe right now",
-    "crisisNote": "Placeholder contacts: to be verified before release.",
     "book": "Book a session instead",
     "privacy": "Your answer is private. Your counsellor sees it only if you gave them access. Anonymous statistics count it only if you agreed to that."
   },

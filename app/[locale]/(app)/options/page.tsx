@@ -43,7 +43,6 @@ export default async function OptionsPage({ params }: { params: Promise<{ locale
                       {(
                         [
                           [t("timing"), o.timing],
-                          [t("cost"), o.cost],
                           [t("availability"), o.availability],
                         ] as const
                       ).map(([k, v]) => (

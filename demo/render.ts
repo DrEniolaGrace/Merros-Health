@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
-import { CLOSING_SECONDS, FPS, TARGET_SECONDS, TITLE_SECONDS, sceneTiming, totalSeconds, type ClipInfo } from "./timeline";
+import { CLOSING_SECONDS, FPS, INTRO_SECONDS, MAX_TOTAL_SECONDS, MONTAGE, STORY, TARGET_SECONDS, TITLE_SECONDS, sceneTiming, totalSeconds, type ClipInfo } from "./timeline";
 import type { DemoProps, TimelineScene } from "./video/composition";
 
 const ROOT = process.cwd();
@@ -44,19 +44,37 @@ const OUT = path.join(ROOT, "docs", "demo.mp4");
 
 async function main() {
   const captions = JSON.parse(fs.readFileSync(path.join(ROOT, "demo", "captions.json"), "utf8"));
-  const scenes: TimelineScene[] = Object.keys(TARGET_SECONDS).map((key, i) => {
+  const keys = [...STORY, ...MONTAGE] as string[];
+  const scenes: TimelineScene[] = keys.map((key) => {
     const file = path.join(PUBLIC, "clips", `${key}.json`);
     if (!fs.existsSync(file)) throw new Error(`Missing clip ${key}. Record the scenes first: pnpm demo`);
     const clip = JSON.parse(fs.readFileSync(file, "utf8")) as ClipInfo;
-    const t = sceneTiming(clip, TARGET_SECONDS[key]);
+    const montage = (MONTAGE as readonly string[]).includes(key);
+    const t = sceneTiming(clip, TARGET_SECONDS[key], { trim: montage });
     const c = captions.scenes[key];
     console.log(`${key}: ${t.keptSeconds.toFixed(1)} s kept, played at ${t.rate}x, ${(t.frames / FPS).toFixed(1)} s on screen`);
-    return { key, clip: steadyClip(key), index: i + 1, title: c.title, text: c.text, evidence: c.evidence, segments: t.segments, rate: t.rate, frames: t.frames };
+    return {
+      key,
+      clip: steadyClip(key),
+      index: montage ? 0 : (STORY as readonly string[]).indexOf(key) + 1,
+      caption: c.caption,
+      evidence: c.evidence,
+      intro: c.intro,
+      introFrames: Math.round((INTRO_SECONDS[key] ?? 0) * FPS),
+      segments: t.segments,
+      rate: t.rate,
+      frames: t.frames,
+      camera: clip.camera ?? [],
+    };
   });
   const props: DemoProps = { fps: FPS, titleFrames: TITLE_SECONDS * FPS, closingFrames: CLOSING_SECONDS * FPS, scenes, captions };
-  console.log(`Total: ${totalSeconds(scenes.map((s) => s.frames)).toFixed(0)} seconds`);
-  const empty = Object.entries(captions.placeholders as Record<string, string>).filter(([, v]) => !String(v).trim()).map(([k]) => k);
-  if (empty.length) console.log(`Placeholders still empty (shown highlighted): ${empty.join(", ")}`);
+  const total = totalSeconds(scenes.map((s) => s.frames));
+  console.log(`Total: ${total.toFixed(0)} seconds`);
+  if (total > MAX_TOTAL_SECONDS) throw new Error(`The video would run ${total.toFixed(0)} s, over the ${MAX_TOTAL_SECONDS} s limit. Shorten a scene in demo/scenes.spec.ts.`);
+
+  // The logo for the title and closing cards.
+  fs.mkdirSync(path.join(PUBLIC, "brand"), { recursive: true });
+  fs.copyFileSync(path.join(ROOT, "public", "brand", "merros-mark.png"), path.join(PUBLIC, "brand", "merros-mark.png"));
 
   console.log("Bundling the composition...");
   const serveUrl = await bundle({ entryPoint: path.join(ROOT, "demo", "video", "index.tsx"), publicDir: PUBLIC });

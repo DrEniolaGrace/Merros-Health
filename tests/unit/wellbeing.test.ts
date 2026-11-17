@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DISTRESS_THRESHOLD, emptyContext, evaluateEscalation } from "@/lib/escalation/rules";
 import { distressBand, offersCallback, validDistress, DISTRESS_HIGH } from "@/lib/wellbeing/distress";
 import { decisionalConflict, importantValues, relateOptions, sureScore, validRatings, validSure, type Ratings, type SureAnswers } from "@/lib/values/compass";
-import { CRISIS_PLACEHOLDERS, DISTRESS_SUPPORT, IMPORTANCE, OPTION_FIT, OPTION_IDS, SURE_ITEMS, VALUES, VALUE_KEYS } from "@/content/values";
+import { CRISIS_GUIDANCE, DISTRESS_SUPPORT, IMPORTANCE, OPTION_FIT, OPTION_IDS, SURE_ITEMS, VALUES, VALUE_KEYS } from "@/content/values";
 import { OPTIONS } from "@/content/options";
 import { checkOutput } from "@/lib/ai/safety";
 
@@ -48,9 +48,11 @@ describe("Distress Check", () => {
         expect(b.ar).toMatch(/[؀-ۿ]/);
       }
     }
-    for (const c of CRISIS_PLACEHOLDERS) {
-      expect(c.en).toMatch(/verified before release/);
-      expect(c.en).not.toMatch(/\d{3,}/); // no real looking phone number may ship unverified
+    expect(CRISIS_GUIDANCE.some((c) => /counsellor/.test(c.en))).toBe(true);
+    for (const c of CRISIS_GUIDANCE) {
+      expect(c.ar).toMatch(/[\u0600-\u06FF]/);
+      expect(c.en).not.toMatch(/\d{3,}/); // no phone number that could be out of date
+      expect(c.en).not.toMatch(/placeholder|to be verified/i);
     }
   });
 });

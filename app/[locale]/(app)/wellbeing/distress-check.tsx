@@ -23,7 +23,6 @@ export interface DistressLabels {
   callbackDone: Record<CallbackKind, string>;
   crisisTitle: string;
   crisis: string[];
-  crisisNote: string;
   book: string;
   support: Record<DistressBand, { title: string; body: string; tips: string[] }>;
 }
@@ -117,8 +116,7 @@ export function DistressCheck({ labels: L, initial }: { labels: DistressLabels; 
           {result.band === "high" && (
             <GlassCard className="flex flex-col gap-3" data-crisis>
               <h2 className="text-lg font-medium text-ink">{L.crisisTitle}</h2>
-              <ul className="flex flex-col gap-1 text-sm text-ink">{L.crisis.map((c) => <li key={c}>{c}</li>)}</ul>
-              <p className="text-xs text-gold-ink">{L.crisisNote}</p>
+              <ul className="flex flex-col gap-2 text-sm text-ink">{L.crisis.map((c) => <li key={c} className="flex gap-2"><span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />{c}</li>)}</ul>
             </GlassCard>
           )}
 

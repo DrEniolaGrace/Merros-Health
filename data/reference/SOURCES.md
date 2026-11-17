@@ -11,6 +11,7 @@ Verified via NCBI E-utilities (esummary, db=clinvar) on 2026-11-08. Assigning th
 | NM_004004.6(GJB2):c.35del (p.Gly12fs) | 17004 | Pathogenic (reviewed by expert panel) | Mariam, Khalid |
 | NM_000518.5(HBB):c.20A>T (p.Glu7Val), HbS | 15333 | Pathogenic (multiple submitters, no conflicts) | Aisha |
 | NM_000518.4(HBB):c.371C>A (p.Thr124Asn) | 15584 | Uncertain significance (multiple submitters, no conflicts) | Hamad (reclassification in Phase 3 is simulated) |
+| NM_000492.4(CFTR):c.3439G>C (p.Val1147Leu) | 5034488 | Uncertain significance (criteria provided, single submitter), verified 2026-11-17 | Mariam (the change to likely benign in the demo is simulated, not a real ClinVar change) |
 | SMN1 exon 7 copy number = 1 | none (copy number result) | Carrier | Noura |
 
 ## Condition content
