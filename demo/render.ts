@@ -29,13 +29,14 @@ function ffmpegPath(): string {
 
 /**
  * Browser recordings have uneven frame timing, which the compositor cannot always seek in.
- * Each clip is converted once to a steady 30 frames per second before assembly.
+ * Each clip is converted once to a steady 30 frames per second, every frame a keyframe, so any
+ * moment can be found when a scene plays faster than real time.
  */
 function steadyClip(key: string): string {
   const src = path.join(PUBLIC, "clips", `${key}.webm`);
   const dest = path.join(PUBLIC, "clips", `${key}.mp4`);
   if (fs.existsSync(dest) && fs.statSync(dest).mtimeMs > fs.statSync(src).mtimeMs) return `clips/${key}.mp4`;
-  const r = spawnSync(ffmpegPath(), ["-v", "error", "-y", "-i", src, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-pix_fmt", "yuv420p", "-an", dest], { stdio: "inherit" });
+  const r = spawnSync(ffmpegPath(), ["-v", "error", "-y", "-i", src, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "16", "-g", "1", "-bf", "0", "-pix_fmt", "yuv420p", "-an", dest], { stdio: "inherit" });
   if (r.status !== 0) throw new Error(`Could not convert ${key}.webm`);
   return `clips/${key}.mp4`;
 }

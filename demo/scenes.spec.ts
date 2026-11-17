@@ -22,7 +22,7 @@ test("s1 Mariam understands her result", async ({ browser }) => {
   await expect(showResult).toBeVisible();
   await showResult.evaluate((el) => el.scrollIntoView({ block: "start" }));
   await s.hold(900);
-  await s.focus(showResult, recontact);
+  await s.focus(p.getByText("Show me my result", { exact: true }), showResult, recontact);
   s.keep();
   await s.hold(1800);
   await s.click(showResult, 450);

@@ -179,9 +179,9 @@ function CaptionBar({ s, montage }: { s: TimelineScene; montage: string }) {
       ) : (
         <span style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 999, background: C.burgundy, color: C.ink, fontSize: 20, fontWeight: 600, letterSpacing: 1 }}>{montage}</span>
       )}
-      <span style={{ flex: 1, minWidth: 0, fontSize: 32, color: C.ink, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.caption}</span>
+      <span style={{ flex: 1, minWidth: 0, fontSize: s.evidence ? 28 : 32, color: C.ink, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.caption}</span>
       {s.evidence && (
-        <span style={{ flexShrink: 0, maxWidth: 640, padding: "10px 18px", borderRadius: 16, border: `1.5px solid ${C.gold}`, color: C.gold, fontSize: 22, lineHeight: 1.25, fontWeight: 600 }}>{s.evidence}</span>
+        <span style={{ flexShrink: 0, maxWidth: 560, padding: "8px 16px", borderRadius: 16, border: `1.5px solid ${C.gold}`, color: C.gold, fontSize: 20, lineHeight: 1.25, fontWeight: 600 }}>{s.evidence}</span>
       )}
     </div>
   );
