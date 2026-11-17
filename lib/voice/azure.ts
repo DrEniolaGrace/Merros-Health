@@ -1,3 +1,4 @@
+import { stripCitations } from "@/lib/ai/citations";
 /**
  * Azure AI Speech (SPEC 6.5 voice mode) through its REST endpoints, called only from the server so
  * the key never reaches the browser. Without a key the app falls back to the browser's own speech
@@ -31,8 +32,7 @@ const escapeXml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").
 
 /** Text as it should be spoken: no citation markers, no markdown symbols, single spaces. */
 export function speakable(text: string): string {
-  return text
-    .replace(/\s*\[[a-z0-9.#-]+\]/gi, "")
+  return stripCitations(text)
     .replace(/[*_`#>]/g, "")
     .replace(/\s+/g, " ")
     .trim();

@@ -12,6 +12,7 @@ import { LinkButton } from "@/components/ui/link-button";
 import { Skeleton } from "@/components/ui/states";
 import { cn } from "@/lib/cn";
 import { useVoice, type VoiceError } from "@/components/voice/use-voice";
+import { stripCitations } from "@/lib/ai/citations";
 
 export interface ChatLabels {
   placeholder: string;
@@ -45,7 +46,7 @@ type Item = { role: "user"; text: string } | { role: "assistant"; text: string; 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /** Removes [id] citation markers from the visible text; they are shown as source chips instead. */
-const visible = (text: string) => text.replace(/\s*\[[a-z0-9.#-]+\]/gi, "").trim();
+const visible = stripCitations;
 
 /** Breathing orb of light: the Copilot's presence (DESIGN.md 7.7). Pulses faster while working. */
 export function CopilotOrb({ active, size = 48 }: { active?: boolean; size?: number }) {

@@ -94,3 +94,5 @@
 | 2026-11-17 | Mariam carries a real ClinVar VUS (CFTR, VCV 5034488); the feed has a simulated change to likely benign for the Living Results story | Done | 2 unit updated |
 | 2026-11-17 | Early user testing results in docs/USER_TESTING.md (12 participants, simulated scenario) | Done | — |
 | 2026-11-17 | Demo video rebuilt: one couple, four scenes, a montage of about 28 seconds, under 3 minutes, English captions in a bar under the app, the whole app shown (no zoom), logo on the cards, no web address at the end | Done | 6 unit (timeline) |
+| 2026-11-17 | Fix: Copilot source markers with an underscore (for example [explainer.acmg#likely_benign]) showed on screen; one shared pattern now hides every marker on screen and in speech, and counts it as a source | Done | 5 unit (citations) + 3 e2e (no raw key in either language) |
+| 2026-11-17 | Demo video recorded at 150% page zoom (1280 x 720 layout, sharp at 1920 x 1080); every scene frames its key element from its real position and stops if it does not fit; Mariam completes Teach Back (67% to 100% on the brief) | Done | — |

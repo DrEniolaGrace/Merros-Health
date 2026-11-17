@@ -3,6 +3,7 @@
  * Deterministic, bilingual, unit tested. Runs before and independently of any model classifier.
  */
 import type { FactSheet, Locale } from "./types";
+import { citationIds } from "./citations";
 
 export interface RuleHit {
   rule: string;
@@ -53,7 +54,7 @@ export function checkOutput(text: string, sheet: FactSheet, opts: { requireCitat
 /** Passage ids cited in the text as [id]. Unknown ids are ignored. */
 export function citedIds(text: string, sheet: FactSheet): string[] {
   const known = new Set(sheet.passages.map((p) => p.id));
-  return [...new Set([...text.matchAll(/\[([a-z0-9.#-]+)\]/gi)].map((m) => m[1]).filter((id) => known.has(id)))];
+  return citationIds(text).filter((id) => known.has(id));
 }
 
 export type InputIntent = "explain" | "medical_advice" | "decide_for_me" | "distress" | "off_topic_empty";
