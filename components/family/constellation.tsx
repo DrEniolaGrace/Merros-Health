@@ -22,7 +22,7 @@ export function Constellation({ risks, labels, you, summary }: { risks: (Relativ
   return (
     <figure className="w-full">
       <figcaption className="sr-only">{summary}</figcaption>
-      <svg viewBox="0 0 400 380" className="w-full" aria-hidden>
+      <svg viewBox="-20 0 440 410" className="w-full" aria-hidden>
         <defs>
           <radialGradient id="fc-core">
             <stop offset="0" stopColor="var(--rose-light)" />
@@ -34,25 +34,26 @@ export function Constellation({ risks, labels, you, summary }: { risks: (Relativ
           </filter>
         </defs>
         {RADII.map((rad) => (
-          <circle key={rad} cx="200" cy="190" r={rad} fill="none" stroke="var(--glass-border)" strokeDasharray="2 6" />
+          <circle key={rad} cx="200" cy="190" r={rad} fill="none" stroke="var(--rose-light)" strokeOpacity="0.28" strokeWidth="1" strokeDasharray="3 5" />
         ))}
         {stars.map(({ r, x, y }) => (
-          <line key={`l-${r.id}`} x1="200" y1="190" x2={x} y2={y} stroke={r.planning ? "var(--pearl-gold)" : "var(--rose-light)"} strokeOpacity={0.15 + r.probability * 0.55} strokeWidth="1" />
+          <line key={`l-${r.id}`} x1="200" y1="190" x2={x} y2={y} stroke={r.planning ? "var(--pearl-gold)" : "var(--rose-light)"} strokeOpacity={0.35 + r.probability * 0.5} strokeWidth="1.5" />
         ))}
         {stars.map(({ r, x, y }) => {
           const tested = r.basis === "tested";
-          const size = 4 + r.probability * 8;
+          // Every relative stays clearly visible; brightness and size still grow with the chance.
+          const size = 7 + r.probability * 9;
           const fill = tested ? (r.probability === 1 ? "var(--data-cyan)" : "var(--glass-border)") : r.planning ? "var(--pearl-gold)" : "var(--rose-light)";
           return (
             <g key={r.id} filter="url(#fc-glow)">
-              <circle cx={x} cy={y} r={size} fill={fill} opacity={0.35 + r.probability * 0.65} />
-              <text x={x} y={y + size + 12} textAnchor="middle" fontSize="9" fill="var(--text-secondary)">{labels[r.relation]}</text>
-              <text x={x} y={y + size + 23} textAnchor="middle" fontSize="9" fill="var(--text-primary)" style={{ fontVariantNumeric: "tabular-nums" }}>{Math.round(r.probability * 100)}%</text>
+              <circle cx={x} cy={y} r={size} fill={fill} opacity={0.6 + r.probability * 0.4} />
+              <text x={x} y={y + size + 14} textAnchor="middle" fontSize="12" fill="var(--text-secondary)">{labels[r.relation]}</text>
+              <text x={x} y={y + size + 28} textAnchor="middle" fontSize="12" fontWeight="600" fill="var(--text-primary)" style={{ fontVariantNumeric: "tabular-nums" }}>{Math.round(r.probability * 100)}%</text>
             </g>
           );
         })}
-        <circle cx="200" cy="190" r="16" fill="url(#fc-core)" filter="url(#fc-glow)" />
-        <text x="200" y="222" textAnchor="middle" fontSize="10" fill="var(--text-primary)">{you}</text>
+        <circle cx="200" cy="190" r="20" fill="url(#fc-core)" filter="url(#fc-glow)" />
+        <text x="200" y="228" textAnchor="middle" fontSize="13" fontWeight="600" fill="var(--text-primary)">{you}</text>
       </svg>
     </figure>
   );

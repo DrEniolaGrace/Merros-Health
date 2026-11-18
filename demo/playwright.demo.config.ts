@@ -3,7 +3,7 @@ import { defineConfig } from "@playwright/test";
 /** Demo recording (pnpm demo). Not part of the test suite: it records clips and screenshots. */
 export default defineConfig({
   testDir: ".",
-  testMatch: ["scenes.spec.ts", "screens.spec.ts"],
+  testMatch: ["scenes.spec.ts", "screens.spec.ts", "check.spec.ts"],
   outputDir: "out/playwright",
   fullyParallel: false,
   workers: 1,
