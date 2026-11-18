@@ -147,8 +147,9 @@ function IntroCard({ intro }: { intro: NonNullable<TimelineScene["intro"]> }) {
 }
 
 /** A small bar under the app window: scene number, one short line, and any testing result. */
-function CaptionBar({ s, montage }: { s: TimelineScene; montage: string }) {
-  const p = useRise(6);
+function CaptionBar({ s, montage, settled }: { s: TimelineScene; montage: string; settled?: boolean }) {
+  const rise = useRise(6);
+  const p = settled ? 1 : rise;
   return (
     <div
       style={{
@@ -253,6 +254,33 @@ export function Demo(props: DemoProps) {
       <Sequence from={at} durationInFrames={props.closingFrames}>
         <ClosingCard c={props.captions} />
       </Sequence>
+    </AbsoluteFill>
+  );
+}
+
+export interface PatchProps extends Record<string, unknown> {
+  scene: TimelineScene;
+  montage: string;
+  /** Fade in and out frames, matching the original at this point (0 when the piece is mid scene). */
+  fadeIn: number;
+  fadeOut: number;
+  /** The caption bar is already in place (the piece starts mid scene). */
+  settled: boolean;
+}
+
+/** One replacement piece of a scene, drawn exactly as in the full video (see demo/patch.ts). */
+export function Patch({ scene, montage, fadeIn, fadeOut, settled }: PatchProps) {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const a = fadeIn > 0 ? interpolate(frame, [0, fadeIn], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 1;
+  const b = fadeOut > 0 ? interpolate(frame, [durationInFrames - fadeOut, durationInFrames], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 1;
+  return (
+    <AbsoluteFill style={{ background: C.bg }}>
+      <AbsoluteFill style={{ opacity: Math.min(a, b) }}>
+        <Backdrop />
+        <AppWindow s={scene} />
+        <CaptionBar s={scene} montage={montage} settled={settled} />
+      </AbsoluteFill>
     </AbsoluteFill>
   );
 }
