@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Merros Technical Documentation</title>
+<style>
+  @page { size: A4; margin: 18mm 18mm 20mm; }
+  :root { --ink: #1d1418; --muted: #5d4c52; --burgundy: #7d1a35; --rose: #c2415f; --gold: #9a7a2e; --line: #e6d9dd; --soft: #faf5f6; --cyan: #1f6f7a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 10.6pt; line-height: 1.55; }
+  h1, h2, h3 { color: var(--burgundy); line-height: 1.2; margin: 0; }
+  h2 { font-size: 19pt; margin: 0 0 4mm; }
+  h2 .n { color: var(--rose); margin-right: 3mm; }
+  h3 { font-size: 12pt; margin: 5mm 0 2mm; color: var(--ink); }
+  p { margin: 0 0 3mm; }
+  ul { margin: 0 0 3mm; padding-left: 5mm; }
+  li { margin-bottom: 1.4mm; }
+  .section { page-break-before: always; }
+  .lead { font-size: 11.5pt; color: var(--muted); margin-bottom: 5mm; }
+  table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.8pt; }
+  th, td { text-align: left; vertical-align: top; padding: 2mm 2.5mm; border-bottom: 1px solid var(--line); }
+  th { color: var(--burgundy); font-weight: 600; background: var(--soft); }
+  .box { border: 1px solid var(--line); border-left: 4px solid var(--rose); background: var(--soft); border-radius: 2mm; padding: 3.5mm 4.5mm; margin: 3mm 0 4mm; }
+  .box.gold { border-left-color: var(--gold); }
+  .box.cyan { border-left-color: var(--cyan); }
+  .box p:last-child, .box ul:last-child { margin-bottom: 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .stat { border: 1px solid var(--line); border-radius: 2mm; padding: 3mm 4mm; }
+  .stat b { display: block; font-size: 20pt; color: var(--burgundy); line-height: 1.1; }
+  .stat span { color: var(--muted); font-size: 9.5pt; }
+  .small { font-size: 9pt; color: var(--muted); }
+  code { font-family: Consolas, "Courier New", monospace; font-size: 9.2pt; background: var(--soft); padding: 0.3mm 1.2mm; border-radius: 1mm; }
+  pre { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: var(--soft); border: 1px solid var(--line); border-radius: 2mm; padding: 3mm 4mm; white-space: pre-wrap; margin: 2mm 0 4mm; }
+  .tag { display: inline-block; font-size: 8.5pt; padding: 0.4mm 2mm; border-radius: 3mm; border: 1px solid var(--line); color: var(--muted); }
+  .ok { color: var(--cyan); font-weight: 600; }
+  /* Cover */
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; padding: 8mm 0 0; }
+  .cover .mark { width: 34mm; height: 34mm; border-radius: 9mm; }
+  .cover h1 { font-size: 46pt; margin: 10mm 0 3mm; letter-spacing: -0.5pt; }
+  .cover .sub { font-size: 16pt; color: var(--muted); max-width: 150mm; }
+  .cover .meta { border-top: 2px solid var(--burgundy); padding-top: 5mm; display: grid; grid-template-columns: 38mm 1fr; row-gap: 2.5mm; font-size: 11pt; }
+  .cover .meta b { color: var(--burgundy); }
+  .cover .disclaimer { font-size: 9pt; color: var(--muted); margin-top: 6mm; }
+  /* Contents */
+  .toc { list-style: none; padding: 0; font-size: 11.5pt; }
+  .toc li { display: flex; gap: 4mm; padding: 2mm 0; border-bottom: 1px dotted var(--line); }
+  .toc li span:first-child { color: var(--rose); width: 8mm; }
+  svg text { font-family: "Segoe UI", Arial, sans-serif; }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<section class="cover">
+  <div>
+    <img class="mark" src="{{LOGO}}" alt="">
+    <h1>Merros</h1>
+    <p class="sub">A privacy preserving genomic companion that helps couples build healthy families, with a plan.</p>
+    <p class="sub" style="font-size:13pt;margin-top:6mm">Technical documentation for the judging panel</p>
+  </div>
+  <div>
+    <div class="meta">
+      <b>Team</b><span>Merros</span>
+      <b>Challenge</b><span>Future Health Digital Innovation Challenge 2026 (Abu Dhabi), Fertility Challenge 03: Understanding and Reducing Inherited Disease Risk</span>
+      <b>Live prototype</b><span>https://merros-health.vercel.app</span>
+      <b>Date</b><span>November 2026</span>
+    </div>
+    <p class="disclaimer">All data in the prototype is synthetic. Merros is an independent prototype. It is not affiliated with or endorsed by the Department of Health Abu Dhabi; it uses the Department's published Premarital Screening Standard (DoH/STD/PSS/V3, September 2024) as a public reference only.</p>
+  </div>
+</section>
+
+<!-- Contents -->
+<section class="section">
+  <h2>Contents</h2>
+  <ul class="toc">
+    <li><span>1</span><span>Overview and the challenge it answers</span></li>
+    <li><span>2</span><span>System architecture</span></li>
+    <li><span>3</span><span>Data and dataset assumptions</span></li>
+    <li><span>4</span><span>Clinical boundaries</span></li>
+    <li><span>5</span><span>Privacy, security and responsible AI</span></li>
+    <li><span>6</span><span>User testing</span></li>
+    <li><span>7</span><span>Deployment</span></li>
+    <li><span>8</span><span>Limitations</span></li>
+    <li><span>9</span><span>Pilot plan</span></li>
+    <li><span>10</span><span>How to run it</span></li>
+  </ul>
+  <div class="box gold" style="margin-top:10mm">
+    <p><b>The principle behind every screen.</b> Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling and confident personal choice. A cancelled marriage, or any single personal decision, is never a success measure.</p>
+  </div>
+  <h3>Merros in one minute</h3>
+  <p>Mariam receives her premarital screening result. Merros checks the lab's signature, explains the result in plain Arabic or English and checks her understanding with Teach Back. With her fiancé Khalid she runs a Blind Couple Match on their own phones: only the genes they both carry are revealed, as a shared carrier result followed by their plan. Their genetic counsellor, Dr. Layla, receives a pre-session brief and a Counsellor Copilot that drafts a summary she reviews and signs. A year later, when science reclassifies one of Mariam's variants, Dr. Layla is told first and releases the update after speaking to her. Meanwhile the health system plans counselling from privacy protected statistics, without seeing anyone.</p>
+</section>
+
+<!-- 1 -->
+<section class="section">
+  <h2><span class="n">1</span>Overview and the challenge it answers</h2>
+  <p class="lead">Abu Dhabi has made premarital genetic screening universal. Testing is solved; understanding and acting on results is not.</p>
+  <h3>The challenge</h3>
+  <p>Fertility Challenge 03 asks for solutions that help people <b>identify, understand and reduce</b> inherited disease risk, in a way that is culturally appropriate and privacy preserving. Genetic results are complex, probabilistic and shared across families. Misunderstood results cause anxiety, stigma, family tension or false certainty. Consanguineous marriage is a long standing practice, so technology must support informed choice without judging anyone. Genetic counsellors are few, and genetic data is among the most private data a person has.</p>
+  <h3>What Merros does</h3>
+  <table>
+    <tr><th style="width:30%">Challenge need</th><th>How Merros answers it</th></tr>
+    <tr><td>Identify inherited risk</td><td>A signed lab result on the DoH premarital panel (563 genes); Blind Couple Match for shared carrier status; Family Risk Engine for relatives; Risk Beyond the Panel for related couples; Living Results that follow science over time.</td></tr>
+    <tr><td>Understand</td><td>Risk Explainer in plain language at three reading levels; Teach Back with re-explanation; the Genetic Copilot in Arabic (Gulf dialect) and English, by text or voice; a personal result video.</td></tr>
+    <tr><td>Reduce</td><td>"Your plan" after every risk result: counselling, every option with equal weight, one next step. Options Explorer, Values Compass, Find Care, and a care pathway that follows the DoH process.</td></tr>
+    <tr><td>Culturally appropriate</td><td>Arabic first, right to left; non directive wording enforced by tests (a couple is never "incompatible": they have a "shared carrier result"); options related to personal values, never ranked.</td></tr>
+    <tr><td>Privacy preserving</td><td>Granular consent; the couple match runs on the partners' phones; field level encryption; a tamper evident audit log; population statistics with differential privacy.</td></tr>
+  </table>
+  <h3>Two beneficiaries, one loop</h3>
+  <div class="grid">
+    <div class="box"><p><b>The person and the couple</b> understand their result, reach a counsellor sooner, decide by their own values and stay protected as science evolves.</p></div>
+    <div class="box cyan"><p><b>The health system</b> sees where people drop off, where counselling demand is rising and which languages are underserved, without seeing any individual.</p></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="section">
+  <h2><span class="n">2</span>System architecture</h2>
+  <p class="lead">One web application, a deterministic risk engine at its centre, and AI only where language is needed, always behind safety checks.</p>
+  <svg viewBox="0 0 700 430" width="100%" style="margin: 2mm 0 4mm">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#7d1a35"/></marker>
+    </defs>
+    <!-- users -->
+    <g font-size="12">
+      <rect x="10" y="20" width="150" height="58" rx="8" fill="#faf5f6" stroke="#c2415f"/>
+      <text x="85" y="44" text-anchor="middle" font-weight="600" fill="#1d1418">Person and couple</text>
+      <text x="85" y="62" text-anchor="middle" fill="#5d4c52">phone or browser, AR / EN</text>
+      <rect x="10" y="100" width="150" height="58" rx="8" fill="#faf5f6" stroke="#c2415f"/>
+      <text x="85" y="124" text-anchor="middle" font-weight="600" fill="#1d1418">Genetic counsellor</text>
+      <text x="85" y="142" text-anchor="middle" fill="#5d4c52">case queue and brief</text>
+      <rect x="10" y="180" width="150" height="58" rx="8" fill="#faf5f6" stroke="#c2415f"/>
+      <text x="85" y="204" text-anchor="middle" font-weight="600" fill="#1d1418">Health system</text>
+      <text x="85" y="222" text-anchor="middle" fill="#5d4c52">Population Signals</text>
+      <rect x="10" y="300" width="150" height="58" rx="8" fill="#fff" stroke="#9a7a2e"/>
+      <text x="85" y="324" text-anchor="middle" font-weight="600" fill="#1d1418">Screening lab</text>
+      <text x="85" y="342" text-anchor="middle" fill="#5d4c52">signed FHIR result</text>
+    </g>
+    <!-- app -->
+    <rect x="200" y="10" width="300" height="410" rx="12" fill="#fff" stroke="#7d1a35" stroke-width="1.5"/>
+    <text x="350" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#7d1a35">Merros web application (Next.js)</text>
+    <g font-size="11.5">
+      <rect x="220" y="48" width="260" height="44" rx="6" fill="#faf5f6" stroke="#e6d9dd"/>
+      <text x="350" y="67" text-anchor="middle" font-weight="600" fill="#1d1418">Consent, sign in, audit log</text>
+      <text x="350" y="83" text-anchor="middle" fill="#5d4c52">nothing is shown or shared before consent</text>
+      <rect x="220" y="102" width="260" height="56" rx="6" fill="#fdf2f4" stroke="#c2415f"/>
+      <text x="350" y="122" text-anchor="middle" font-weight="700" fill="#7d1a35">Deterministic risk engine</text>
+      <text x="350" y="139" text-anchor="middle" fill="#5d4c52">every number; unit tested; exact fractions</text>
+      <text x="350" y="153" text-anchor="middle" fill="#5d4c52">couple, family, beyond the panel</text>
+      <rect x="220" y="168" width="260" height="70" rx="6" fill="#faf5f6" stroke="#e6d9dd"/>
+      <text x="350" y="187" text-anchor="middle" font-weight="600" fill="#1d1418">Genetic Copilot and Counsellor Copilot</text>
+      <text x="350" y="204" text-anchor="middle" fill="#5d4c52">approved content + engine tools only</text>
+      <text x="350" y="219" text-anchor="middle" fill="#5d4c52">Safety Verifier on every answer</text>
+      <text x="350" y="233" text-anchor="middle" fill="#5d4c52">counsellor signs anything clinical</text>
+      <rect x="220" y="248" width="125" height="58" rx="6" fill="#faf5f6" stroke="#e6d9dd"/>
+      <text x="282" y="270" text-anchor="middle" font-weight="600" fill="#1d1418">Blind Couple</text>
+      <text x="282" y="285" text-anchor="middle" font-weight="600" fill="#1d1418">Match (PSI)</text>
+      <text x="282" y="300" text-anchor="middle" fill="#5d4c52">on the two phones</text>
+      <rect x="355" y="248" width="125" height="58" rx="6" fill="#faf5f6" stroke="#e6d9dd"/>
+      <text x="417" y="270" text-anchor="middle" font-weight="600" fill="#1d1418">Living Results</text>
+      <text x="417" y="285" text-anchor="middle" fill="#5d4c52">ClinVar watch,</text>
+      <text x="417" y="300" text-anchor="middle" fill="#5d4c52">counsellor first</text>
+      <rect x="220" y="316" width="260" height="44" rx="6" fill="#eef6f7" stroke="#1f6f7a"/>
+      <text x="350" y="335" text-anchor="middle" font-weight="600" fill="#1d1418">Population Signals</text>
+      <text x="350" y="351" text-anchor="middle" fill="#5d4c52">differential privacy, budget, suppression</text>
+      <rect x="220" y="370" width="260" height="40" rx="6" fill="#faf5f6" stroke="#e6d9dd"/>
+      <text x="350" y="388" text-anchor="middle" font-weight="600" fill="#1d1418">Escalation engine</text>
+      <text x="350" y="402" text-anchor="middle" fill="#5d4c52">routes to a named counsellor</text>
+    </g>
+    <!-- data -->
+    <g font-size="11.5">
+      <rect x="540" y="40" width="150" height="70" rx="8" fill="#faf5f6" stroke="#7d1a35"/>
+      <text x="615" y="64" text-anchor="middle" font-weight="600" fill="#1d1418">PostgreSQL</text>
+      <text x="615" y="81" text-anchor="middle" fill="#5d4c52">encrypted results,</text>
+      <text x="615" y="96" text-anchor="middle" fill="#5d4c52">hash chained audit</text>
+      <rect x="540" y="130" width="150" height="70" rx="8" fill="#fff" stroke="#e6d9dd"/>
+      <text x="615" y="154" text-anchor="middle" font-weight="600" fill="#1d1418">Language model</text>
+      <text x="615" y="171" text-anchor="middle" fill="#5d4c52">wording only,</text>
+      <text x="615" y="186" text-anchor="middle" fill="#5d4c52">never numbers</text>
+      <rect x="540" y="220" width="150" height="58" rx="8" fill="#fff" stroke="#e6d9dd"/>
+      <text x="615" y="244" text-anchor="middle" font-weight="600" fill="#1d1418">ClinVar (NCBI)</text>
+      <text x="615" y="261" text-anchor="middle" fill="#5d4c52">nightly check</text>
+      <rect x="540" y="298" width="150" height="58" rx="8" fill="#fff" stroke="#e6d9dd"/>
+      <text x="615" y="322" text-anchor="middle" font-weight="600" fill="#1d1418">Speech</text>
+      <text x="615" y="339" text-anchor="middle" fill="#5d4c52">voice in and out</text>
+    </g>
+    <g stroke="#7d1a35" stroke-width="1.4" fill="none" marker-end="url(#a)">
+      <path d="M160,49 L198,49"/><path d="M160,129 L198,129"/><path d="M160,209 L198,209"/><path d="M160,329 L198,329"/>
+      <path d="M500,75 L538,75"/><path d="M500,165 L538,165"/><path d="M500,249 L538,249"/><path d="M500,327 L538,327"/>
+    </g>
+  </svg>
+  <h3>Main parts</h3>
+  <ul>
+    <li><b>Web application:</b> Next.js 15 with React 19 and TypeScript, Arabic and English with full right to left layout, designed for phones first. One codebase serves people, counsellors and the programme team, each seeing only their own screens.</li>
+    <li><b>Risk engine:</b> pure, deterministic code that computes per pregnancy chances with exact fractions (for example 1/4 per shared gene, combined across genes as 1 − (1 − ¼)²). It is the only source of numbers.</li>
+    <li><b>Copilots:</b> a multi agent pipeline. A router reads the question; a retriever finds approved content; engine tools provide numbers; the model writes the answer; a Cultural and Dialect Adapter renders natural Gulf Arabic; the Safety Verifier checks the draft before anyone sees it.</li>
+    <li><b>Database:</b> PostgreSQL through Prisma. Results are stored as the lab signed them, encrypted per person; every access is written to a hash chained audit log.</li>
+    <li><b>Scheduled work:</b> a nightly job checks ClinVar for reclassifications and resets the public demo data.</li>
+  </ul>
+</section>
+
+<!-- 3 -->
+<section class="section">
+  <h2><span class="n">3</span>Data and dataset assumptions</h2>
+  <p class="lead">No real patient data is used anywhere. Real public references give the synthetic people realistic results.</p>
+  <table>
+    <tr><th style="width:26%">Source</th><th>How Merros uses it</th><th style="width:24%">Assumption</th></tr>
+    <tr><td><b>Synthetic personas</b></td><td>Ten fictional people (for example Mariam and Khalid, a first cousin couple; Hamad with a variant of uncertain significance; Noura and Faisal), one fictional counsellor and a programme user. Fictional lab, clinics and appointments.</td><td>Represent common premarital screening situations; they are not statistically representative.</td></tr>
+    <tr><td><b>DoH Premarital Screening Standard, V3 (September 2024)</b></td><td>Appendix 12 gene panel: 563 genes, mapped to current HGNC names with aliases so people can search by old or new names. Appendices 13 to 15 shape the care pathway, referral kinds and Find Care categories.</td><td>The September 2024 version; the Department updates the panel over time. Used as a public reference only.</td></tr>
+    <tr><td><b>ClinVar (NCBI)</b></td><td>Every variant in the synthetic results is a real ClinVar record with its real classification, for example HBB c.92+5G&gt;C (pathogenic), GJB2 c.35del (pathogenic) and CFTR c.3439G&gt;C (uncertain significance).</td><td>Real variants are assigned to fictional people. The reclassification shown in the demo is simulated and labelled as such.</td></tr>
+    <tr><td><b>Population carrier frequencies</b></td><td>Used by the Family Risk Engine when a relative's own result is unknown (for example 8.5% for HBB), shown with every estimate.</td><td>Published regional estimates; a pilot would replace them with programme data.</td></tr>
+    <tr><td><b>Kinship and inbreeding coefficients</b></td><td>Risk Beyond the Panel compares a related couple's measured sharing with the expected value (0.0625 for first cousins) and estimates the added risk above the population baseline.</td><td>Runs on precomputed synthetic shared segments; there is no genomics pipeline in the prototype.</td></tr>
+    <tr><td><b>Population Signals data</b></td><td>Synthetic journeys (result received, Teach Back, counselling booked, report issued) by region, language and reading level.</td><td>Generated to show the method; no real programme statistics.</td></tr>
+  </table>
+  <div class="box gold">
+    <p><b>Content.</b> Condition explanations, Teach Back items, options and consent wording were written for the prototype from MedlinePlus Genetics and GeneReviews, with sources cited in the app. All content is marked as pending accredited clinical and Arabic language review.</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="section">
+  <h2><span class="n">4</span>Clinical boundaries</h2>
+  <p class="lead">Merros explains and connects. It does not diagnose, decide or replace a genetic counsellor.</p>
+  <div class="grid">
+    <div class="box cyan">
+      <p><b>The AI may</b></p>
+      <ul>
+        <li>Explain a result, a condition or an option in plain language, citing approved content.</li>
+        <li>Use numbers that the risk engine returns through its tools.</li>
+        <li>Answer in Gulf Arabic or English, by text or voice.</li>
+        <li>Draft a patient summary from the counsellor's own notes, for the counsellor to edit and sign.</li>
+        <li>Offer a counsellor whenever a person is the right answer.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <p><b>The AI may not</b></p>
+      <ul>
+        <li>Calculate or invent any risk number. A number not in the engine's output or approved content is blocked.</li>
+        <li>Tell anyone whom to marry or what to decide, or rank options.</li>
+        <li>Diagnose, or say a baby will or will not have a condition.</li>
+        <li>Use stigmatising or judging language ("incompatible", "defective").</li>
+        <li>Send anything clinical to a patient without a counsellor's signature.</li>
+      </ul>
+    </div>
+  </div>
+  <h3>Escalation rules (deterministic, unit tested)</h3>
+  <table>
+    <tr><th style="width:38%">Trigger</th><th style="width:16%">Priority</th><th>What happens</th></tr>
+    <tr><td>Both partners carry a change in the same gene</td><td>High</td><td>Routed to a named genetic counsellor, with the couple's plan</td></tr>
+    <tr><td>Pregnant, or trying to conceive</td><td>Urgent / high</td><td>Timing matters: counselling offered first</td></tr>
+    <tr><td>Distress score of 4 or more (0 to 10)</td><td>Urgent</td><td>Same week counsellor or psychologist callback; safety guidance at 7+</td></tr>
+    <tr><td>Variant of uncertain significance</td><td>Routine</td><td>Counsellor explains; never counted in any risk number</td></tr>
+    <tr><td>Significant personal finding</td><td>High</td><td>Counsellor before any explanation</td></tr>
+    <tr><td>Teach Back answered wrongly twice</td><td>Routine</td><td>A person explains instead</td></tr>
+    <tr><td>Medical advice requested, or Safety Verifier block</td><td>Routine</td><td>Answer replaced; counsellor offered</td></tr>
+    <tr><td>Variant reclassified (Living Results)</td><td>High</td><td>Counsellor told first, releases after speaking to the person</td></tr>
+    <tr><td>Risk Beyond the Panel result</td><td>High</td><td>Counsellor only, until discussed with the couple</td></tr>
+  </table>
+  <h3>Counsellor sign off</h3>
+  <p>Summaries drafted by the Counsellor Copilot, reclassified results and Risk Beyond the Panel estimates all stay with the counsellor until she reviews them and releases them. The patient sees only what the counsellor signed.</p>
+  <h3>Engine scope</h3>
+  <p>The engine computes autosomal recessive couple risk. X linked, dominant, phase unknown and homozygous findings are routed to a counsellor rather than computed.</p>
+</section>
+
+<!-- 5 -->
+<section class="section">
+  <h2><span class="n">5</span>Privacy, security and responsible AI</h2>
+  <h3>Consent</h3>
+  <p>Nothing is pre ticked and nothing is shared by default. Each purpose (see my result, compare with my partner, let my counsellor see it, help improve care anonymously, tell me if science changes my result, Risk Beyond the Panel, Values Summary sharing) is a separate, revocable choice with a time limit, visible in Privacy. The right not to know is respected: people who did not ask to be recontacted are never contacted.</p>
+  <h3>Blind Couple Match</h3>
+  <p>Each partner turns their own key on their own phone. Their phones run a private set intersection protocol (elliptic curve, blinded points); the server only relays sealed points and cannot tell which genes the couple shares. Only the genes both carry are revealed, and only once both have agreed. Neither partner sees the rest of the other's result.</p>
+  <h3>Security</h3>
+  <ul>
+    <li><b>Signed results:</b> the lab signs each FHIR result (Ed25519). Merros verifies the signature before opening it and refuses a tampered delivery.</li>
+    <li><b>Encryption:</b> results are encrypted per person (AES-256-GCM with a per person data key wrapped by a master key held as a secret).</li>
+    <li><b>Audit:</b> every access and change is written to a hash chained, tamper evident audit log that the person can see.</li>
+    <li><b>Public demo protections:</b> rate limits on the Copilot (20 questions per visitor per hour and a daily cap), a passcode on demo reset, and a nightly data reset.</li>
+  </ul>
+  <h3>Population Signals: differential privacy</h3>
+  <p>Every published number has calibrated random noise added (discrete Laplace, ε differential privacy). Each release spends part of a visible quarterly privacy budget (ε 2.0 per release out of ε 6.0); when it is used up, nothing more is published until the next quarter. Any group under 10 people is hidden. Nothing is broken down by tribe, family name or identity group.</p>
+  <h3>Responsible AI</h3>
+  <ul>
+    <li><b>Safety Verifier:</b> rules first (unverified numbers, directive, diagnostic and stigmatising wording, missing citation), then a model classifier. A blocked draft is replaced by a safe answer and a counsellor offer.</li>
+    <li><b>Grounding:</b> answers must cite approved passages; the sources are shown under each answer.</li>
+    <li><b>Evaluation:</b> a golden set of questions in both languages is run against the Copilot; results are documented.</li>
+    <li><b>Transparency:</b> every answer is labelled "Education" or "Decision support", and "How this answer was made" shows the agents' steps.</li>
+    <li><b>Testing:</b> 350+ unit tests cover the risk engine, the couple match protocol, consent, escalation, the Safety Verifier, differential privacy and wording; 30 browser tests cover the main journeys in Arabic and English.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section class="section">
+  <h2><span class="n">6</span>User testing</h2>
+  <p class="lead">A small, early usability test of the prototype, with a simulated scenario and no real patient data.</p>
+  <div class="grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="stat"><b>12</b><span>people tested Merros</span></div>
+    <div class="stat"><b>8 → 12 of 12</b><span>understood their result correctly, first time and after Teach Back</span></div>
+    <div class="stat"><b>12 of 12</b><span>would recommend Merros to a friend or relative</span></div>
+  </div>
+  <h3>Method</h3>
+  <p>Twelve adults used the demo couple (synthetic data) and read Mariam's result as if it were their own, compared it with a partner using the Blind Couple Match, asked the Genetic Copilot questions and completed Teach Back. We recorded whether each person could explain their result correctly in their own words, first without help and then after Teach Back; whether they found the Copilot's answers clear; and whether they would recommend Merros.</p>
+  <table>
+    <tr><th>Measure</th><th style="width:22%">Result</th></tr>
+    <tr><td>Understood their result correctly the first time</td><td>8 of 12</td></tr>
+    <tr><td>Understood their result correctly after Teach Back</td><td>12 of 12</td></tr>
+    <tr><td>Found the Copilot's answers clear</td><td>12 of 12</td></tr>
+    <tr><td>Would recommend Merros to a friend or relative</td><td>12 of 12</td></tr>
+  </table>
+  <h3>What this shows, and what it does not</h3>
+  <ul>
+    <li>Teach Back did its job: the four people who misunderstood at first understood after a second explanation. This supports keeping it as a required step.</li>
+    <li>Twelve people is a small group, and a simulated scenario is not the same as receiving your own result.</li>
+    <li>Participants were not selected to represent the UAE population. These results should not be read as evidence of clinical effect; the pilot (section 9) is designed to measure that.</li>
+  </ul>
+</section>
+
+<!-- 7 -->
+<section class="section">
+  <h2><span class="n">7</span>Deployment</h2>
+  <h3>Today: the live prototype</h3>
+  <p>The prototype runs on <b>Vercel</b> with a <b>Neon PostgreSQL</b> database, at https://merros-health.vercel.app. It deploys automatically from the main branch. Development and all automated tests use a separate database branch; the live site uses its own production branch, and a guard in the code refuses to run seeds or tests against any database that is not explicitly allowed. Secrets live only in the hosting provider's environment settings. Because this hosting is outside the UAE, the live site holds synthetic data only.</p>
+  <h3>Production: Microsoft Azure, UAE North</h3>
+  <p>The production deployment is prepared for <b>Microsoft Azure in the UAE North region</b>, so that genetic data stays in the country. It is defined as infrastructure as code and is ready to switch on:</p>
+  <table>
+    <tr><th style="width:34%">Component</th><th>Role</th></tr>
+    <tr><td>Bicep templates</td><td>The whole environment in one file, deployed by a GitHub Actions workflow</td></tr>
+    <tr><td>Azure Container Apps</td><td>The web application, a database migration job and the nightly ClinVar job, from a container registry</td></tr>
+    <tr><td>Azure Database for PostgreSQL</td><td>Flexible Server, in region</td></tr>
+    <tr><td>Azure Key Vault</td><td>Encryption master key, signing keys and other secrets, read through a managed identity</td></tr>
+    <tr><td>Azure AI Speech</td><td>Natural Gulf Arabic and English voices for the Copilot</td></tr>
+    <tr><td>Microsoft Foundry</td><td>Hosting the Copilot's language model in the same region; the model provider is a configuration setting</td></tr>
+    <tr><td>Monitoring</td><td>Log Analytics and Application Insights</td></tr>
+  </table>
+  <div class="box gold"><p><b>Status, stated plainly.</b> The Azure deployment is prepared but not yet live. Every service that depends on Azure has a working fallback today (browser speech, a simulated video room, the nightly job on the current host, precomputed Risk Beyond the Panel results), selected by feature flags, so switching to Azure changes configuration, not code.</p></div>
+  <h3>Scaling</h3>
+  <p>The application is stateless and runs in containers, so it scales horizontally. Couple matching runs on the users' own devices, and the risk engine is pure computation with no external calls, so neither becomes a bottleneck as use grows.</p>
+</section>
+
+<!-- 8 -->
+<section class="section">
+  <h2><span class="n">8</span>Limitations</h2>
+  <ul>
+    <li><b>Synthetic data only.</b> All people, clinicians, clinics, appointments and lab results are fictional. Variants are real ClinVar records assigned to fictional people.</li>
+    <li><b>Content pending accredited review.</b> Explanations, Teach Back items, options and consent wording must be reviewed by accredited clinicians, genetic counsellors and Arabic language reviewers before real use.</li>
+    <li><b>Simulated integrations.</b> Lab delivery, appointment booking, the counsellor directory, video sessions and sign in (a persona picker instead of UAE Pass) are simulated.</li>
+    <li><b>Gene panel.</b> The DoH panel (September 2024) covers autosomal recessive genes. Seven conditions have written explanations; for other panel genes the couple sees the gene name and the engine's numbers, and a counsellor explains the condition.</li>
+    <li><b>Risk engine scope.</b> Autosomal recessive couple risk only; other inheritance patterns are routed to a counsellor. Residual risk after a negative result is explained in words, not computed.</li>
+    <li><b>Blind Couple Match.</b> The server relays blinded points only, but still stores each person's encrypted result at rest. A modified app could submit a small number of chosen genes; this is documented in the threat model.</li>
+    <li><b>Risk Beyond the Panel</b> runs on precomputed synthetic data; there is no genomics pipeline yet.</li>
+    <li><b>Care pathway.</b> Merros follows the DoH steps but does not issue the Premarital Screening and Counselling Report.</li>
+    <li><b>Hosting.</b> The live prototype is hosted outside the UAE and holds synthetic data only; the UAE North deployment is prepared, not yet live.</li>
+    <li><b>Public demonstration.</b> Anyone with the link can sign in as any synthetic persona; there is no real authentication.</li>
+    <li><b>User testing.</b> Twelve participants, simulated scenario (section 6).</li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section class="section">
+  <h2><span class="n">9</span>Pilot plan</h2>
+  <p class="lead">A three month pilot in two Abu Dhabi screening centres, after accredited review of all content.</p>
+  <h3>Design</h3>
+  <ul>
+    <li><b>Setting:</b> two premarital screening centres, Arabic and English speakers, a range of reading levels.</li>
+    <li><b>Participants:</b> consenting couples receiving premarital screening results, with their genetic counsellors.</li>
+    <li><b>Integration:</b> signed results from the screening laboratory; referral routes to the genetic counselling services listed in Appendix 13 of the DoH standard, subject to agreement from those institutions and the Department.</li>
+    <li><b>Hosting:</b> Azure UAE North, with real authentication.</li>
+  </ul>
+  <h3>Measures</h3>
+  <table>
+    <tr><th style="width:40%">Outcome</th><th>Measure</th></tr>
+    <tr><td>Understanding</td><td>Teach Back correct before and after re-explanation, by language and reading level</td></tr>
+    <tr><td>Access to counselling</td><td>Time from result to results counselling; share of couples counselled together</td></tr>
+    <tr><td>Programme steps</td><td>Time to the Premarital Screening and Counselling Report; referrals made</td></tr>
+    <tr><td>Counsellor workload</td><td>Preparation time per session with the pre-session brief and Counsellor Copilot</td></tr>
+    <tr><td>Wellbeing</td><td>Distress scores and callbacks</td></tr>
+    <tr><td>Safety</td><td>Safety Verifier blocks, escalations and their resolution</td></tr>
+    <tr><td>Experience</td><td>Usability and trust, in Arabic and English</td></tr>
+  </table>
+  <h3>What success is not</h3>
+  <p>The pilot never measures cancelled marriages or any single personal decision. Success is understanding, timely counselling and confident personal choice.</p>
+  <h3>Before the pilot</h3>
+  <ul>
+    <li>Accredited clinical, genetic counselling and Arabic language review of all content.</li>
+    <li>Ethics approval and a data protection impact assessment.</li>
+    <li>Switching on the Azure UAE North deployment and UAE Pass sign in.</li>
+  </ul>
+</section>
+
+<!-- 10 -->
+<section class="section">
+  <h2><span class="n">10</span>How to run it</h2>
+  <h3>Use the live prototype</h3>
+  <ol>
+    <li>Open <b>https://merros-health.vercel.app</b>. It opens on the sign in page.</li>
+    <li>Choose a persona (for example <b>Mariam</b>). No password is needed; all data is synthetic.</li>
+    <li>Press <b>Judge Tour</b> (bottom corner) for a guided four minute walk in six steps, following Mariam and Khalid from result day to a year later. Buttons marked <b>Presenter control</b> appear only during the tour; they simulate things that normally take months or two phones (switching to the partner's phone, a ClinVar update).</li>
+    <li>Switch between Arabic and English at the top of any screen.</li>
+  </ol>
+  <h3>Run it locally</h3>
+  <p>Requirements: Docker Desktop. From the project folder:</p>
+  <pre>docker compose up --build</pre>
+  <p>This starts PostgreSQL, applies the database schema, loads the synthetic demo data and serves the app at http://localhost:3000.</p>
+  <h3>Tests</h3>
+  <pre>pnpm test        # unit tests: risk engine, couple match, consent, escalation, Safety Verifier, privacy
+pnpm test:e2e    # browser tests of the main journeys in Arabic and English</pre>
+  <h3>The demo video</h3>
+  <pre>pnpm demo        # records the story with a browser and assembles the video (under 3 minutes)</pre>
+  <div class="box"><p>Source code, architecture notes, security and privacy documents, the clinical safety case and the AI evaluation are in the project repository under <code>docs/</code>.</p></div>
+</section>
+
+</body>
+</html>
