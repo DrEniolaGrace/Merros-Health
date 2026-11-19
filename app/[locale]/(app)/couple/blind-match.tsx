@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowsLeftRight, Key, LockKey, ShieldCheck, Sparkle, UsersThree } from "@phosphor-icons/react";
 import { psiState, psiSubmitRound1, psiSubmitRound2, psiTurnKey, shareOutcomeWithCounsellor } from "@/lib/actions/psi";
 import { tourGo } from "@/lib/actions/auth";
+import { PresenterControl } from "@/components/tour/presenter";
 import { intersect, newSecret, psiItemsFromSignedResult, round1, round2, PSI_SET_SIZE } from "@/lib/psi/protocol";
 import { combineAffected, perPregnancy } from "@/lib/risk/engine";
 import { HALF, toNumber, toPercentString } from "@/lib/risk/fraction";
@@ -262,11 +263,11 @@ export function BlindMatch({
           </div>
         )}
         {(phase === "waiting" || phase === "ready") && partnerPersona && (
-          <div>
+          <PresenterControl>
             <Button variant="ghost" icon={<ArrowsLeftRight />} pending={pending} className="-ms-4" onClick={() => start(async () => { window.location.assign(await tourGo(partnerPersona, "/couple")); })}>
               {L.demoSwitch}
             </Button>
-          </div>
+          </PresenterControl>
         )}
       </PageHero>
 

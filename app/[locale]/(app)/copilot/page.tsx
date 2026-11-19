@@ -67,7 +67,7 @@ export default async function CopilotPage({ params }: { params: Promise<{ locale
           voiceErrors: { mic_denied: t("errMic"), not_understood: t("errNotUnderstood"), too_long: t("errTooLong"), failed: t("errFailed") },
         }}
       />
-      <p className="text-xs text-muted">{t("disclaimer")}{azureVoice ? "" : ` ${t("voiceBrowserNote")}`}</p>
+      <p className="text-xs text-muted">{t("disclaimer")}</p>
     </div>
   );
 }

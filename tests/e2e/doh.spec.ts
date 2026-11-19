@@ -44,9 +44,9 @@ test("About and sources: the DoH standard is cited, and Merros is not affiliated
 
 test("The admin passcode can be typed in one go", async ({ page }) => {
   test.skip(!process.env.E2E_ADMIN_PASSCODE, "needs a server started with DEMO_ADMIN_PASSCODE");
+  // Reset is a presenter control on the tour's last card ("Explore more").
+  await page.context().addCookies([{ name: "merros-tour", value: "7", url: new URL(page.url() === "about:blank" ? process.env.E2E_BASE_URL ?? "http://localhost:3000" : page.url()).origin }]);
   await page.goto("/en/login");
-  await page.getByRole("button", { name: "Judge Tour" }).click();
-  await page.getByRole("button", { name: "Admin", exact: true }).click();
   const box = page.getByLabel("Admin passcode");
   await box.click();
   // Typed key by key, as a person does. Before the fix, focus left the box after the first key.

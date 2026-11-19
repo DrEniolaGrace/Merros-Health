@@ -72,14 +72,30 @@ describe("Your plan", () => {
 });
 
 describe("Judge Tour", () => {
-  it("opens with what only Merros does", () => {
+  type Tour = Record<string, unknown> & { explore: Record<string, { title: string; body: string }> };
+  const tourEn = en.tour as unknown as Tour;
+  const tourAr = ar.tour as unknown as Tour;
+  it("follows the story of the demo video in six steps, then Explore more", () => {
     const src = fs.readFileSync("components/tour/judge-tour.tsx", "utf8");
-    const order = [...src.matchAll(/\{ key: "(s\d+)", persona: "[a-z]+", path: "[^"]+", group: "(unique|supporting)" \}/g)].map((m) => [m[1], m[2]]);
-    expect(order.slice(0, 4)).toEqual([["s10", "unique"], ["s18", "unique"], ["s16", "unique"], ["s13", "unique"]]);
-    expect(order.slice(4).every(([, g]) => g === "supporting")).toBe(true);
-    for (const [k] of order) {
-      expect((en.tour as Record<string, string>)[k], k).toBeTruthy();
-      expect((ar.tour as Record<string, string>)[k], k).toBeTruthy();
+    const steps = [...src.slice(src.indexOf("const STEPS"), src.indexOf("const COUNT")).matchAll(/key: "([a-z]+)"/g)].map((m) => m[1]);
+    expect(steps).toEqual(["welcome", "result", "match", "brief", "living", "signals"]);
+    for (const k of steps) {
+      for (const t of [tourEn, tourAr]) expect((t[k] as { title: string; body: string }).body, k).toBeTruthy();
+    }
+    expect((tourEn.welcome as { body: string }).body).toBe("This short tour walks you through Merros in about 4 minutes, following one couple, Mariam and Khalid, from result day to a year later. Buttons marked Presenter control simulate things that normally take months or two phones. You can leave the tour at any time.");
+    const explore = [...src.slice(src.indexOf("const EXPLORE"), src.indexOf("export function JudgeTour")).matchAll(/key: "([a-zA-Z]+)"/g)].map((m) => m[1]);
+    expect(explore).toEqual(["copilot", "family", "beyond", "findCare", "values", "privacy"]);
+    for (const k of explore) for (const t of [tourEn, tourAr]) expect(t.explore[k].body, k).toBeTruthy();
+  });
+
+  it("no user facing text mentions Azure, phases or unfinished work", () => {
+    const walk = (o: unknown, out: string[] = []): string[] => {
+      if (typeof o === "string") out.push(o);
+      else if (o && typeof o === "object") for (const v of Object.values(o)) walk(v, out);
+      return out;
+    };
+    for (const text of [...walk(en), ...walk(ar)]) {
+      expect(text).not.toMatch(/Azure|Phase d|in a later phase|المرحلة|coming soon|TODO|lorem/i);
     }
   });
 });

@@ -107,8 +107,8 @@ export const PERSONAS: Persona[] = [
   },
   {
     key: "admin", role: "admin", nameEn: "Programme Admin", nameAr: "مسؤول البرنامج",
-    storyEn: "Department of Health programme view. Verifies audit integrity; dashboard arrives in Phase 4.",
-    storyAr: "واجهة دائرة الصحة. تتحقق من سلامة سجل التدقيق؛ لوحة المؤشرات في المرحلة الرابعة.",
+    storyEn: "Health system view: privacy protected Population Signals, the privacy budget and audit integrity.",
+    storyAr: "واجهة النظام الصحي: مؤشرات المجتمع المحمية الخصوصية، وميزانية الخصوصية، وسلامة سجل التدقيق.",
     variants: null,
     onboarded: true, locale: "en", readingLevel: "standard", mediaPref: "text", pregnancyStatus: "prefer_not_to_say", showInPicker: true,
   },

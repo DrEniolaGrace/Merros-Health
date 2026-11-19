@@ -17,6 +17,8 @@ export default defineConfig({
   globalSetup: "./tests/e2e/global-setup.ts",
   use: {
     baseURL: BASE,
+    // Presenter controls (phone switch, tampered delivery, ClinVar update) are on, without the tour card.
+    storageState: { cookies: [{ name: "merros-tour", value: "p", domain: new URL(BASE).hostname, path: "/", expires: -1, httpOnly: false, secure: false, sameSite: "Lax" }], origins: [] },
     ...devices["Pixel 5"],
     viewport: { width: 375, height: 812 },
     trace: "retain-on-failure",

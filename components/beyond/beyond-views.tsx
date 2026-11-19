@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/controls";
 import { releaseBeyondPanel, setBeyondConsent } from "@/lib/actions/beyond";
 import { tourGo } from "@/lib/actions/auth";
+import { PresenterControl } from "@/components/tour/presenter";
 import { AUTOSOME_MB, type Segment } from "@/lib/beyond/engine";
 
 /** Twenty two autosomes as bars, with the stretches the partners share shown in gold. */
@@ -52,9 +53,11 @@ export function BeyondConsentSwitch({ checked, label, description }: { checked: 
 export function DemoSwitchPartner({ persona, label }: { persona: string; label: string }) {
   const [pending, start] = useTransition();
   return (
-    <Button variant="ghost" icon={<ArrowsLeftRight />} pending={pending} className="-ms-4 self-start" onClick={() => start(async () => { window.location.assign(await tourGo(persona, "/couple")); })}>
-      {label}
-    </Button>
+    <PresenterControl>
+      <Button variant="ghost" icon={<ArrowsLeftRight />} pending={pending} className="-ms-4 self-start" onClick={() => start(async () => { window.location.assign(await tourGo(persona, "/couple")); })}>
+        {label}
+      </Button>
+    </PresenterControl>
   );
 }
 

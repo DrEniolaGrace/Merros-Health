@@ -8,6 +8,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { LinkButton } from "@/components/ui/link-button";
 import { importAction } from "@/lib/actions/patient";
+import { PresenterControl } from "@/components/tour/presenter";
 import type { ImportOutcome } from "@/lib/services/results";
 
 export function ImportPanel({ lab }: { lab: string }) {
@@ -35,9 +36,11 @@ export function ImportPanel({ lab }: { lab: string }) {
               <Button size="lg" variant="gold" icon={<SealCheck />} pending={pending && which === "real"} disabled={pending} onClick={() => run(false)}>
                 {t("verify")}
               </Button>
-              <Button variant="ghost" disabled={pending} pending={pending && which === "tamper"} onClick={() => run(true)}>
-                {t("tamper")}
-              </Button>
+              <PresenterControl>
+                <Button variant="ghost" disabled={pending} pending={pending && which === "tamper"} onClick={() => run(true)}>
+                  {t("tamper")}
+                </Button>
+              </PresenterControl>
             </div>
           </GlassCard>
           {outcome && !outcome.ok && (

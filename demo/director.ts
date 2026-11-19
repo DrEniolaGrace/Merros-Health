@@ -75,6 +75,8 @@ export class Scene {
     fs.mkdirSync(CLIPS, { recursive: true });
     const ctx = await browser.newContext({ viewport: SIZE, recordVideo: { dir: path.join(OUT, "raw"), size: SIZE }, baseURL: BASE, locale: "en-GB" });
     await ctx.addInitScript(STAGE);
+    // Presenter controls on (switching phones, simulating an update), without the tour card.
+    await ctx.addCookies([{ name: "merros-tour", value: "p", url: BASE }]);
     const page = await ctx.newPage();
     const s = new Scene(key, ctx, page);
     s.t0 = Date.now(); // the video starts when the page is created

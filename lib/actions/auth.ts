@@ -44,11 +44,13 @@ export async function signOut() {
 /** Judge Tour: switch persona and open a screen. Only fixed, known paths are allowed. */
 const TOUR_PATHS = new Set(["/onboarding", "/import", "/copilot", "/family", "/find-care", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home", "/admin", "/values", "/wellbeing", "/video"]);
 
-export async function tourGo(personaKey: string, path: string): Promise<string> {
+export async function tourGo(personaKey: string, path: string, locale?: "ar" | "en"): Promise<string> {
   // Counsellor shortcuts open one case directly: /counsellor/open/<persona key>.
   if (!TOUR_PATHS.has(path) && !/^\/counsellor\/open\/[a-z]+$/.test(path)) throw new Error("Unknown tour path");
   await signIn(personaKey);
-  return `/${await getLocale()}${path}`;
+  // Only the two app languages; anything else keeps the current one.
+  const lang = locale === "ar" || locale === "en" ? locale : await getLocale();
+  return `/${lang}${path}`;
 }
 
 /** Tells the Judge Tour whether to show the reset button, a passcode field, or nothing. */

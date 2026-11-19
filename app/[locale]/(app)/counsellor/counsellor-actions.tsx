@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { ArrowsClockwise, CheckCircle, PencilSimpleLine, SealCheck, Sparkle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
+import { PresenterControl } from "@/components/tour/presenter";
 import { checkClinvarNow, releaseReclassification, simulateClinvarUpdate } from "@/lib/actions/living";
 import { completeSession, markReportIssued, saveNotesAndDraft, signSummary } from "@/lib/actions/counsellor";
 
@@ -10,12 +11,14 @@ export function SimulateUpdate({ label, done }: { label: string; done: string })
   const [pending, start] = useTransition();
   const [msg, setMsg] = useState<string | null>(null);
   return (
+    <PresenterControl>
     <div className="flex flex-wrap items-center gap-3">
       <Button variant="secondary" icon={<ArrowsClockwise />} pending={pending} onClick={() => start(async () => { const r = await simulateClinvarUpdate(); setMsg(done.replace("{affected}", String(r.affected)).replace("{tasks}", String(r.tasks))); window.location.reload(); })}>
         {label}
       </Button>
       {msg && <p role="status" className="text-sm text-cyan-ink tabular">{msg}</p>}
     </div>
+    </PresenterControl>
   );
 }
 

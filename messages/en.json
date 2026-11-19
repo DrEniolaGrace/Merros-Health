@@ -22,7 +22,6 @@
     "days": "{count, plural, one {# day} other {# days}}",
     "until": "until {date}",
     "noExpiry": "until you withdraw",
-    "phaseNote": "Coming in Phase {n}",
     "yes": "Yes",
     "no": "No"
   },
@@ -104,7 +103,7 @@
     "perPregnancyGrid": "One shared gene, out of 100 pregnancies",
     "accents": "Hero accents",
     "accentsNote": "Eyebrow pills, gradient display text, the glowing horizon, floating status chips with corner dots, live badges, stat rows and the dot meter. Use them for moments that matter, never as decoration alone.",
-    "eyebrowSample": "Phase 1 is live",
+    "eyebrowSample": "Synthetic demo",
     "gradientSample": "Your genes, understood.",
     "goldSample": "Your choices, your own.",
     "chipSample": "Signature verified",
@@ -149,7 +148,7 @@
     "f2Body": "Every risk figure comes from tested, deterministic code, never from an AI model.",
     "f3Title": "People, not just screens",
     "f3Body": "When it matters, Merros routes you to a named, licensed genetic counsellor.",
-    "announce": "Phase 1 is live · synthetic demo",
+    "announce": "Prototype · synthetic demo data",
     "heroTitle": "Your genes, understood.",
     "heroAccent": "Your choices, your own.",
     "heroBody": "Merros explains premarital and preconception carrier results in Arabic and English, protects couples so nobody sees more than they agreed to, and connects you to a qualified genetic counsellor when it matters.",
@@ -243,7 +242,7 @@
     "text": "Read",
     "textDesc": "Text on screen",
     "audio": "Listen",
-    "audioDesc": "Spoken explanations (voice arrives in Phase 4)",
+    "audioDesc": "Spoken explanations, read aloud on your device",
     "both": "Both",
     "bothDesc": "Text with audio",
     "aboutTitle": "Are you pregnant or planning a pregnancy?",
@@ -410,7 +409,7 @@
     "timing": "Timing",
     "availability": "Availability",
     "questions": "Questions to ask a counsellor",
-    "values": "Values Compass, a tool to think through what matters to you, arrives in a later phase.",
+    "values": "Not sure which fits you? The Values Compass relates each option to what matters to you.",
     "talk": "Talk these through with a counsellor",
     "toValues": "See how options fit my values"
   },
@@ -488,7 +487,7 @@
     "deleteBody": "Permanently removes your account, result, consents and journey. The access record keeps only anonymous entries so it can still be verified.",
     "deleteConfirmLabel": "Type DELETE or حذف to confirm",
     "deleteConfirm": "Delete everything",
-    "relatives": "Relatives are stored only by relationship label, never by name (Family Risk Engine, Phase 3).",
+    "relatives": "Relatives are stored only by relationship label, never by name.",
     "actions": {
       "login": "Signed in",
       "onboarding_completed": "Completed onboarding",
@@ -529,7 +528,7 @@
     "whatTitle": "What it covers",
     "whatBody": "A blood or saliva test that looks for changes in genes linked to conditions such as thalassaemia, sickle cell disease and SMA. It shows chance, not a diagnosis.",
     "whereTitle": "Where to get it",
-    "whereBody": "Ask your family doctor or a genetic counsellor. A directory of services arrives in Phase 3.",
+    "whereBody": "Ask your family doctor or a genetic counsellor, or use Find Care to see services near you.",
     "talk": "Talk to a genetic counsellor"
   },
   "home": {
@@ -618,38 +617,70 @@
   },
   "tour": {
     "open": "Judge Tour",
-    "title": "Judge Tour",
-    "body": "A guided walk through Merros. Each step switches persona and opens the screen that proves it.",
-    "go": "Go",
+    "presenter": "Presenter control",
+    "stepOf": "Step {n} of {total}",
+    "exploreEyebrow": "Explore more",
+    "back": "Back",
+    "next": "Next",
+    "exit": "Exit",
+    "finish": "Finish",
     "reset": "Reset demo data",
     "resetting": "Resetting",
-    "s1": "Mariam receives a lab signed result, sets her language and gives granular consent",
-    "s2": "Signature check: Merros refuses a tampered result",
-    "s3": "Blind Couple Match: Mariam turns her key, then switch to Khalid's phone. Only a shared carrier result is revealed, followed by their plan",
-    "s4": "Teach Back checks understanding and re explains",
-    "s5": "Options Explorer: every option, equal weight",
-    "s6": "Hamad's VUS routes him to a named counsellor",
-    "s8": "Privacy: access history and tamper evident audit",
-    "later": "Waiting for Azure",
-    "l4": "Azure: deployment in the UAE, Gulf Arabic voice, real video calls, genomics pipeline",
-    "s9": "Genetic Copilot: ask a question, then try \"Should I marry my cousin?\" to see the Safety Verifier",
-    "s10": "Living Results: as Dr. Layla, simulate a ClinVar update and release it to Hamad",
-    "s11": "Family Risk Engine: Khalid's family map and a private invitation",
-    "s12": "Find Care: filter providers and see them on the map",
-    "s13": "Population Signals: private statistics with a visible privacy budget",
-    "admin": "Admin",
     "passcode": "Admin passcode",
     "passcodeWrong": "That passcode is not correct.",
     "passcodeTooMany": "Too many attempts. Please try again in an hour.",
     "nightly": "The demo data resets itself every night.",
-    "s14": "Values Compass: options related to your own values, never ranked",
-    "s15": "Distress Check: calm support and a same week callback",
-    "s16": "Risk Beyond the Panel: Khalid and Mariam both agreed. Dr. Layla sees the estimate first and decides when to release it",
-    "s17": "My Result Video: a personal animated explainer, made on the device",
-    "needsAzure": "Needs Azure",
-    "uniqueTitle": "What only Merros does",
-    "supportingTitle": "Supporting features",
-    "s18": "Counsellor Copilot: Dr. Layla's pre session brief for Hamad, then a summary drafted from her notes that she reviews and signs"
+    "welcome": {
+      "title": "Welcome to Merros",
+      "body": "This short tour walks you through Merros in about 4 minutes, following one couple, Mariam and Khalid, from result day to a year later. Buttons marked Presenter control simulate things that normally take months or two phones. You can leave the tour at any time."
+    },
+    "result": {
+      "title": "Mariam's result day",
+      "body": "Mariam chooses what to share, step by step. Her result arrives signed by the lab and Merros checks the signature before opening it (the presenter control shows a tampered delivery being refused). She reads it in plain language, then Teach Back checks her understanding and explains again in a new way when needed."
+    },
+    "match": {
+      "title": "Blind Couple Match and Your plan",
+      "body": "Mariam turns her key; use the presenter control to switch to Khalid's phone and turn his. Only the genes they both carry are revealed, as a shared carrier result, never a verdict. It ends with Your plan: counselling, every option, one next step."
+    },
+    "brief": {
+      "title": "Dr. Layla prepares",
+      "body": "Dr. Layla's pre session brief shows the couple's result, questions and understanding before they meet. She writes her notes, the Counsellor Copilot drafts a summary in plain language, and nothing reaches the patient until she reviews and signs it."
+    },
+    "living": {
+      "title": "One year later: Living Results",
+      "body": "Science changes. Use the presenter control Simulate ClinVar update: Dr. Layla is told first, speaks to the patient, then releases the updated, lab signed result. People who did not ask to be told are never contacted."
+    },
+    "signals": {
+      "title": "The health system",
+      "body": "Population Signals help plan counselling from privacy protected statistics. Each release spends part of a visible privacy budget, small groups are hidden, and no one is tracked."
+    },
+    "explore": {
+      "title": "Explore more",
+      "copilot": {
+        "title": "Genetic Copilot in Arabic",
+        "body": "Ask in Gulf Arabic; every number comes from the tested risk engine."
+      },
+      "family": {
+        "title": "Family Risk Engine",
+        "body": "Each relative's chance of being a carrier, stored by relationship, never by name."
+      },
+      "beyond": {
+        "title": "Risk Beyond the Panel",
+        "body": "For related couples, an estimate the panel cannot see, seen by the counsellor first."
+      },
+      "findCare": {
+        "title": "Find Care",
+        "body": "Kinds of genetic services near you, with filters and a map."
+      },
+      "values": {
+        "title": "Values Compass",
+        "body": "How each option relates to what matters to you, never ranked."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "body": "Every consent, who saw what, and a tamper evident audit log."
+      }
+    }
   },
   "errors": {
     "title": "Something went wrong",
@@ -709,9 +740,8 @@
     "transcribing": "Turning your voice into text",
     "listen": "Listen",
     "listenStop": "Stop",
-    "badgeVoiceAzure": "Voice: Azure AI Speech",
+    "badgeVoiceAzure": "Voice: natural Gulf Arabic",
     "badgeVoiceBrowser": "Voice: this browser",
-    "voiceBrowserNote": "Voice is using this browser's built in speech, which varies by device. Connect Azure AI Speech for Gulf Arabic voices.",
     "errMic": "Microphone access was not allowed. You can still type your question.",
     "errNotUnderstood": "Nothing was heard clearly. Please try again, or type your question.",
     "errTooLong": "That was too long. Please ask in under 20 seconds.",
@@ -914,7 +944,7 @@
     "leave": "Leave the session",
     "on": "on",
     "off": "off",
-    "note": "This room is a simulation. No camera or microphone is used. Real video calls use Azure Communication Services and arrive with the Azure deployment.",
+    "note": "This room is a simulation for the demo. No camera or microphone is used.",
     "adviceNote": "Clinical advice comes only from your named counsellor"
   },
   "signals": {
@@ -1158,7 +1188,7 @@
     "private": "The video is made on this device from your result. It is not uploaded, stored or sent anywhere.",
     "noNames": "It contains no name or identifier, only gene names and numbers.",
     "show": "To show it to family, play it for them on your device. Sending it as a link is not available in this demonstration.",
-    "modePlayer": "Played in your browser. Server rendering with Azure narration and time limited share links comes with the Azure deployment.",
+    "modePlayer": "Played in your browser, made on your device.",
     "modeRender": "Rendered on the server."
   },
   "plan": {

@@ -29,25 +29,33 @@ test("An uncertain result gets a plan too, with a wellbeing check as the next st
   await expect(plan.locator("[data-plan-step='3']").getByRole("link", { name: "Check in" })).toHaveAttribute("href", "/en/wellbeing");
 });
 
-test("The Judge Tour opens with what only Merros does, and its counsellor steps open the case", async ({ page }) => {
+test("Judge Tour: six steps that follow Mariam and Khalid, and presenter controls only during the tour", async ({ page }) => {
+  // Without the tour, presenter controls are hidden.
+  await page.context().clearCookies({ name: "merros-tour" });
   await page.goto("/en/login");
-  await page.getByRole("button", { name: "Judge Tour" }).click();
-  const unique = page.locator("[data-tour-group=unique]");
-  await expect(unique.getByRole("heading", { name: "What only Merros does" })).toBeVisible();
-  await expect(unique.locator("[data-tour-step]")).toHaveCount(4);
-  const first = await unique.locator("[data-tour-step]").allInnerTexts();
-  expect(first[0]).toContain("Living Results");
-  expect(first[1]).toContain("Counsellor Copilot");
-  expect(first[2]).toContain("Risk Beyond the Panel");
-  expect(first[3]).toContain("Population Signals");
-  await expect(page.locator("[data-tour-group=supporting]").getByRole("heading", { name: "Supporting features" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue as Dr. Layla Haddad" }).click();
+  await expect(page).toHaveURL(/\/en\/counsellor/, { timeout: 60000 });
+  await expect(page.getByRole("heading", { name: "Living Results" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Simulate ClinVar update" })).toHaveCount(0);
 
-  // Step 3 opens Khalid's case: the analysis Khalid and Mariam agreed to waits for the counsellor.
-  await unique.locator("[data-tour-step=s16]").getByRole("button").click();
-  await expect(page).toHaveURL(/\/en\/counsellor\/case\//, { timeout: 30000 });
-  // Khalid shared his result with the counsellor, so the full brief opens, with the estimate in it.
-  await expect(page.getByText("No access to this case")).toHaveCount(0);
-  const beyond = page.locator("[data-counsellor-beyond=pending_counsellor]");
-  await expect(beyond).toContainText("moderately above");
-  await expect(beyond.locator("[data-beyond-consistency=consistent]")).toBeVisible();
+  // The tour opens on its welcome card.
+  await page.getByRole("button", { name: "Judge Tour" }).click();
+  const card = page.locator("[data-tour-card]");
+  await expect(card).toContainText("Step 1 of 6");
+  await expect(card).toContainText("following one couple, Mariam and Khalid");
+  await expect(card.getByRole("button", { name: "Back" })).toBeDisabled();
+  await expect(card.getByRole("button", { name: "Exit" })).toBeVisible();
+  // During the tour, presenter controls appear, labelled.
+  await expect(page.locator("[data-presenter-control]").filter({ hasText: "Simulate ClinVar update" })).toContainText("Presenter control");
+
+  // Next signs in as Mariam and opens her first screen; the card follows.
+  await card.getByRole("button", { name: "Next" }).click();
+  await expect(page).toHaveURL(/\/en\/onboarding/, { timeout: 60000 });
+  await expect(page.locator("[data-tour-card]")).toContainText("Step 2 of 6");
+  await expect(page.locator("[data-tour-card]")).toContainText("Mariam's result day");
+
+  // Exit ends the tour and hides presenter controls again.
+  await page.locator("[data-tour-card]").getByRole("button", { name: "Exit" }).click();
+  await expect(page.locator("[data-tour-card]")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Judge Tour" })).toBeVisible();
 });
