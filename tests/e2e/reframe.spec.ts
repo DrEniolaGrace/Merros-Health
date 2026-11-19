@@ -69,3 +69,23 @@ test("Judge Tour: six steps that follow Mariam and Khalid, and presenter control
   await page.locator("[data-tour-card]").getByRole("button", { name: "Start over" }).click();
   await expect(page.locator("[data-tour-card]")).toContainText("Step 1 of 6");
 });
+
+test("Landing page: the site address opens it, the tour starts as Mariam, and the persona picker stays at /login", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/en$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Healthy families, planned together.");
+  await expect(page.locator("main")).toContainText("while keeping every result private");
+  await expect(page.locator("[data-proof] li")).toHaveCount(3);
+  await expect(page.locator("[data-proof]")).toContainText("563 genes");
+  await expect(page.getByText("Synthetic demo data").filter({ visible: true }).first()).toBeVisible();
+
+  await page.getByRole("link", { name: "Explore on your own" }).click();
+  await expect(page).toHaveURL(/\/en\/login/);
+  await expect(page.getByRole("button", { name: "Continue as Mariam" })).toBeVisible();
+
+  await page.goto("/en");
+  await page.waitForLoadState("networkidle").catch(() => undefined);
+  await page.locator("[data-start-tour]").click();
+  await expect(page).toHaveURL(/\/en\/onboarding/, { timeout: 60000 });
+  await expect(page.locator("[data-tour-card]")).toContainText("Step 1 of 6");
+});

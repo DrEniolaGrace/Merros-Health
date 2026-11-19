@@ -219,7 +219,15 @@
     "featuresEyebrow": "Built for trust",
     "featuresTitle": "Private, exact and human",
     "genesTile": "Genes",
-    "combinedTile": "Combined"
+    "combinedTile": "Combined",
+    "name": "Merros",
+    "tagline": "Healthy families, planned together.",
+    "summary": "Merros helps couples understand their genetic screening results, reach a counsellor faster and plan their families, while keeping every result private.",
+    "startTour": "Start the Judge Tour (4 minutes)",
+    "explore": "Explore on your own",
+    "proofUnderstanding": "Understanding rose from 8 of 12 to 12 of 12 testers",
+    "proofPanel": "Built on the DoH premarital panel of 563 genes",
+    "proofPrivacy": "Nobody sees more than they agreed to"
   },
   "login": {
     "title": "Choose a demo persona",
