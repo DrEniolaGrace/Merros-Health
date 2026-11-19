@@ -168,7 +168,7 @@ Each person owns their data. Nothing shared by default. Granular, time limited, 
 * `VariantWatch` scheduled job queries ClinVar (NCBI E utilities, by ClinVar variation ID) and a mock local reclassification feed (representing national data). Compare current classification against stored classification.
 * On change: create a counsellor task with old versus new classification and evidence summary; rerun couple analysis (6.1) if the couple has consented to updates; escalate (4.8). The patient is told by the counsellor, never by a raw push notification.
 * Patient controls whether they want to be recontacted about reclassifications at all (right not to know).
-* Demo button in Judge Tour: "Simulate ClinVar update" reclassifies Hamad's VUS and shows the whole chain react: counsellor task, recalculated risk, pathway update, dashboard counter.
+* Demo button in Guided tour: "Simulate ClinVar update" reclassifies Hamad's VUS and shows the whole chain react: counsellor task, recalculated risk, pathway update, dashboard counter.
 * Health system view: number of people affected by each reclassification, without identities.
 
 ### 6.4 Family Risk Engine (privacy preserving cascade screening)
@@ -234,7 +234,7 @@ Emirati calibrated penetrance and allele frequencies; IVF outcome simulator; new
 
 ---
 
-## 10. Judge Tour
+## 10. Guided tour
 Floating button. Guided five minute walkthrough that switches personas and narrates what each screen proves, mapped to the six desired outcomes and six scoring criteria. Must include: Blind Couple Match live, Copilot voice question in Arabic, Simulate ClinVar update, Family Risk Engine graph, Risk Beyond the Panel (counsellor view), My Result Video, Population Signals dashboard.
 
 ---
@@ -303,7 +303,7 @@ Document, as design intent subject to legal review:
 
 ## 14. Build phases (17 days, cut from the bottom if needed)
 
-**Phase 1 (by 9 Nov):** setup, i18n and RTL, auth, personas, signed result import, consent, Risk Explainer with multi gene, Teach Back, Options Explorer, boundary labels, Escalation Engine with tests, Care Pathway, privacy controls, Judge Tour skeleton.
+**Phase 1 (by 9 Nov):** setup, i18n and RTL, auth, personas, signed result import, consent, Risk Explainer with multi gene, Teach Back, Options Explorer, boundary labels, Escalation Engine with tests, Care Pathway, privacy controls, Guided tour skeleton.
 
 **Phase 2 (by 12 Nov):** Blind Couple Match with Dual Key and tests. Merros Genetic Copilot (text) with Safety Verifier and evaluation harness.
 
@@ -311,14 +311,14 @@ Document, as design intent subject to legal review:
 
 **Phase 4 (by 17 Nov):** Population Signals Dashboard with differential privacy. Azure AI Speech voice mode. First Azure deployment.
 
-**Phase 5 (by 19 Nov):** Risk Beyond the Panel (precomputed if needed), My Result Video, Distress Check, design images applied, final Azure deployment, full Judge Tour, demo video recording.
+**Phase 5 (by 19 Nov):** Risk Beyond the Panel (precomputed if needed), My Result Video, Distress Check, design images applied, final Azure deployment, full Guided tour, demo video recording.
 
 **20 Nov:** submit.
 
 ---
 
 ## 15. Required documentation (/docs)
-README (run in under 5 minutes, demo logins, Judge Tour), ARCHITECTURE (Mermaid diagrams), SECURITY (PSI threat model, encryption, keys), PRIVACY_AND_DATA_GOVERNANCE, RESPONSIBLE_AI, AI_EVALUATION (harness results), CLINICAL_SAFETY (risk engine, escalation rules, content review), REGULATORY, ASSUMPTIONS, DEPENDENCIES, LIMITATIONS (synthetic data, content pending accredited review, simulated integrations, kinship estimates are approximations), METRICS, PILOT_PLAN (3 month pilot in two Abu Dhabi screening centres), COMMERCIAL (licence per screened couple, counsellor copilot seats, programme dashboard licence; scalable across GCC, MENA and South Asia), CHALLENGE_MAPPING.
+README (run in under 5 minutes, demo logins, Guided tour), ARCHITECTURE (Mermaid diagrams), SECURITY (PSI threat model, encryption, keys), PRIVACY_AND_DATA_GOVERNANCE, RESPONSIBLE_AI, AI_EVALUATION (harness results), CLINICAL_SAFETY (risk engine, escalation rules, content review), REGULATORY, ASSUMPTIONS, DEPENDENCIES, LIMITATIONS (synthetic data, content pending accredited review, simulated integrations, kinship estimates are approximations), METRICS, PILOT_PLAN (3 month pilot in two Abu Dhabi screening centres), COMMERCIAL (licence per screened couple, counsellor copilot seats, programme dashboard licence; scalable across GCC, MENA and South Asia), CHALLENGE_MAPPING.
 
 ## 16. Definition of done
-A judge opens the link on a phone, taps Judge Tour, and sees every desired outcome and every hero feature working in about five minutes. Arabic and English fully work. Safety critical tests pass. Docs are complete and honest. Runs locally with one command and is deployed to a public URL.
+A judge opens the link on a phone, taps Guided tour, and sees every desired outcome and every hero feature working in about five minutes. Arabic and English fully work. Safety critical tests pass. Docs are complete and honest. Runs locally with one command and is deployed to a public URL.

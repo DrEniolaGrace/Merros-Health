@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { redirect } from "@/i18n/navigation";
 
-/** Demo shortcut for the Judge Tour: opens a synthetic persona's case brief directly. */
+/** Demo shortcut for the guided tour: opens a synthetic persona's case brief directly. */
 export default async function OpenCase({ params }: { params: Promise<{ locale: string; persona: string }> }) {
   const { locale, persona } = await params;
   await requireUser(["counsellor"]);

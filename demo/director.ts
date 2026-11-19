@@ -20,7 +20,7 @@ export const OUT = path.resolve("demo/out");
 export const CLIPS = path.join(OUT, "public", "clips");
 export const BASE = process.env.DEMO_BASE_URL ?? "http://localhost:3100";
 
-/** A soft cursor dot (Playwright's video does not show the real pointer) and no Judge Tour button. */
+/** A soft cursor dot (Playwright's video does not show the real pointer) and no Guided tour button. */
 const STAGE = `
 (() => {
   const css = \`

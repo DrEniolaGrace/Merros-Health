@@ -41,7 +41,7 @@ export async function signOut() {
   redirect({ href: "/login", locale: await getLocale() });
 }
 
-/** Judge Tour: switch persona and open a screen. Only fixed, known paths are allowed. */
+/** Guided tour: switch persona and open a screen. Only fixed, known paths are allowed. */
 const TOUR_PATHS = new Set(["/onboarding", "/import", "/copilot", "/family", "/find-care", "/couple", "/teach-back", "/options", "/support", "/counsellor", "/privacy", "/result", "/home", "/admin", "/values", "/wellbeing", "/video"]);
 
 export async function tourGo(personaKey: string, path: string, locale?: "ar" | "en"): Promise<string> {
@@ -53,7 +53,7 @@ export async function tourGo(personaKey: string, path: string, locale?: "ar" | "
   return `/${lang}${path}`;
 }
 
-/** Tells the Judge Tour whether to show the reset button, a passcode field, or nothing. */
+/** Tells the guided tour whether to show the reset button, a passcode field, or nothing. */
 export async function getResetPolicy(): Promise<ResetPolicy> {
   return resetPolicy();
 }

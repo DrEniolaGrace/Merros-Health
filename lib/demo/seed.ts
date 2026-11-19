@@ -1,5 +1,5 @@
 /**
- * Demo data reset. Used by `pnpm seed` and by the Judge Tour "Reset demo" action.
+ * Demo data reset. Used by `pnpm seed` and by the guided tour "Reset demo" action.
  * Everything created here is synthetic. Deliberately free of "server-only" imports so the CLI
  * seed (tsx) can run it; keys are passed in explicitly.
  */
@@ -29,7 +29,7 @@ function seededConsents(p: Persona): string[] {
   if (p.partnerKey) c.push("couple_comparison");
   if (p.key === "hamad") c.push("counsellor_access", "reclassification_recontact");
   if (p.key === "sara") c.push("counsellor_access");
-  // Khalid has shared his result with Dr. Layla, so the Judge Tour opens his full brief.
+  // Khalid has shared his result with Dr. Layla, so the guided tour opens his full brief.
   if (p.key === "khalid") c.push("counsellor_access");
   return c;
 }

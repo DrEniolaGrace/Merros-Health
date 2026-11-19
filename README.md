@@ -30,7 +30,7 @@ docker compose up --build -d
 | Task | Command |
 |---|---|
 | Start, or rebuild after code changes | `pnpm docker:up` |
-| Reset demo data | `pnpm docker:seed` (or Judge Tour > Reset demo data) |
+| Reset demo data | `pnpm docker:seed` (or Guided tour > Reset demo data) |
 | App logs | `pnpm docker:logs` |
 | Stop | `pnpm docker:down` (data stays in the `pgdata` volume; add `-v` to wipe it) |
 
@@ -65,9 +65,9 @@ Pick a persona on the sign in screen (no passwords; demo mode only).
 | Any patient persona | Phase 5 screens: My video, Values, Check in, and Risk Beyond the Panel on the Couple page. |
 | Programme Admin | Population Signals Dashboard (differential privacy, privacy budget, demand forecast) and the audit integrity check. |
 
-## Judge Tour
+## Guided tour
 
-The gold **Judge Tour** button (bottom corner of every screen) walks through Phase 1 in eight steps, switching personas automatically, and lists later phase features as "Coming in Phase N". **Reset demo data** restores the starting state.
+**Start the guided tour** on the home page, or the gold **Guided tour** button in the corner of every other screen, walks through Merros in about four minutes: six steps that follow Mariam and Khalid from result day to a year later, switching personas automatically, then an "Explore more" card. Buttons marked **Presenter control** (switching phones, simulating a ClinVar update, resetting the demo) appear only during the tour.
 
 ## Demo video and screenshots
 

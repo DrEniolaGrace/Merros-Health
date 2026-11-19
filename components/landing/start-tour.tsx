@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { tourGo } from "@/lib/actions/auth";
 import { setTour } from "@/components/tour/presenter";
 
-/** Signs in as Mariam, opens her first screen, and starts the Judge Tour on its welcome card. */
+/** Signs in as Mariam, opens her first screen, and starts the guided tour on its welcome card. */
 export function StartTour({ label }: { label: string }) {
   const [pending, start] = useTransition();
   return (

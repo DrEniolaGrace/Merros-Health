@@ -11,7 +11,7 @@ import { cn } from "@/lib/cn";
 import { PresenterControl, lastTourStep, setTour, useTour } from "./presenter";
 
 /**
- * The Judge Tour follows the story of the demo video: one couple, Mariam and Khalid, from result
+ * The guided tour follows the story of the demo video: one couple, Mariam and Khalid, from result
  * day to a year later. Six steps, then "Explore more". Each step signs in as the right persona and
  * opens the screen that shows it. While the tour runs, presenter controls are visible.
  */
@@ -35,7 +35,7 @@ const EXPLORE: { key: string; persona: string; path: string; locale?: "ar" }[] =
   { key: "privacy", persona: "khalid", path: "/privacy" },
 ];
 
-export function JudgeTour({ raised = false }: { raised?: boolean }) {
+export function JudgeTour({ raised = false, floating = true }: { raised?: boolean; floating?: boolean }) {
   const t = useTranslations("tour");
   const tour = useTour();
   const parsed = tour ? /^(\d+)(m?)$/.exec(tour) : null;
@@ -76,7 +76,7 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
 
   return (
     <>
-      {(step === null || minimised) && (
+      {floating && (step === null || minimised) && (
         <motion.button
           data-judge-tour-button
           // Reopening resumes at the step the tour was on; the card offers "Start over".

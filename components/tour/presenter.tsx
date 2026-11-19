@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 
 /**
  * Judge Mode. Presenter controls (switching phones, simulating a tampered delivery or a ClinVar
- * update, resetting the demo) only appear while the Judge Tour is running. The tour keeps its state
+ * update, resetting the demo) only appear while the guided tour is running. The tour keeps its state
  * in a cookie so it survives page changes and persona switches:
  *   a number 1 to 7  the tour card is showing that step (7 is "Explore more")
  *   "4m"             step 4, card tucked away into a small button (after a click outside it)
@@ -46,7 +46,7 @@ export function lastTourStep(): number {
   return m ? Number(m[1]) : 1;
 }
 
-/** Shows its children only during the Judge Tour, labelled "Presenter control". */
+/** Shows its children only during the guided tour, labelled "Presenter control". */
 export function PresenterControl({ children, className }: { children: ReactNode; className?: string }) {
   const tour = useTour();
   const t = useTranslations("tour");

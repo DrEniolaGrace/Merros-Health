@@ -71,7 +71,7 @@ describe("Your plan", () => {
   });
 });
 
-describe("Judge Tour", () => {
+describe("Guided tour", () => {
   type Tour = Record<string, unknown> & { explore: Record<string, { title: string; body: string }> };
   const tourEn = en.tour as unknown as Tour;
   const tourAr = ar.tour as unknown as Tour;

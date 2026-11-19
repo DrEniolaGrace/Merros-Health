@@ -29,7 +29,7 @@ test("An uncertain result gets a plan too, with a wellbeing check as the next st
   await expect(plan.locator("[data-plan-step='3']").getByRole("link", { name: "Check in" })).toHaveAttribute("href", "/en/wellbeing");
 });
 
-test("Judge Tour: six steps that follow Mariam and Khalid, and presenter controls only during the tour", async ({ page }) => {
+test("Guided tour: six steps that follow Mariam and Khalid, and presenter controls only during the tour", async ({ page }) => {
   // Without the tour, presenter controls are hidden.
   await page.context().clearCookies({ name: "merros-tour" });
   await page.goto("/en/login");
@@ -39,7 +39,7 @@ test("Judge Tour: six steps that follow Mariam and Khalid, and presenter control
   await expect(page.getByRole("button", { name: "Simulate ClinVar update" })).toHaveCount(0);
 
   // The tour opens on its welcome card.
-  await page.getByRole("button", { name: "Judge Tour" }).click();
+  await page.getByRole("button", { name: "Guided tour" }).click();
   const card = page.locator("[data-tour-card]");
   await expect(card).toContainText("Step 1 of 6");
   await expect(card).toContainText("following one couple, Mariam and Khalid");
@@ -64,28 +64,42 @@ test("Judge Tour: six steps that follow Mariam and Khalid, and presenter control
   // Exit ends the tour and hides presenter controls; reopening resumes at step 2, and Start over goes to step 1.
   await page.locator("[data-tour-card]").getByRole("button", { name: "Exit" }).click();
   await expect(page.locator("[data-tour-card]")).toHaveCount(0);
-  await page.getByRole("button", { name: "Judge Tour" }).click();
+  await page.getByRole("button", { name: "Guided tour" }).click();
   await expect(page.locator("[data-tour-card]")).toContainText("Step 2 of 6");
   await page.locator("[data-tour-card]").getByRole("button", { name: "Start over" }).click();
   await expect(page.locator("[data-tour-card]")).toContainText("Step 1 of 6");
 });
 
-test("Landing page: the site address opens it, the tour starts as Mariam, and the persona picker stays at /login", async ({ page }) => {
+test("Home page: the site address opens it, every section is there, the tour starts as Mariam, and the persona picker stays at /login", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/\/en$/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Healthy families, planned together.");
-  await expect(page.locator("main")).toContainText("while keeping every result private");
-  await expect(page.locator("[data-proof] li")).toHaveCount(3);
-  await expect(page.locator("[data-proof]")).toContainText("563 genes");
-  await expect(page.getByText("Synthetic demo data").filter({ visible: true }).first()).toBeVisible();
+  const main = page.locator("main");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Healthy families");
+  await expect(main).toContainText("while keeping every result private");
+  for (const title of ["How Merros works", "One platform, three people", "What makes Merros different", "Built responsibly"]) {
+    await expect(page.getByRole("heading", { level: 2, name: title })).toBeAttached();
+  }
+  await expect(main).toContainText("Understanding rose from 8 of 12 to 12 of 12 testers after Teach Back");
+  await expect(main).toContainText("12 of 12 would recommend Merros");
+  // The synthetic data badge shows once, and no floating tour button sits over the footer here.
+  await expect(page.getByText("Synthetic demo data").filter({ visible: true })).toHaveCount(1);
+  await expect(page.locator("[data-judge-tour-button]")).toHaveCount(0);
+  await expect(page.locator("[data-start-tour]")).toHaveCount(2);
 
-  await page.getByRole("link", { name: "Explore on your own" }).click();
+  await page.getByRole("link", { name: "Explore on your own" }).first().click();
   await expect(page).toHaveURL(/\/en\/login/);
   await expect(page.getByRole("button", { name: "Continue as Mariam" })).toBeVisible();
 
   await page.goto("/en");
   await page.waitForLoadState("networkidle").catch(() => undefined);
-  await page.locator("[data-start-tour]").click();
+  await page.locator("[data-start-tour]").first().click();
   await expect(page).toHaveURL(/\/en\/onboarding/, { timeout: 60000 });
   await expect(page.locator("[data-tour-card]")).toContainText("Step 1 of 6");
+});
+
+test("Home page in Arabic: right to left, same sections", async ({ page }) => {
+  await page.goto("/ar");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByRole("heading", { level: 2, name: "كيف يعمل ميرّوس" })).toBeAttached();
+  await expect(page.getByRole("button", { name: "ابدأ الجولة الإرشادية (4 دقائق)" }).first()).toBeVisible();
 });

@@ -120,7 +120,7 @@ GitHub, Actions, **Deploy to Azure**, Run workflow. It will:
   "Voice: Azure AI Speech". Check the Arabic voice name against the current list in the portal
   (`AZURE_SPEECH_VOICE_AR`, default `ar-AE-FatimaNeural`).
 * **Reset the demo data:** start the `merros-migrate` job with the command `pnpm seed`, or use the
-  Judge Tour reset inside the app.
+  Guided tour reset inside the app.
 * **Cost:** the database and the always on web replica are the main costs. Stop the PostgreSQL
   server and scale the web app to zero when you are not demonstrating.
 
