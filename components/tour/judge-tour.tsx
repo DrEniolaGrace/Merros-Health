@@ -122,11 +122,8 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
                 {t("back")}
               </Button>
               {step <= COUNT ? (
-                <Button variant="gold" disabled={pending} pending={pending && active === `step-${step + 1}`} onClick={() => go(step + 1)}>
-                  <span className="inline-flex items-center gap-2 whitespace-nowrap">
-                    {t("next")}
-                    <ArrowRight size={16} className="rtl:-scale-x-100" />
-                  </span>
+                <Button variant="gold" iconEnd={<ArrowRight size={16} />} disabled={pending} pending={pending && active === `step-${step + 1}`} onClick={() => go(step + 1)}>
+                  {t("next")}
                 </Button>
               ) : (
                 <Button variant="gold" onClick={() => setTour(null)}>{t("finish")}</Button>
