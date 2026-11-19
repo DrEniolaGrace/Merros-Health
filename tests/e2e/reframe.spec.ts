@@ -54,8 +54,18 @@ test("Judge Tour: six steps that follow Mariam and Khalid, and presenter control
   await expect(page.locator("[data-tour-card]")).toContainText("Step 2 of 6");
   await expect(page.locator("[data-tour-card]")).toContainText("Mariam's result day");
 
-  // Exit ends the tour and hides presenter controls again.
+  // A click outside tucks the card into the tour button, still on step 2; clicking it brings the card back.
+  await page.locator("main").click({ position: { x: 5, y: 5 } });
+  await expect(page.locator("[data-tour-card]")).toHaveCount(0);
+  await expect(page.locator("[data-judge-tour-button]")).toContainText("Step 2 of 6");
+  await page.locator("[data-judge-tour-button]").click();
+  await expect(page.locator("[data-tour-card]")).toContainText("Step 2 of 6");
+
+  // Exit ends the tour and hides presenter controls; reopening resumes at step 2, and Start over goes to step 1.
   await page.locator("[data-tour-card]").getByRole("button", { name: "Exit" }).click();
   await expect(page.locator("[data-tour-card]")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Judge Tour" })).toBeVisible();
+  await page.getByRole("button", { name: "Judge Tour" }).click();
+  await expect(page.locator("[data-tour-card]")).toContainText("Step 2 of 6");
+  await page.locator("[data-tour-card]").getByRole("button", { name: "Start over" }).click();
+  await expect(page.locator("[data-tour-card]")).toContainText("Step 1 of 6");
 });

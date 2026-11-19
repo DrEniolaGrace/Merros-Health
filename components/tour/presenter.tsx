@@ -9,9 +9,12 @@ import { cn } from "@/lib/cn";
  * update, resetting the demo) only appear while the Judge Tour is running. The tour keeps its state
  * in a cookie so it survives page changes and persona switches:
  *   a number 1 to 7  the tour card is showing that step (7 is "Explore more")
+ *   "4m"             step 4, card tucked away into a small button (after a click outside it)
  *   "p"              presenter controls on, no tour card (recordings and automated tests)
+ * The last step is also remembered on its own, so reopening the tour resumes where it was left.
  */
 export const TOUR_COOKIE = "merros-tour";
+const LAST_COOKIE = "merros-tour-last";
 const EVENT = "merros-tour";
 
 function read(): string | null {
@@ -32,7 +35,15 @@ export function useTour(): string | null {
 
 export function setTour(value: string | null) {
   document.cookie = value === null ? `${TOUR_COOKIE}=; path=/; max-age=0; samesite=lax` : `${TOUR_COOKIE}=${encodeURIComponent(value)}; path=/; max-age=86400; samesite=lax`;
+  const step = value ? /^(\d+)/.exec(value)?.[1] : undefined;
+  if (step) document.cookie = `${LAST_COOKIE}=${step}; path=/; max-age=86400; samesite=lax`;
   window.dispatchEvent(new Event(EVENT));
+}
+
+/** The step the tour was last on (1 when it has not been opened yet). */
+export function lastTourStep(): number {
+  const m = document.cookie.match(new RegExp(`(?:^|; )${LAST_COOKIE}=(\\d+)`));
+  return m ? Number(m[1]) : 1;
 }
 
 /** Shows its children only during the Judge Tour, labelled "Presenter control". */

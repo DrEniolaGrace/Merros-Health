@@ -680,7 +680,8 @@
         "title": "Privacy",
         "body": "Every consent, who saw what, and a tamper evident audit log."
       }
-    }
+    },
+    "startOver": "Start over"
   },
   "errors": {
     "title": "Something went wrong",

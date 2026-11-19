@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 import { ArrowLeft, ArrowRight, ArrowsClockwise, Compass, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getResetPolicy, resetDemoAction, tourGo } from "@/lib/actions/auth";
 import type { ResetPolicy } from "@/lib/demo/policy";
 import { cn } from "@/lib/cn";
-import { PresenterControl, setTour, useTour } from "./presenter";
+import { PresenterControl, lastTourStep, setTour, useTour } from "./presenter";
 
 /**
  * The Judge Tour follows the story of the demo video: one couple, Mariam and Khalid, from result
@@ -38,9 +38,29 @@ const EXPLORE: { key: string; persona: string; path: string; locale?: "ar" }[] =
 export function JudgeTour({ raised = false }: { raised?: boolean }) {
   const t = useTranslations("tour");
   const tour = useTour();
-  const step = tour && /^\d+$/.test(tour) ? Number(tour) : null; // 1..6, 7 = Explore more
+  const parsed = tour ? /^(\d+)(m?)$/.exec(tour) : null;
+  const step = parsed ? Number(parsed[1]) : null; // 1..6, 7 = Explore more
+  const minimised = !!parsed?.[2];
   const [pending, start] = useTransition();
   const [active, setActive] = useState<string | null>(null);
+  const card = useRef<HTMLElement>(null);
+
+  // A click outside the card, or Escape, tucks it away without ending the tour.
+  useEffect(() => {
+    if (step === null || minimised) return;
+    const tuck = () => setTour(`${step}m`);
+    const onDown = (e: PointerEvent) => {
+      const el = e.target as Element | null;
+      if (card.current && el && !card.current.contains(el) && !el.closest("[data-presenter-control]")) tuck();
+    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && tuck();
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [step, minimised]);
 
   /** Shows step n, opening its screen when it has one. */
   const go = (n: number) => {
@@ -56,10 +76,11 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
 
   return (
     <>
-      {step === null && (
+      {(step === null || minimised) && (
         <motion.button
           data-judge-tour-button
-          onClick={() => go(1)}
+          // Reopening resumes at the step the tour was on; the card offers "Start over".
+          onClick={() => (step !== null ? setTour(String(step)) : lastTourStep() > 1 ? setTour(String(lastTourStep())) : go(1))}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.97 }}
           className={cn(
@@ -71,12 +92,14 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
         >
           <Compass size={18} />
           {t("open")}
+          {step !== null && <span className="text-xs text-muted tabular">· {step <= COUNT ? t("stepOf", { n: step, total: COUNT }) : t("exploreEyebrow")}</span>}
         </motion.button>
       )}
 
       <AnimatePresence>
-        {step !== null && (
+        {step !== null && !minimised && (
           <motion.section
+            ref={card}
             key="tour-card"
             role="dialog"
             aria-modal="false"
@@ -97,10 +120,17 @@ export function JudgeTour({ raised = false }: { raised?: boolean }) {
                 <Compass size={16} />
                 {step <= COUNT ? t("stepOf", { n: step, total: COUNT }) : t("exploreEyebrow")}
               </span>
-              <button type="button" onClick={() => setTour(null)} aria-label={t("exit")} className="-me-2 inline-flex h-10 items-center gap-1 rounded-full px-3 text-sm text-muted hover:text-ink">
-                <X size={16} />
-                {t("exit")}
-              </button>
+              <span className="-me-2 inline-flex items-center">
+                {step > 1 && (
+                  <button type="button" onClick={() => go(1)} className="inline-flex h-10 items-center rounded-full px-3 text-sm text-muted hover:text-ink">
+                    {t("startOver")}
+                  </button>
+                )}
+                <button type="button" onClick={() => setTour(null)} aria-label={t("exit")} className="inline-flex h-10 items-center gap-1 rounded-full px-3 text-sm text-muted hover:text-ink">
+                  <X size={16} />
+                  {t("exit")}
+                </button>
+              </span>
             </div>
 
             {step <= COUNT ? (
