@@ -1,0 +1,68 @@
+{
+  "_about": "Voiceover for the demo video (demo/voiceover.ts). Each line starts at its time in the video. Voice: Microsoft neural voice en-GB-SoniaNeural via edge-tts.",
+  "voice": "en-GB-SoniaNeural",
+  "rate": "-5%",
+  "video": "C:/Users/USER/Downloads/merros health demo final (fixed).mp4",
+  "lines": [
+    {
+      "at": "0:00",
+      "text": "Couples share a carrier result, and get numbers, not a plan."
+    },
+    {
+      "at": "0:05",
+      "text": "This is Merros, built by a medical student to change that. Before Mariam sees anything, she chooses what happens to her data. Nothing is switched on unless she says yes, and she can choose not to know."
+    },
+    {
+      "at": "0:20",
+      "text": "Her result comes from the screening lab with a digital signature. Merros checks it hasn't been changed on the way, then stores it encrypted, so only she can open it."
+    },
+    {
+      "at": "0:35",
+      "text": "She carries two gene changes, and she is healthy. Merros explains this simply, checks she understood, and explains again if needed. In testing, understanding rose from 8 of 12 people to 12 of 12."
+    },
+    {
+      "at": "0:50",
+      "text": "Now Mariam and her fiancé Khalid each turn a key on their own phone. The match runs privately. They see only the genes they share, never the rest of each other's results, and our server can't see them either."
+    },
+    {
+      "at": "1:10",
+      "text": "They share two genes: a 25% chance per pregnancy for each condition. Merros gives them a plan, not a verdict."
+    },
+    {
+      "at": "1:20",
+      "text": "Their genetic counsellor, Dr. Layla, sees their questions before the session, with their consent. Afterwards, the Copilot drafts a summary in plain language. But nothing reaches the couple until she reviews it and signs it. The counsellor always decides."
+    },
+    {
+      "at": "1:50",
+      "text": "Genetic science changes."
+    },
+    {
+      "at": "1:55",
+      "text": "A year later, Mariam's uncertain variant is reclassified as likely benign. Merros tells her counsellor first, and only after they've spoken is the update released to Mariam."
+    },
+    {
+      "at": "2:15",
+      "text": "Her result now reflects the latest science."
+    },
+    {
+      "at": "2:20",
+      "text": "In Arabic or English, every number comes from tested code."
+    },
+    {
+      "at": "2:25",
+      "text": "Relatives can be invited to screening, privately."
+    },
+    {
+      "at": "2:30",
+      "text": "For related couples, Merros estimates the risk a gene panel can't see, and shows it to the counsellor first."
+    },
+    {
+      "at": "2:40",
+      "text": "And the health system plans ahead, without identifying anyone."
+    },
+    {
+      "at": "2:45",
+      "text": "Merros. Healthy families, planned together."
+    }
+  ]
+}

@@ -52,3 +52,5 @@ Reference/*.pdf
 # Demo recording output (re-created by pnpm demo); the video is uploaded, not committed
 demo/out/
 docs/demo.mp4
+docs/merros_demo_voiceover.mp4
+docs/voice-samples/
