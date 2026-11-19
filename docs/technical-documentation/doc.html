@@ -323,7 +323,7 @@
   <p>The production deployment is prepared for <b>Microsoft Azure in the UAE North region</b>, so that genetic data stays in the country. It is defined as infrastructure as code and is ready to switch on:</p>
   <table>
     <tr><th style="width:34%">Component</th><th>Role</th></tr>
-    <tr><td>Bicep templates</td><td>The whole environment in one file, deployed by a GitHub Actions workflow</td></tr>
+    <tr><td>Bicep templates</td><td>The whole environment in one file, deployed by a GitHub Actions workflow in the repository (https://github.com/DrEniolaGrace/Merros-Health)</td></tr>
     <tr><td>Azure Container Apps</td><td>The web application, a database migration job and the nightly ClinVar job, from a container registry</td></tr>
     <tr><td>Azure Database for PostgreSQL</td><td>Flexible Server, in region</td></tr>
     <tr><td>Azure Key Vault</td><td>Encryption master key, signing keys and other secrets, read through a managed identity</td></tr>
@@ -396,16 +396,29 @@
     <li>Press <b>Judge Tour</b> (bottom corner) for a guided four minute walk in six steps, following Mariam and Khalid from result day to a year later. Buttons marked <b>Presenter control</b> appear only during the tour; they simulate things that normally take months or two phones (switching to the partner's phone, a ClinVar update).</li>
     <li>Switch between Arabic and English at the top of any screen.</li>
   </ol>
-  <h3>Run it locally</h3>
-  <p>Requirements: Docker Desktop. From the project folder:</p>
-  <pre>docker compose up --build</pre>
-  <p>This starts PostgreSQL, applies the database schema, loads the synthetic demo data and serves the app at http://localhost:3000.</p>
+  <h3>Run it locally (for technical reviewers)</h3>
+  <p>Source code: <b>https://github.com/DrEniolaGrace/Merros-Health</b></p>
+  <ol>
+    <li>Install <b>Docker Desktop</b> (https://www.docker.com/products/docker-desktop) and start it. Install <b>Node.js 20 or later</b> (https://nodejs.org) and <b>Git</b>.</li>
+    <li>Download the code and go into its folder:
+      <pre>git clone https://github.com/DrEniolaGrace/Merros-Health.git
+cd Merros-Health</pre></li>
+    <li>Create the local settings file. This generates fresh encryption and signing keys for your machine only; no account or API key is needed:
+      <pre>npm install -g pnpm@9.15.0
+pnpm install
+pnpm setup:env</pre></li>
+    <li>Start everything:
+      <pre>docker compose up --build</pre>
+      This starts PostgreSQL, applies the database schema, loads the synthetic demo data and builds the app. The first build takes a few minutes.</li>
+    <li>Open <b>http://localhost:3000</b> and choose a persona.</li>
+  </ol>
+  <p class="small">Without an AI key the Copilot uses a built in offline model that composes answers only from approved content, so every screen works without external services.</p>
   <h3>Tests</h3>
   <pre>pnpm test        # unit tests: risk engine, couple match, consent, escalation, Safety Verifier, privacy
 pnpm test:e2e    # browser tests of the main journeys in Arabic and English</pre>
-  <h3>The demo video</h3>
+  <h3>The demo video (optional)</h3>
   <pre>pnpm demo        # records the story with a browser and assembles the video (under 3 minutes)</pre>
-  <div class="box"><p>Source code, architecture notes, security and privacy documents, the clinical safety case and the AI evaluation are in the project repository under <code>docs/</code>.</p></div>
+  <div class="box"><p>Source code, architecture notes, security and privacy documents, the clinical safety case and the AI evaluation are in the repository at <b>https://github.com/DrEniolaGrace/Merros-Health</b>, under <code>docs/</code>.</p></div>
 </section>
 
 </body>

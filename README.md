@@ -107,3 +107,7 @@ $env:DATABASE_URL="postgresql://meros:meros@localhost:5432/meros"; $env:DIRECT_U
 ## Documentation
 
 See [`docs/`](docs): architecture, security, privacy, clinical safety, regulatory alignment, assumptions, dependencies, limitations, challenge mapping and progress.
+
+## License
+
+Copyright 2026 Eniola Grace Rosilu. All rights reserved. Shared for evaluation in the Future Health Digital Innovation Challenge; see [LICENSE](LICENSE).

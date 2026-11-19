@@ -22,8 +22,18 @@ npm-debug.log*
 .pnpm-debug.log*
 
 # env files: secrets never committed; .env.example documents every variable
-.env*
+.env
+.env.*
 !.env.example
+*.env
+.envrc
+
+# keys and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
 
 # private demo material (lab private key output, generated lab inbox)
 /data/private/
@@ -34,9 +44,6 @@ npm-debug.log*
 
 # Vercel CLI link (local only)
 .vercel
-
-.vercel
-.env*
 
 # Official documents kept locally, cited by URL instead (see data/reference/SOURCES.md)
 reference/*.pdf
