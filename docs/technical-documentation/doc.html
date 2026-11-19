@@ -15,10 +15,19 @@
   p { margin: 0 0 3mm; }
   ul { margin: 0 0 3mm; padding-left: 5mm; }
   li { margin-bottom: 1.4mm; }
-  .section { page-break-before: always; }
+  .section { margin-top: 7mm; }
+  .section > h2, .section > .lead { break-after: avoid; page-break-after: avoid; }
+  .section.newpage { page-break-before: always; margin-top: 0; }
+  h2, h3 { break-after: avoid; page-break-after: avoid; }
+  tr, pre, .box, .stat, svg, li, .keep { break-inside: avoid; page-break-inside: avoid; }
+  .keep { display: block; }
+  .team { border-top: 1px solid var(--line); padding-top: 4mm; margin-top: 8mm; font-size: 10.5pt; color: var(--muted); max-width: 160mm; }
+  .team b { color: var(--burgundy); }
+  .src { font-size: 8.5pt; color: var(--muted); }
+  .src a { color: var(--muted); }
   .lead { font-size: 11.5pt; color: var(--muted); margin-bottom: 5mm; }
   table { width: 100%; border-collapse: collapse; margin: 2mm 0 4mm; font-size: 9.8pt; }
-  th, td { text-align: left; vertical-align: top; padding: 2mm 2.5mm; border-bottom: 1px solid var(--line); }
+  th, td { text-align: left; vertical-align: top; padding: 1.5mm 2.5mm; border-bottom: 1px solid var(--line); }
   th { color: var(--burgundy); font-weight: 600; background: var(--soft); }
   .box { border: 1px solid var(--line); border-left: 4px solid var(--rose); background: var(--soft); border-radius: 2mm; padding: 3.5mm 4.5mm; margin: 3mm 0 4mm; }
   .box.gold { border-left-color: var(--gold); }
@@ -30,7 +39,7 @@
   .stat span { color: var(--muted); font-size: 9.5pt; }
   .small { font-size: 9pt; color: var(--muted); }
   code { font-family: Consolas, "Courier New", monospace; font-size: 9.2pt; background: var(--soft); padding: 0.3mm 1.2mm; border-radius: 1mm; }
-  pre { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: var(--soft); border: 1px solid var(--line); border-radius: 2mm; padding: 3mm 4mm; white-space: pre-wrap; margin: 2mm 0 4mm; }
+  pre { font-family: Consolas, "Courier New", monospace; font-size: 8.8pt; background: var(--soft); border: 1px solid var(--line); border-radius: 2mm; padding: 2mm 3.5mm; white-space: pre-wrap; margin: 1.5mm 0 2.5mm; }
   .tag { display: inline-block; font-size: 8.5pt; padding: 0.4mm 2mm; border-radius: 3mm; border: 1px solid var(--line); color: var(--muted); }
   .ok { color: var(--cyan); font-weight: 600; }
   /* Cover */
@@ -43,7 +52,7 @@
   .cover .disclaimer { font-size: 9pt; color: var(--muted); margin-top: 6mm; }
   /* Contents */
   .toc { list-style: none; padding: 0; font-size: 11.5pt; }
-  .toc li { display: flex; gap: 4mm; padding: 2mm 0; border-bottom: 1px dotted var(--line); }
+  .toc li { display: flex; gap: 4mm; padding: 1.4mm 0; border-bottom: 1px dotted var(--line); }
   .toc li span:first-child { color: var(--rose); width: 8mm; }
   svg text { font-family: "Segoe UI", Arial, sans-serif; }
 </style>
@@ -57,6 +66,7 @@
     <h1>Merros</h1>
     <p class="sub">A privacy preserving genomic companion that helps couples build healthy families, with a plan.</p>
     <p class="sub" style="font-size:13pt;margin-top:6mm">Technical documentation for the judging panel</p>
+    <p class="team"><b>Team.</b> Merros was built by Eniola Grace Rosilu, a final year medical student (MD) at Caucasus University, Tbilisi, who also builds AI automation systems for clients. She combined clinical training with AI engineering to design a tool that clinicians and families can trust.</p>
   </div>
   <div>
     <div class="meta">
@@ -70,7 +80,7 @@
 </section>
 
 <!-- Contents -->
-<section class="section">
+<section class="section newpage">
   <h2>Contents</h2>
   <ul class="toc">
     <li><span>1</span><span>Overview and the challenge it answers</span></li>
@@ -82,21 +92,47 @@
     <li><span>7</span><span>Deployment</span></li>
     <li><span>8</span><span>Limitations</span></li>
     <li><span>9</span><span>Pilot plan</span></li>
-    <li><span>10</span><span>How to run it</span></li>
+    <li><span>10</span><span>Commercial viability</span></li>
+    <li><span>11</span><span>How to run it</span></li>
+    <li><span></span><span>How Merros meets the assessment criteria (after this page)</span></li>
   </ul>
-  <div class="box gold" style="margin-top:10mm">
+  <div class="box gold" style="margin-top:6mm">
     <p><b>The principle behind every screen.</b> Merros never tells anyone whom to marry or what to decide. Success means understanding, timely access to qualified counselling and confident personal choice. A cancelled marriage, or any single personal decision, is never a success measure.</p>
   </div>
   <h3>Merros in one minute</h3>
   <p>Mariam receives her premarital screening result. Merros checks the lab's signature, explains the result in plain Arabic or English and checks her understanding with Teach Back. With her fiancé Khalid she runs a Blind Couple Match on their own phones: only the genes they both carry are revealed, as a shared carrier result followed by their plan. Their genetic counsellor, Dr. Layla, receives a pre-session brief and a Counsellor Copilot that drafts a summary she reviews and signs. A year later, when science reclassifies one of Mariam's variants, Dr. Layla is told first and releases the update after speaking to her. Meanwhile the health system plans counselling from privacy protected statistics, without seeing anyone.</p>
 </section>
 
+<!-- Criteria -->
+<section class="section newpage">
+  <h2>How Merros meets the assessment criteria</h2>
+  <p class="lead">Where to find the evidence for each of the six criteria, in this document and in the working prototype.</p>
+  <table>
+    <tr><th style="width:24%">Criterion</th><th>What answers it</th><th style="width:15%">Sections</th></tr>
+    <tr><td><b>Health impact and clinical relevance</b></td><td>Built for the problem the numbers show: couples with a shared carrier result need understanding and a plan. Plain language result at three reading levels, Teach Back (understanding rose from 8 of 12 to 12 of 12 testers), "Your plan" after every risk result, escalation to a named counsellor, a care pathway that follows the DoH premarital process and its 563 gene panel.</td><td>1, 4, 6</td></tr>
+    <tr><td><b>Technical depth and architecture</b></td><td>A deterministic risk engine with exact fractions; a multi agent Copilot (router, retriever, engine tools, dialect adapter, Safety Verifier); private set intersection for the Blind Couple Match on the partners' phones; lab signed FHIR results; per person field encryption; a hash chained audit log; differential privacy with a privacy budget. 350+ unit tests and 30+ browser tests.</td><td>2, 5</td></tr>
+    <tr><td><b>Working solution and demonstration quality</b></td><td>A live prototype at https://merros-health.vercel.app, working end to end in Arabic (right to left) and English, phone first. A four minute guided tour in six steps that follows one couple, and a demo video under three minutes.</td><td>11</td></tr>
+    <tr><td><b>Responsible AI, safety and data governance</b></td><td>The AI never computes a number; every answer passes the Safety Verifier and cites approved content; a counsellor signs every clinical message; consent per purpose, the right not to know, a visible audit history; synthetic data only; limitations stated openly.</td><td>4, 5, 8</td></tr>
+    <tr><td><b>Scalability and deployment readiness</b></td><td>Live on Vercel with Neon PostgreSQL today. Production prepared as infrastructure as code for Microsoft Azure UAE North (Container Apps, PostgreSQL, Key Vault, AI Speech, Microsoft Foundry), ready to switch on. Feature flags give every Azure service a working fallback; stateless containers; couple matching runs on users' devices.</td><td>7</td></tr>
+    <tr><td><b>Commercial viability and path to pilot</b></td><td>A three month pilot in two Abu Dhabi screening centres with clear measures. Paying customers: health authorities and screening programmes, IVF and genetics clinics, insurers. Licence per screened couple, Counsellor Copilot seats and a programme dashboard licence.</td><td>9, 10</td></tr>
+  </table>
+</section>
+
 <!-- 1 -->
-<section class="section">
+<section class="section newpage">
   <h2><span class="n">1</span>Overview and the challenge it answers</h2>
   <p class="lead">Abu Dhabi has made premarital genetic screening universal. Testing is solved; understanding and acting on results is not.</p>
   <h3>The challenge</h3>
-  <p>Fertility Challenge 03 asks for solutions that help people <b>identify, understand and reduce</b> inherited disease risk, in a way that is culturally appropriate and privacy preserving. Genetic results are complex, probabilistic and shared across families. Misunderstood results cause anxiety, stigma, family tension or false certainty. Consanguineous marriage is a long standing practice, so technology must support informed choice without judging anyone. Genetic counsellors are few, and genetic data is among the most private data a person has.</p>
+  <p>Fertility Challenge 03 asks for solutions that help people <b>identify, understand and reduce</b> inherited disease risk, in a way that is culturally appropriate and privacy preserving. Genetic results are complex, probabilistic and shared across families; misunderstood, they cause anxiety, stigma or false certainty. Consanguineous marriage is a long standing practice, so technology must support informed choice without judging anyone. Genetic counsellors are few, and genetic data is deeply private.</p>
+  <div class="keep">
+  <h3>The need in numbers</h3>
+  <div class="grid">
+    <div class="stat"><b>565</b><span>"incompatible cases" flagged by Abu Dhabi premarital genetic screening among 11,748 couples tested since 2022 (Gulf News). In our words: couples with a shared carrier result.</span></div>
+    <div class="stat"><b>71%</b><span>"of incompatible couples choose marriage": Emirati couples in the national programme, September 2026, down from about 90% in January 2025 (Gulf News).</span></div>
+  </div>
+  <p>Most couples with a shared carrier result go ahead together. They need understanding, timely counselling and a plan, not a verdict. That is what Merros gives them.</p>
+  <p class="src">Sources: Gulf News, "Abu Dhabi genetic screening flags 565 incompatible cases among couples", https://gulfnews.com/uae/health/abu-dhabi-genetic-screening-flags-565-incompatible-cases-among-couples-1.500697261 · Gulf News, "UAE premarital genetic screening: 71 per cent of incompatible couples choose marriage", https://gulfnews.com/uae/health/uae-premarital-genetic-screening-71-per-cent-of-incompatible-couples-choose-marriage-1.500731467</p>
+  </div>
   <h3>What Merros does</h3>
   <table>
     <tr><th style="width:30%">Challenge need</th><th>How Merros answers it</th></tr>
@@ -106,11 +142,6 @@
     <tr><td>Culturally appropriate</td><td>Arabic first, right to left; non directive wording enforced by tests (a couple is never "incompatible": they have a "shared carrier result"); options related to personal values, never ranked.</td></tr>
     <tr><td>Privacy preserving</td><td>Granular consent; the couple match runs on the partners' phones; field level encryption; a tamper evident audit log; population statistics with differential privacy.</td></tr>
   </table>
-  <h3>Two beneficiaries, one loop</h3>
-  <div class="grid">
-    <div class="box"><p><b>The person and the couple</b> understand their result, reach a counsellor sooner, decide by their own values and stay protected as science evolves.</p></div>
-    <div class="box cyan"><p><b>The health system</b> sees where people drop off, where counselling demand is rising and which languages are underserved, without seeing any individual.</p></div>
-  </div>
 </section>
 
 <!-- 2 -->
@@ -205,7 +236,7 @@
   <p class="lead">No real patient data is used anywhere. Real public references give the synthetic people realistic results.</p>
   <table>
     <tr><th style="width:26%">Source</th><th>How Merros uses it</th><th style="width:24%">Assumption</th></tr>
-    <tr><td><b>Synthetic personas</b></td><td>Ten fictional people (for example Mariam and Khalid, a first cousin couple; Hamad with a variant of uncertain significance; Noura and Faisal), one fictional counsellor and a programme user. Fictional lab, clinics and appointments.</td><td>Represent common premarital screening situations; they are not statistically representative.</td></tr>
+    <tr><td><b>Synthetic personas</b></td><td>Ten synthetic personas: eight people receiving results (Mariam and Khalid, a first cousin couple; Noura and Faisal; Hamad with a variant of uncertain significance; Aisha; Sara and Omar), one genetic counsellor (Dr. Layla Haddad) and one health system programme user. Fictional lab, clinics and appointments.</td><td>Represent common premarital screening situations; they are not statistically representative.</td></tr>
     <tr><td><b>DoH Premarital Screening Standard, V3 (September 2024)</b></td><td>Appendix 12 gene panel: 563 genes, mapped to current HGNC names with aliases so people can search by old or new names. Appendices 13 to 15 shape the care pathway, referral kinds and Find Care categories.</td><td>The September 2024 version; the Department updates the panel over time. Used as a public reference only.</td></tr>
     <tr><td><b>ClinVar (NCBI)</b></td><td>Every variant in the synthetic results is a real ClinVar record with its real classification, for example HBB c.92+5G&gt;C (pathogenic), GJB2 c.35del (pathogenic) and CFTR c.3439G&gt;C (uncertain significance).</td><td>Real variants are assigned to fictional people. The reclassification shown in the demo is simulated and labelled as such.</td></tr>
     <tr><td><b>Population carrier frequencies</b></td><td>Used by the Family Risk Engine when a relative's own result is unknown (for example 8.5% for HBB), shown with every estimate.</td><td>Published regional estimates; a pilot would replace them with programme data.</td></tr>
@@ -387,38 +418,64 @@
 </section>
 
 <!-- 10 -->
+<section class="section newpage">
+  <h2><span class="n">10</span>Commercial viability</h2>
+  <p class="lead">Premarital and carrier screening is already paid for. Merros makes what happens after the result work better, for the programme and for the couple.</p>
+  <h3>Customers</h3>
+  <ul>
+    <li><b>Health authorities and premarital screening programmes</b>: the programme owner, responsible for counselling every couple with a shared carrier result.</li>
+    <li><b>IVF and genetics clinics</b>: counselling, PGT-M and carrier screening services that need prepared, well informed patients.</li>
+    <li><b>Insurers</b>: covering screening and counselling, interested in timely, appropriate care.</li>
+  </ul>
+  <h3>Business model</h3>
+  <table>
+    <tr><th style="width:34%">Licence</th><th>What it covers</th></tr>
+    <tr><td>Per screened couple</td><td>The couple's app: signed result, explanation, Teach Back, Blind Couple Match, plan, Living Results.</td></tr>
+    <tr><td>Counsellor Copilot seats</td><td>Per counsellor: pre-session briefs, summaries drafted from notes for review and signature, case queue.</td></tr>
+    <tr><td>Programme dashboard</td><td>Per programme: Population Signals with differential privacy, drop off and demand forecasts, reclassification impact.</td></tr>
+  </table>
+  <h3>Why they pay</h3>
+  <ul>
+    <li><b>More people understand their results</b>, measured by Teach Back before and after re-explanation.</li>
+    <li><b>Faster counselling</b>: escalation routes couples who need it to a named counsellor, sooner.</li>
+    <li><b>Counsellors handle more cases safely</b>: prepared briefs and drafted summaries save time, and the counsellor always signs.</li>
+    <li><b>Better programme data</b>: where couples drop off and where counselling demand is rising, without identifying anyone.</li>
+  </ul>
+  <h3>Market</h3>
+  <p>Abu Dhabi first, where premarital genetic screening covers 563 genes and is mandatory for Emirati citizens. Then the wider UAE, the GCC countries, and other regions with premarital or carrier screening programmes. Arabic and English, a configurable gene panel and hosting in region make each new programme a configuration, not a rebuild.</p>
+</section>
+
+<!-- 11 -->
 <section class="section">
-  <h2><span class="n">10</span>How to run it</h2>
+  <h2><span class="n">11</span>How to run it</h2>
   <h3>Use the live prototype</h3>
   <ol>
     <li>Open <b>https://merros-health.vercel.app</b>. A short landing page offers two ways in.</li>
     <li><b>Start the guided tour (4 minutes)</b> signs in as Mariam and starts the guided walk directly. <b>Explore on your own</b> opens the persona picker: choose anyone (for example <b>Mariam</b>); no password is needed, all data is synthetic.</li>
-    <li>The tour is also available from the <b>Guided tour</b> button in the bottom corner of every screen: six steps, following Mariam and Khalid from result day to a year later. Buttons marked <b>Presenter control</b> appear only during the tour; they simulate things that normally take months or two phones (switching to the partner's phone, a ClinVar update).</li>
+    <li>The tour is also on the <b>Guided tour</b> button in the corner of every screen. Buttons marked <b>Presenter control</b> appear only during the tour.</li>
     <li>Switch between Arabic and English at the top of any screen.</li>
   </ol>
   <h3>Run it locally (for technical reviewers)</h3>
-  <p>Source code: <b>https://github.com/DrEniolaGrace/Merros-Health</b></p>
+  <p>Source code and documentation (architecture, security, privacy, clinical safety, AI evaluation, under <code>docs/</code>): <b>https://github.com/DrEniolaGrace/Merros-Health</b></p>
   <ol>
     <li>Install <b>Docker Desktop</b> (https://www.docker.com/products/docker-desktop) and start it. Install <b>Node.js 20 or later</b> (https://nodejs.org) and <b>Git</b>.</li>
     <li>Download the code and go into its folder:
       <pre>git clone https://github.com/DrEniolaGrace/Merros-Health.git
 cd Merros-Health</pre></li>
-    <li>Create the local settings file. This generates fresh encryption and signing keys for your machine only; no account or API key is needed:
+    <li>Create the local settings file. This generates fresh encryption and signing keys for your machine only. No account or API key is needed (the Copilot then uses its offline model).
       <pre>npm install -g pnpm@9.15.0
 pnpm install
 pnpm setup:env</pre></li>
     <li>Start everything:
       <pre>docker compose up --build</pre>
-      This starts PostgreSQL, applies the database schema, loads the synthetic demo data and builds the app. The first build takes a few minutes.</li>
+      This starts the database, loads the synthetic data and builds the app (a few minutes the first time).</li>
     <li>Open <b>http://localhost:3000</b> and choose a persona.</li>
   </ol>
-  <p class="small">Without an AI key the Copilot uses a built in offline model that composes answers only from approved content, so every screen works without external services.</p>
   <h3>Tests</h3>
   <pre>pnpm test        # unit tests: risk engine, couple match, consent, escalation, Safety Verifier, privacy
 pnpm test:e2e    # browser tests of the main journeys in Arabic and English</pre>
   <h3>The demo video (optional)</h3>
   <pre>pnpm demo        # records the story with a browser and assembles the video (under 3 minutes)</pre>
-  <div class="box"><p>Source code, architecture notes, security and privacy documents, the clinical safety case and the AI evaluation are in the repository at <b>https://github.com/DrEniolaGrace/Merros-Health</b>, under <code>docs/</code>.</p></div>
 </section>
 
 </body>

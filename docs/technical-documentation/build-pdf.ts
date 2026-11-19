@@ -13,6 +13,31 @@ async function main() {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: "load" });
+  // Keep every subheading on the same page as what follows it (no heading alone at the bottom of a page).
+  await page.evaluate(() => {
+    for (const h of Array.from(document.querySelectorAll("h3"))) {
+      const next = h.nextElementSibling;
+      if (!next || h.parentElement?.classList.contains("keep")) continue;
+      // Short content moves with its heading; long content (a big table) may start on the same page.
+      if (next.getBoundingClientRect().height > 260) continue;
+      const wrap = document.createElement("div");
+      wrap.className = "keep";
+      h.before(wrap);
+      wrap.append(h, next);
+    }
+  });
+  await page.evaluate(() => {
+    for (const h of Array.from(document.querySelectorAll(".section > h2"))) {
+      const parts: Element[] = [h];
+      let n = h.nextElementSibling;
+      if (n?.classList.contains("lead")) { parts.push(n); n = n.nextElementSibling; }
+      if (n && n.getBoundingClientRect().height < 260) parts.push(n);
+      const wrap = document.createElement("div");
+      wrap.className = "keep";
+      h.before(wrap);
+      wrap.append(...parts);
+    }
+  });
   const out = path.join(process.cwd(), "docs", "Merros_Technical_Documentation.pdf");
   await page.pdf({
     path: out,
